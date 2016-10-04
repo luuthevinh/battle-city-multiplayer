@@ -1,0 +1,10 @@
+ClientCocos2dx/cocos2d/
+ClientCocos2dx/proj.android/
+ClientCocos2dx/proj.android-studio/
+ClientCocos2dx/proj.ios_mac/
+ClientCocos2dx/proj.linux/
+ClientCocos2dx/proj.win8.1-universal/
+ClientCocos2dx/proj.win10/
+ClientCocos2dx/proj.win32/
+ClientCocos2dx/.cocos-project.json
+ClientCocos2dx/CMakeLists.txt
