@@ -14,6 +14,22 @@ Tank::~Tank()
 	}
 }
 
+Tank* Tank::create(eObjectId id)
+{
+	Tank* tank = new(std::nothrow) Tank(id);
+	if (tank && tank->init())
+	{
+		tank->autorelease();
+		return tank;
+	}
+	else
+	{
+		delete tank;
+		tank = nullptr;
+		return nullptr;
+	}
+}
+
 bool Tank::init()
 {
 	// update object
@@ -69,7 +85,21 @@ void Tank::updatePosition(float dt)
 
 void Tank::setDirection(eDirection direction)
 {
+	if (_direction == direction || direction <= 0 || direction > 4)
+		return;
+
 	_direction = direction;
+
+	_sprite->stopAllActions();
+
+	if ((_status & eStatus::RUNNING) == eStatus::RUNNING)
+	{
+		_sprite->runAction(RepeatForever::create(_animations[_direction]));
+	}
+	else
+	{
+		_sprite->runAction(_animations[_direction]);
+	}
 }
 
 eDirection Tank::getDirection()

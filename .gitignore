@@ -8,3 +8,4 @@ ClientCocos2dx/proj.win10/
 ClientCocos2dx/proj.win32/
 ClientCocos2dx/.cocos-project.json
 ClientCocos2dx/CMakeLists.txt
+/Server/TankServer/Debug

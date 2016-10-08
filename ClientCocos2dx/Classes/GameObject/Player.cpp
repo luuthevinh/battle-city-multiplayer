@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Base\SpriteManager.h"
+#include "Scene\HelloWorldScene.h"
 
 Player::Player(eObjectId id) : Tank(id)
 {
@@ -47,6 +48,24 @@ bool Player::init()
 void Player::update(float dt)
 {
 	Tank::update(dt);
+
+	//std::string info = "postion: ";
+	//char buffer[100];
+	//sprintf(buffer, "position: (%.2f, %.2f)", this->getPositionX(), this->getPositionY());
+	//HelloWorld::instance->getConnector()->sendData(buffer);
+
+	ObjectPacket pack;
+	if(_velocity != 0)
+		pack.direction = _direction;
+	else
+		pack.direction = 0;
+	pack.id = 0;
+	pack.x = this->getPositionX();
+	pack.y = this->getPositionY();
+	pack.dx = 0;
+	pack.dy = 0;
+
+	HelloWorld::instance->getConnector()->sendData(&pack);
 }
 
 void Player::setDirection(eDirection direction)
@@ -76,12 +95,14 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		_status = (eStatus)(_status | eStatus::RUNNING);
 	}
 
+
 	switch (keycode)
 	{
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 	{
 		this->setDirection(eDirection::TOP);
 		_keyDirectionCounter++;
+
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:

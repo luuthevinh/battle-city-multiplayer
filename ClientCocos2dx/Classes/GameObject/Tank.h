@@ -12,6 +12,8 @@ public:
 	Tank(eObjectId id);
 	~Tank();
 
+	static Tank* create(eObjectId id);
+
 	virtual bool init() override;
 	virtual void update(float dt) override;
 	virtual void updatePosition(float dt);

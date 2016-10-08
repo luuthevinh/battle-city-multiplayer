@@ -11,3 +11,18 @@ GameObject::GameObject(eObjectId id) :
 GameObject::~GameObject()
 {
 }
+
+void GameObject::addStatus(eStatus status)
+{
+	_status = (eStatus)(_status | status);
+}
+
+void GameObject::setStatus(eStatus status)
+{
+	_status = status;
+}
+
+eStatus GameObject::getStatus()
+{
+	return _status;
+}

@@ -1,8 +1,9 @@
 #include "HelloWorldScene.h"
-#include "GameObject\Player.h"
 #include "Base\SpriteManager.h"
 
 USING_NS_CC;
+
+HelloWorld* HelloWorld::instance = nullptr;
 
 Scene* HelloWorld::createScene()
 {
@@ -35,20 +36,35 @@ bool HelloWorld::init()
     /////////////////////////////
 	SpriteManager::getInstance()->init();
     
-	Player* player = Player::create(eObjectId::YELLOW_TANK);
-	player->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	_player = Player::create(eObjectId::YELLOW_TANK);
+	_player->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(_player);
 
-	this->addChild(player);
+	_otherPlayer = Tank::create(eObjectId::YELLOW_TANK);
+	_otherPlayer->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(_otherPlayer);
+
+	// init server
+	_serverConnector = new ServerConnector();
+	if (_serverConnector->init(PORT, SERVER_ADD))
+	// connect to server
+	_serverConnector->connectServer();
+
+	// update
+	this->scheduleUpdate();
+
+	//
+	this->instance = this;
 
     return true;
 }
 
-
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void HelloWorld::update(float dt)
 {
-    Director::getInstance()->end();
+	_serverConnector->update(this);
+}
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+ServerConnector * HelloWorld::getConnector()
+{
+	return _serverConnector;
 }

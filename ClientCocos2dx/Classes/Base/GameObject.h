@@ -12,6 +12,10 @@ public:
 	GameObject(eObjectId id);
 	~GameObject();
 
+	virtual void addStatus(eStatus status);
+	virtual void setStatus(eStatus status);
+	virtual eStatus getStatus();
+
 protected:
 	Sprite* _sprite;
 

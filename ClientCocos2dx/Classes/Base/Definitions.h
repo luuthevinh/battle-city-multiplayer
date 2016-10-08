@@ -1,6 +1,9 @@
 #ifndef __DEFINITIONS_H__
 #define __DEFINITIONS_H__
 
+#define PORT 1495
+#define SERVER_ADD "127.0.0.1"
+
 enum eObjectId
 {
 	YELLOW_TANK = 1 << 0,
@@ -10,10 +13,10 @@ enum eObjectId
 
 enum eDirection
 {
-	LEFT,
-	TOP,
-	RIGHT,
-	BOTTOM
+	LEFT = 1,
+	TOP = 2,
+	RIGHT = 3,
+	BOTTOM = 4
 };
 
 enum eStatus
@@ -46,5 +49,14 @@ enum eSpriteId
 
 #define DEFAULT_ANIMATION_TIME 0.1
 #define TANK_NORMAL_VELOCITY 100
+
+struct ObjectPacket {
+	int id;
+	int direction;
+	float x;
+	float y;
+	float dx;
+	float dy;
+};
 
 #endif // !__DEFINITIONS_H__
