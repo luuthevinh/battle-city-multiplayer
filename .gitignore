@@ -5,7 +5,9 @@ ClientCocos2dx/proj.ios_mac/
 ClientCocos2dx/proj.linux/
 ClientCocos2dx/proj.win8.1-universal/
 ClientCocos2dx/proj.win10/
-ClientCocos2dx/proj.win32/
 ClientCocos2dx/.cocos-project.json
 ClientCocos2dx/CMakeLists.txt
 /Server/TankServer/Debug
+/ClientCocos2dx/proj.win32/Debug.win32
+/ClientCocos2dx/proj.win32/Debug
+/ClientCocos2dx/proj.win32/*.sdf
