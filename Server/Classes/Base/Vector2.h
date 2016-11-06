@@ -6,6 +6,7 @@ class Vector2
 public:
 	Vector2();
 	Vector2(float xx, float yy);
+	Vector2(const Vector2& other);
 	~Vector2();
 
 	Vector2 operator+(const Vector2& v);

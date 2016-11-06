@@ -55,6 +55,10 @@ private:
 	float _lastTime;
 
 	// PacketHandler* _packetHandler;
+
+	int _serverTick;
+	float _serverDetal;
+	float _serverLastTime;
 };
 
 #endif // !__SERVER_H__

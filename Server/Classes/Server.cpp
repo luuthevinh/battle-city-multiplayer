@@ -10,6 +10,10 @@ Server::Server(u_short port, char * address)
 
 	_detalTime = 0;
 	_lastTime = 0;
+
+	_serverTick = 20;
+	_serverLastTime = 0.0f;
+	_serverDetal = 1.0f / _serverTick;
 }
 
 Server::~Server()
@@ -150,16 +154,22 @@ void Server::run()
 				this->recievePackage(i);
 			}
 
-			// socket để gửi 
-			if (FD_ISSET(currentSocket, &_writeSet))
-			{
-				// kiểm tra xem list còn client hoặc phải player 0  ko
-				if (_clientManager->getAllClients().size() <= 0)
-					continue;
+			//float delta = _gameTime->getTotalTime() - _serverLastTime;
+			//if (delta >= _serverDetal)
+			//{
+				//_serverLastTime += _serverDetal;
 
-				// send package in socket
-				this->sendPackage(i);
-			}
+				// socket để gửi 
+				if (FD_ISSET(currentSocket, &_writeSet))
+				{
+					// kiểm tra xem list còn client hoặc phải player 0  ko
+					if (_clientManager->getAllClients().size() <= 0)
+						continue;
+
+					// send package in socket
+					this->sendPackage(i);
+				}
+			//}
 		}
 
 		// game time update
@@ -253,26 +263,17 @@ void Server::recievePackage(int index)
 
 void Server::sendPackage(int index)
 {
-	if (_clientManager->getPacketInfoQueue().size() <= 0)
-		return;
-
-	auto packetInfo = _clientManager->getPacketInfoQueue().front();
-
-	Packet p = packetInfo.getInfo();
+	// lấy socket
 	SOCKET currentSocket = _clientManager->getClientSocket(index);
 
 	if (currentSocket == 0)
 		return;
 
-	if (p.packetType != Packet::PLAYER)
-	{
-		if(p.fromSocket == currentSocket)
-			return;
-	}
-	else if (p.PlayerPacket.toSocket != currentSocket)
-	{
+	// packet của socket này
+	Packet p = _clientManager->getPacket(currentSocket);
+
+	if (p.packetType == Packet::eType::EMPTY)
 		return;
-	}
 
 	WSABUF dataBuffer;
 	dataBuffer.buf = (CHAR*)(&p);
@@ -304,13 +305,8 @@ void Server::sendPackage(int index)
 		}
 	} while (sendBytes < dataBuffer.len);
 
-	// rep xong player
-	if (p.packetType == Packet::PLAYER)
-	{
-		_clientManager->removeFrontPacket();
-	}
-
-	_clientManager->updateFrontPacket(currentSocket, true);
+	// gửi xong thì xóa
+	_clientManager->removeFrontPacket(currentSocket);
 }
 
 void Server::closeConnection(int index)
@@ -332,19 +328,18 @@ void Server::addConnection(SOCKET socket)
 	Packet repPack;
 	repPack.packetType = Packet::PLAYER;
 	repPack.PlayerPacket.uniqueId = index;
-	repPack.PlayerPacket.toSocket = socket;
 
-	_clientManager->addPacketToQueue(repPack);
+	_clientManager->addPacketToQueue(repPack, socket);
 
-	Packet packet;
-	packet.fromSocket = socket;
-	packet.packetType = Packet::CREATE;
-	packet.CreatePacket.objectId = eObjectId::YELLOW_TANK;
-	packet.CreatePacket.uniqueId = _game->getPlayer(index)->getTag();
-	packet.CreatePacket.x = 0;
-	packet.CreatePacket.y = 0;
+	//Packet packet;
+	//packet.fromSocket = socket;
+	//packet.packetType = Packet::CREATE;
+	//packet.CreatePacket.objectId = eObjectId::YELLOW_TANK;
+	//packet.CreatePacket.uniqueId = _game->getPlayer(index)->getTag();
+	//packet.CreatePacket.x = 0;
+	//packet.CreatePacket.y = 0;
 
-	_clientManager->addPacketToQueue(packet);
+	//_clientManager->addPacketToQueue(packet, socket);
 
 	printf("new connection: %d\n", socket);
 }

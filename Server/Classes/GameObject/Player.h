@@ -12,6 +12,9 @@ public:
 
 	int getIndex();
 
+	void shoot();
+	void updateInput(eKeyInput input, bool start);
+
 private:
 	int _index;		// index socket trong client manager
 };

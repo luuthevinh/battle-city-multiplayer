@@ -12,6 +12,12 @@ Vector2::Vector2(float xx, float yy)
 	y = yy;
 }
 
+Vector2::Vector2(const Vector2 & other)
+{
+	x = other.x;
+	y = other.y;
+}
+
 Vector2::~Vector2()
 {
 }

@@ -17,12 +17,17 @@ public:
 	virtual void setPosition(const Vector2 &position);
 	virtual Vector2 getPosition();
 
+	virtual void setDirection(eDirection direction);
+	virtual eDirection getDirection();
+
 	virtual void addStatus(eStatus status);
+	virtual void removeStatus(eStatus status);
 	virtual void setStatus(eStatus status);
 	virtual bool hasStatus(eStatus status);
 	virtual eStatus getStatus();
 
 	virtual eObjectId getId();
+
 	virtual void setTag(int tag);
 	virtual int getTag();
 
@@ -33,6 +38,7 @@ public:
 	Packet getPacket();
 protected:
 	Vector2 _position;
+	eDirection _direction;
 
 	eObjectId _id;
 	eStatus _status;

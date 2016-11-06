@@ -30,6 +30,8 @@ void SpriteManager::init()
 
 	initResourceFile();
 	initAnimate();
+
+	initSingleSprite();
 }
 
 /// Add tất cả file plist ở đây.
@@ -39,8 +41,7 @@ void SpriteManager::initResourceFile()
 	// addFrameCache("tên file plist")
 	// addFrameCache("tên file plist", "tên file ảnh")
 
-	addFrameCache("yellow_tank.plist", "yellow_tank.png");
-
+	addFrameCache("spritesheet.plist", "spritesheet.png");
 }
 
 
@@ -52,6 +53,21 @@ void SpriteManager::initAnimate()
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_left"].push_back(createAniamte("tank_03.png", "tank_04.png", NULL));
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_down"].push_back(createAniamte("tank_05.png", "tank_06.png", NULL));
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_right"].push_back(createAniamte("tank_07.png", "tank_08.png", NULL));
+
+	// animate nổ
+	this->_animates[_objectNames[eObjectId::EXPLOSION]].push_back(createAniamte(
+		"explosion_00.png",
+		"explosion_01.png",
+		"explosion_02.png",
+		NULL));
+
+	this->_animates[_objectNames[eObjectId::EXPLOSION] + "_big"].push_back(createAniamte(
+			"explosion_00.png",
+			"explosion_01.png",
+			"explosion_02.png",
+			"explosion_03.png",
+			"explosion_04.png",
+			NULL));
 }
 
 // Khởi tạo cho mỗi eSpriteId một Sprite
@@ -60,6 +76,9 @@ void SpriteManager::initSingleSprite()
 	// Sprite::create("Tên file ảnh");
 	// Sprite::createWithSpriteFrameName("Tên frame name trong plist")
 	
+	//SpriteFrameCache::getInstance()->addSpriteFrame(
+	//	SpriteFrame::create(_objectNames[eObjectId::BULLET] + ".png", Rect(0, 0, 8, 6)), _objectNames[eObjectId::BULLET]);
+
 }
 
 void SpriteManager::mappingNames()
@@ -68,6 +87,9 @@ void SpriteManager::mappingNames()
 	_objectNames[eObjectId::YELLOW_TANK] = "yellow_tank";
 	_objectNames[eObjectId::WHITE_TANK] = "white_tank";
 	_objectNames[eObjectId::GREEN_TANK] = "green_tank";
+
+	_objectNames[eObjectId::BULLET] = "bullet.png";
+	_objectNames[eObjectId::EXPLOSION] = "explosion";
 }
 
 Animate* SpriteManager::createAniamte(char* frameName, ...)

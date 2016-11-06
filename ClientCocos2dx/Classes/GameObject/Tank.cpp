@@ -1,4 +1,4 @@
-#include "Tank.h"
+﻿#include "Tank.h"
 
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0),
@@ -105,4 +105,28 @@ void Tank::setDirection(eDirection direction)
 eDirection Tank::getDirection()
 {
 	return _direction;
+}
+
+void Tank::updateWithPacket(const Packet & packet)
+{
+	// update lại với dữ liệu từ server gửi xuống
+	// chưa có tính toán
+	this->setPosition(packet.TankPacket.x, packet.TankPacket.y);
+	this->setStatus((eStatus)packet.TankPacket.status);
+	this->setDirection((eDirection)packet.TankPacket.direction);
+}
+
+const Packet & Tank::getPacket()
+{
+	if (_velocity != 0)
+		_packet.TankPacket.direction = _direction;
+	//else
+	//	_packet.TankPacket.direction = 0;
+
+	_packet.TankPacket.id = _id;
+	_packet.TankPacket.x = this->getPositionX();
+	_packet.TankPacket.y = this->getPositionY();
+	_packet.TankPacket.status = this->getStatus();
+
+	return _packet;
 }

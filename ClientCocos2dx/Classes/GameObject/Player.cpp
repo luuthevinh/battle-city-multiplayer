@@ -1,9 +1,11 @@
 #include "Player.h"
 #include "Base\SpriteManager.h"
 #include "Scene\HelloWorldScene.h"
+#include "Bullet.h"
 
 Player::Player(eObjectId id) : Tank(id)
 {
+	_packet.packetType = Packet::TANK;
 }
 
 Player::~Player()
@@ -48,36 +50,6 @@ bool Player::init()
 void Player::update(float dt)
 {
 	Tank::update(dt);
-
-	//std::string info = "postion: ";
-	//char buffer[100];
-	//sprintf(buffer, "position: (%.2f, %.2f)", this->getPositionX(), this->getPositionY());
-	//HelloWorld::instance->getConnector()->sendData(buffer);
-
-	//ObjectPacket pack;
-	//if(_velocity != 0)
-	//	pack.direction = _direction;
-	//else
-	//	pack.direction = 0;
-	//pack.id = 0;
-	//pack.x = this->getPositionX();
-	//pack.y = this->getPositionY();
-	//pack.dx = 0;
-	//pack.dy = 0;
-
-	Packet pack;
-	pack.packetType = Packet::TANK;
-	if (_velocity != 0)
-		pack.TankPacket.direction = _direction;
-	else
-		pack.TankPacket.direction = 0;
-
-	pack.TankPacket.id = _id;
-	pack.TankPacket.x = this->getPositionX();
-	pack.TankPacket.y = this->getPositionY();
-	pack.TankPacket.status = this->getStatus();
-
-	HelloWorld::instance->getConnector()->sendData(pack);
 }
 
 void Player::setDirection(eDirection direction)
@@ -101,55 +73,89 @@ void Player::setDirection(eDirection direction)
 
 void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 {
-	if (_velocity == 0)
-	{
-		_velocity = TANK_NORMAL_VELOCITY;
-		_status = (eStatus)(_status | eStatus::RUNNING);
-	}
-
+	eKeyInput input = eKeyInput::KEY_NONE;
 
 	switch (keycode)
 	{
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 	{
 		this->setDirection(eDirection::UP);
-		_keyDirectionCounter++;
-
+		input = eKeyInput::KEY_UP;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 	{
 		this->setDirection(eDirection::DOWN);
-		_keyDirectionCounter++;
+		input = eKeyInput::KEY_DOWN;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 	{
 		this->setDirection(eDirection::LEFT);
-		_keyDirectionCounter++;
+		input = eKeyInput::KEY_LEFT;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 	{
-		this->setDirection(eDirection::RIGHT);
-		_keyDirectionCounter++;
+		input = eKeyInput::KEY_RIGHT;
+		break;
+	}
+	case EventKeyboard::KeyCode::KEY_X:
+	{
+		input = eKeyInput::KEY_SHOOT;
 		break;
 	}
 	default:
 		break;
 	}
+
+	if (input != eKeyInput::KEY_NONE)
+	{
+		if (input != eKeyInput::KEY_SHOOT)
+		{
+			_keyDirectionCounter++;
+			_velocity = TANK_NORMAL_VELOCITY;
+			_status = (eStatus)(_status | eStatus::RUNNING);
+		}
+
+		Packet packet;
+		packet.packetType = Packet::eType::PLAYER;
+		packet.PlayerPacket.uniqueId = this->getTag();
+		packet.PlayerPacket.playerInput = input;
+		packet.PlayerPacket.start = true;
+
+		HelloWorld::instance->getConnector()->sendData(packet);
+	}
 }
 
 void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 {
+	eKeyInput input = eKeyInput::KEY_NONE;
+
 	switch (keycode)
 	{
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+	{
+		_keyDirectionCounter--;
+		input = eKeyInput::KEY_UP;
+		break;
+	}
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+	{
+		_keyDirectionCounter--;
+		input = eKeyInput::KEY_DOWN;
+		break;
+	}
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+	{
+		_keyDirectionCounter--;
+		input = eKeyInput::KEY_LEFT;
+		break;
+	}
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 	{
 		_keyDirectionCounter--;
+		input = eKeyInput::KEY_RIGHT;
 		break;
 	}
 	default:
@@ -161,5 +167,17 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 		_velocity = 0.0f;
 		_status = (eStatus)(_status & (~eStatus::RUNNING));
 		_sprite->stopAllActions();
+
+	}
+
+	if (input != eKeyInput::KEY_NONE)
+	{
+		Packet packet;
+		packet.packetType = Packet::eType::PLAYER;
+		packet.PlayerPacket.uniqueId = this->getTag();
+		packet.PlayerPacket.playerInput = input;
+		packet.PlayerPacket.start = false;
+
+		HelloWorld::instance->getConnector()->sendData(packet);
 	}
 }

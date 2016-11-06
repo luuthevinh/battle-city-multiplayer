@@ -38,9 +38,24 @@ Vector2 GameObject::getPosition()
 	return _position;
 }
 
+void GameObject::setDirection(eDirection direction)
+{
+	_direction = direction;
+}
+
+eDirection GameObject::getDirection()
+{
+	return _direction;
+}
+
 void GameObject::addStatus(eStatus status)
 {
 	_status = (eStatus)(_status | status);
+}
+
+void GameObject::removeStatus(eStatus status)
+{
+	_status = (eStatus)(_status & (~status));
 }
 
 void GameObject::setStatus(eStatus status)

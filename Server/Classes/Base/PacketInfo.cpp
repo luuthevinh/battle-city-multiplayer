@@ -8,7 +8,7 @@ PacketInfo::PacketInfo(const Packet & info, const std::vector<SOCKET> &toClients
 	{
 		case Packet::PLAYER:
 		{
-			_sentClients[info.PlayerPacket.toSocket] = false;
+			//_sentClients[info.PlayerPacket.toSocket] = false;
 			break;
 		}
 		default:

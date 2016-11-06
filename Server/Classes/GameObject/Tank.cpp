@@ -1,11 +1,11 @@
 #include "Tank.h"
 
 Tank::Tank(eObjectId id) : GameObject(id),
-	_velocity(0),
-	_direction(eDirection::UP)
+	_velocity(0)
 {
 	_packet.packetType = Packet::TANK;
 	_packet.fromSocket = 0;
+	_direction = eDirection::UP;
 }
 
 Tank::~Tank()
@@ -67,19 +67,6 @@ void Tank::updatePosition(float dt)
 	default:
 		break;
 	}
-}
-
-void Tank::setDirection(eDirection direction)
-{
-	if (_direction == direction || direction <= 0 || direction > 4)
-		return;
-
-	_direction = direction;
-}
-
-eDirection Tank::getDirection()
-{
-	return _direction;
 }
 
 void Tank::setVelocity(float velocity)

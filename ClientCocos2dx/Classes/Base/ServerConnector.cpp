@@ -1,6 +1,7 @@
 ﻿#include "ServerConnector.h"
 #include "Scene\HelloWorldScene.h"
 #include "GameObject\Player.h"
+#include "GameObject\Bullet.h"
 
 ServerConnector::ServerConnector()
 {
@@ -82,37 +83,19 @@ void ServerConnector::recieveData()
 		{
 			if (WSAGetLastError() != WSAEWOULDBLOCK)
 			{
-				// printf("WSARecv() failed with error %d\n", WSAGetLastError());
 				this->closeConnection();
 			}
-
-			// printf("WSARecv() is OK!\n");
 			return;
 		}
 		else
 		{
 			// read data buffer with recvBytes
-			// ...
 			if (recvBytes < dataBuffer.len)
 				return;
 
+			// lấy packet xử lý
 			Packet* packet = (Packet*)dataBuffer.buf;
-
 			this->handlePacket(*packet);
-
-			//if (packet->packetType == (uint8_t)Packet::TANK)
-			//{
-			//	// output log
-			//	char str[100];
-			//	sprintf(str, "data %d: (%.2f, %.2f)", counter, packet->TankPacket.x, packet->TankPacket.y);
-			//	counter++;
-			//	log(str);
-
-			//	// set other position
-			//	HelloWorld::instance->_otherPlayer->setPosition(packet->TankPacket.x, packet->TankPacket.y);
-			//	HelloWorld::instance->_otherPlayer->setDirection((eDirection)packet->TankPacket.direction);
-			//	HelloWorld::instance->_otherPlayer->addStatus(eStatus::RUNNING);
-			//}
 		}
 	//} while (recvBytes < dataBuffer.len);
 }
@@ -170,15 +153,8 @@ void ServerConnector::sendData(char * buffer)
 
 void ServerConnector::sendData(const Packet & packet)
 {
-	// test
 	if (_oldPack == packet)
 		return; // ko gửi package trùng
-
-	//_oldPack.TankPacket.direction = packet.TankPacket.direction;
-	//_oldPack.TankPacket.id = packet.TankPacket.id;
-	//_oldPack.TankPacket.x = packet.TankPacket.x;
-	//_oldPack.TankPacket.y = packet.TankPacket.y;
-	//_oldPack.TankPacket.status = packet.TankPacket.status;
 
 	_oldPack = packet;
 
@@ -231,18 +207,45 @@ void ServerConnector::handlePacket(const Packet & packet)
 {
 	switch ((Packet::eType)packet.packetType)
 	{
-	case Packet::CREATE:
-	{
-		auto object = Tank::create((eObjectId)packet.CreatePacket.objectId);
-		object->setPosition(packet.CreatePacket.x, packet.CreatePacket.y);
-		object->setTag(packet.CreatePacket.uniqueId);
+	//case Packet::CREATE:
+	//{
+	//	auto object = Tank::create((eObjectId)packet.CreatePacket.objectId);
+	//	object->setPosition(packet.CreatePacket.x, packet.CreatePacket.y);
+	//	object->setTag(packet.CreatePacket.uniqueId);
 
-		HelloWorld::instance->addChild(object);
+	//	HelloWorld::instance->addChild(object);
 
-		break;
-	}
+	//	break;
+	//}
 	case Packet::OBJECT:
 	{
+		auto object = (GameObject*)HelloWorld::instance->getChildByTag(packet.ObjectPacket.uniqueId);
+		if (object == nullptr)
+		{
+			switch ((eObjectId)packet.ObjectPacket.objectType)
+			{
+			case eObjectId::BULLET:
+			{
+				auto pos = Vec2(packet.ObjectPacket.x, packet.ObjectPacket.y);
+
+				auto bullet = Bullet::create(pos, (eDirection)packet.ObjectPacket.direction);
+				bullet->setTag(packet.ObjectPacket.uniqueId);
+				bullet->setStatus((eStatus)packet.ObjectPacket.status);
+				
+				HelloWorld::instance->addChild(bullet);
+
+				return;
+			}
+			default:
+				break;
+			}
+		}
+
+		object->setStatus((eStatus)packet.ObjectPacket.status);
+
+		auto pos = Vec2(packet.ObjectPacket.x, packet.ObjectPacket.y);
+		object->setPosition(pos);
+
 		break;
 	}
 	case Packet::TANK:
@@ -250,20 +253,18 @@ void ServerConnector::handlePacket(const Packet & packet)
 		auto object = (Tank*)HelloWorld::instance->getChildByTag(packet.TankPacket.id);
 		if (object == nullptr)
 		{
-			object = Tank::create(eObjectId::YELLOW_TANK);
-			object->setPosition(packet.TankPacket.x, packet.TankPacket.y);
-			object->setTag(packet.TankPacket.id);
-			object->setStatus((eStatus)packet.TankPacket.status);
-			object->setDirection((eDirection)packet.TankPacket.direction);
+			auto tank = Tank::create(eObjectId::YELLOW_TANK);
+			tank->setPosition(packet.TankPacket.x, packet.TankPacket.y);
+			tank->setTag(packet.TankPacket.id);
+			tank->setStatus((eStatus)packet.TankPacket.status);
+			tank->setDirection((eDirection)packet.TankPacket.direction);
 
-			HelloWorld::instance->addChild(object);
+			HelloWorld::instance->addChild(tank);
 			return;
 		}
 
-		object->setPosition(packet.TankPacket.x, packet.TankPacket.y);
-		object->setStatus((eStatus)packet.TankPacket.status);
-		object->setDirection((eDirection)packet.TankPacket.direction);
-		
+		object->updateWithPacket(packet);
+
 		break;
 	}
 	case Packet::PLAYER:
@@ -272,6 +273,7 @@ void ServerConnector::handlePacket(const Packet & packet)
 		if (object == nullptr)
 			return;
 
+		// lấy tag làm unique id cho object
 		object->setTag(packet.PlayerPacket.uniqueId);
 		object->setPosition(Vec2(0, 0));
 		break;

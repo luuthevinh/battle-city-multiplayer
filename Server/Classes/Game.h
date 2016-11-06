@@ -8,6 +8,8 @@
 class Game
 {
 public:
+	static Game* instance;
+
 	Game();
 	~Game();
 
@@ -22,17 +24,22 @@ public:
 	const std::vector<GameObject*>& getAllGameObjects() const;
 	const std::vector<Player*>& getAllPlayers() const;
 
+	int addObject(GameObject* object);
 	GameObject* getGameObject(eObjectId id);
+	void removeObject(int tag);
 
 	void addPlayer(int index);
 	void removePlayer(int index);
 	Player* getPlayer(int index);
+
+	void handlePlayerInput(int playerTag, eKeyInput input, bool start = true);
 
 private:
 	std::vector<GameObject*> _gameObjects;
 	std::vector<Player*> _players;
 
 	float _frameRate;
+	int _uniqueIdCounter;
 };
 
 #endif // !__GAME_H__

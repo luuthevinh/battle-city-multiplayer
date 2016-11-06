@@ -16,7 +16,7 @@ enum eAnimateId
 
 enum eSpriteId 
 {
-	
+	SPRITE_BULLET
 };
 
 #define DEFAULT_ANIMATION_TIME 0.1

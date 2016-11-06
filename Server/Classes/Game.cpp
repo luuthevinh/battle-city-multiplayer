@@ -1,4 +1,7 @@
-#include "Game.h"
+﻿#include "Game.h"
+#include "GameObject\Bullet.h"
+
+Game* Game::instance = nullptr;
 
 Game::Game()
 {
@@ -23,11 +26,25 @@ bool Game::init()
 {
 	_frameRate = 1.0f / GAME_FRAMERATE;
 
+	instance = this;
+	_uniqueIdCounter = 0;
+
 	return true;
 }
 
 void Game::update(float dt)
 {
+	// còn lỗi xóa, nhớ fix
+	//for (auto it = _gameObjects.begin(); it != _gameObjects.end(); )
+	//{
+	//	if ((*it)->getStatus() == eStatus::DIE)
+	//	{
+	//		delete *it;
+	//		_gameObjects.erase(it);
+	//		break;
+	//	}
+	//}
+
 	for(auto object : _gameObjects)
 	{
 		object->update(dt);
@@ -37,6 +54,7 @@ void Game::update(float dt)
 	{
 		player->update(dt);
 	}
+
 }
 
 void Game::update(char * data)
@@ -63,6 +81,7 @@ void Game::addPlayer(int index)
 {
 	auto player = new Player(eObjectId::YELLOW_TANK, index);
 	player->setTag(index);
+	_uniqueIdCounter++;
 
 	_players.push_back(player);
 }
@@ -87,4 +106,32 @@ Player* Game::getPlayer(int index)
 	}
 
 	return nullptr;
+}
+
+int Game::addObject(GameObject* object)
+{
+	_uniqueIdCounter++;
+
+	_gameObjects.push_back(object);
+	object->setTag(_uniqueIdCounter);
+
+	return _gameObjects.size();
+}
+
+void Game::handlePlayerInput(int playerTag, eKeyInput input, bool start)
+{
+	this->getPlayer(playerTag)->updateInput(input, start);
+}
+
+void Game::removeObject(int tag)
+{
+	for (auto it = _gameObjects.begin(); it != _gameObjects.end(); it++)
+	{
+		if ((*it)->getTag() == tag)
+		{
+			delete *it;
+			_gameObjects.erase(it);
+			return;
+		}
+	}
 }
