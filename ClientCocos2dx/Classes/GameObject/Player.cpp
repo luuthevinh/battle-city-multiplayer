@@ -54,18 +54,30 @@ void Player::update(float dt)
 	//sprintf(buffer, "position: (%.2f, %.2f)", this->getPositionX(), this->getPositionY());
 	//HelloWorld::instance->getConnector()->sendData(buffer);
 
-	ObjectPacket pack;
-	if(_velocity != 0)
-		pack.direction = _direction;
-	else
-		pack.direction = 0;
-	pack.id = 0;
-	pack.x = this->getPositionX();
-	pack.y = this->getPositionY();
-	pack.dx = 0;
-	pack.dy = 0;
+	//ObjectPacket pack;
+	//if(_velocity != 0)
+	//	pack.direction = _direction;
+	//else
+	//	pack.direction = 0;
+	//pack.id = 0;
+	//pack.x = this->getPositionX();
+	//pack.y = this->getPositionY();
+	//pack.dx = 0;
+	//pack.dy = 0;
 
-	HelloWorld::instance->getConnector()->sendData(&pack);
+	Packet pack;
+	pack.packetType = Packet::TANK;
+	if (_velocity != 0)
+		pack.TankPacket.direction = _direction;
+	else
+		pack.TankPacket.direction = 0;
+
+	pack.TankPacket.id = _id;
+	pack.TankPacket.x = this->getPositionX();
+	pack.TankPacket.y = this->getPositionY();
+	pack.TankPacket.status = this->getStatus();
+
+	HelloWorld::instance->getConnector()->sendData(pack);
 }
 
 void Player::setDirection(eDirection direction)
@@ -100,14 +112,14 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 	{
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 	{
-		this->setDirection(eDirection::TOP);
+		this->setDirection(eDirection::UP);
 		_keyDirectionCounter++;
 
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 	{
-		this->setDirection(eDirection::BOTTOM);
+		this->setDirection(eDirection::DOWN);
 		_keyDirectionCounter++;
 		break;
 	}

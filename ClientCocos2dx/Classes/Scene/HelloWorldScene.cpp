@@ -38,11 +38,12 @@ bool HelloWorld::init()
     
 	_player = Player::create(eObjectId::YELLOW_TANK);
 	_player->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	_player->setName("player");
 	this->addChild(_player);
 
-	_otherPlayer = Tank::create(eObjectId::YELLOW_TANK);
-	_otherPlayer->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-	this->addChild(_otherPlayer);
+	//_otherPlayer = Tank::create(eObjectId::YELLOW_TANK);
+	//_otherPlayer->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	//this->addChild(_otherPlayer);
 
 	// init server
 	_serverConnector = new ServerConnector();

@@ -50,7 +50,7 @@ void SpriteManager::initAnimate()
 	// xe vàng cấp 1
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_up"].push_back(createAniamte("tank_01.png", "tank_02.png", NULL));
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_left"].push_back(createAniamte("tank_03.png", "tank_04.png", NULL));
-	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_bottom"].push_back(createAniamte("tank_05.png", "tank_06.png", NULL));
+	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_down"].push_back(createAniamte("tank_05.png", "tank_06.png", NULL));
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_right"].push_back(createAniamte("tank_07.png", "tank_08.png", NULL));
 }
 

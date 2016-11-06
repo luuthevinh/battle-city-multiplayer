@@ -21,9 +21,13 @@ public:
 
 	void closeConnection();
 	void sendData(char* buffer);
-	void sendData(ObjectPacket* packet);
+	void sendData(const Packet &packet);
 
 	u_long getDataPendingInSocket(SOCKET socket);
+
+	int getServerIndex();
+
+	void handlePacket(const Packet &packet);
 
 private:
 	WSADATA _wsaData;
@@ -37,7 +41,7 @@ private:
 
 	int _serverIndex;
 
-	ObjectPacket _oldPack;
+	Packet _oldPack;
 };
 
 

@@ -34,12 +34,10 @@ bool ServerConnector::init(u_short port, char * address)
 
 	_connecting = false;
 
-	_oldPack.direction = 0;
-	_oldPack.id = 0;
-	_oldPack.x = 0;
-	_oldPack.y = 0;
-	_oldPack.dx = 0;
-	_oldPack.dy = 0;
+	_oldPack.TankPacket.direction = 0;
+	_oldPack.TankPacket.id = 0;
+	_oldPack.TankPacket.x = 0;
+	_oldPack.TankPacket.y = 0;
 
 	_timeVal.tv_sec = 0;
 	_timeVal.tv_usec = 0;
@@ -72,10 +70,10 @@ void ServerConnector::recieveData()
 {
 	DWORD flags = 0;
 
-	CHAR buffer[sizeof(ObjectPacket)];
+	CHAR buffer[sizeof(Packet)];
 	WSABUF dataBuffer;
 	dataBuffer.buf = buffer;
-	dataBuffer.len = sizeof(ObjectPacket);
+	dataBuffer.len = sizeof(Packet);
 	DWORD recvBytes;
 
 	//do
@@ -98,18 +96,23 @@ void ServerConnector::recieveData()
 			if (recvBytes < dataBuffer.len)
 				return;
 
-			ObjectPacket* packet = (ObjectPacket*)dataBuffer.buf;
+			Packet* packet = (Packet*)dataBuffer.buf;
 
-			// output log
-			char str[100];
-			sprintf(str, "data %d: (%.2f, %.2f)", counter, packet->x, packet->y);
-			counter++;
-			log(str);
+			this->handlePacket(*packet);
 
-			// set other position
-			HelloWorld::instance->_otherPlayer->setPosition(packet->x, packet->y);
-			HelloWorld::instance->_otherPlayer->setDirection((eDirection)packet->direction);
-			HelloWorld::instance->_otherPlayer->addStatus(eStatus::RUNNING);
+			//if (packet->packetType == (uint8_t)Packet::TANK)
+			//{
+			//	// output log
+			//	char str[100];
+			//	sprintf(str, "data %d: (%.2f, %.2f)", counter, packet->TankPacket.x, packet->TankPacket.y);
+			//	counter++;
+			//	log(str);
+
+			//	// set other position
+			//	HelloWorld::instance->_otherPlayer->setPosition(packet->TankPacket.x, packet->TankPacket.y);
+			//	HelloWorld::instance->_otherPlayer->setDirection((eDirection)packet->TankPacket.direction);
+			//	HelloWorld::instance->_otherPlayer->addStatus(eStatus::RUNNING);
+			//}
 		}
 	//} while (recvBytes < dataBuffer.len);
 }
@@ -165,22 +168,23 @@ void ServerConnector::sendData(char * buffer)
 	}
 }
 
-void ServerConnector::sendData(ObjectPacket* packet)
+void ServerConnector::sendData(const Packet & packet)
 {
 	// test
-	if (_oldPack.x == packet->x && _oldPack.y == packet->y)
+	if (_oldPack == packet)
 		return; // ko gửi package trùng
 
-	_oldPack.direction = packet->direction;
-	_oldPack.id = packet->id;
-	_oldPack.x = packet->x;
-	_oldPack.y = packet->y;
-	_oldPack.dx = packet->dx;
-	_oldPack.dy = packet->dy;
+	//_oldPack.TankPacket.direction = packet.TankPacket.direction;
+	//_oldPack.TankPacket.id = packet.TankPacket.id;
+	//_oldPack.TankPacket.x = packet.TankPacket.x;
+	//_oldPack.TankPacket.y = packet.TankPacket.y;
+	//_oldPack.TankPacket.status = packet.TankPacket.status;
+
+	_oldPack = packet;
 
 	WSABUF dataBuffer;
-	dataBuffer.buf = (char*)packet;
-	dataBuffer.len = sizeof(ObjectPacket);
+	dataBuffer.buf = (char*)&packet;
+	dataBuffer.len = sizeof(Packet);
 	DWORD sendBytes;
 
 	do
@@ -216,4 +220,63 @@ u_long ServerConnector::getDataPendingInSocket(SOCKET socket)
 	ioctlsocket(socket, FIONREAD, &pending);
 
 	return pending;
+}
+
+int ServerConnector::getServerIndex()
+{
+	return _serverIndex;
+}
+
+void ServerConnector::handlePacket(const Packet & packet)
+{
+	switch ((Packet::eType)packet.packetType)
+	{
+	case Packet::CREATE:
+	{
+		auto object = Tank::create((eObjectId)packet.CreatePacket.objectId);
+		object->setPosition(packet.CreatePacket.x, packet.CreatePacket.y);
+		object->setTag(packet.CreatePacket.uniqueId);
+
+		HelloWorld::instance->addChild(object);
+
+		break;
+	}
+	case Packet::OBJECT:
+	{
+		break;
+	}
+	case Packet::TANK:
+	{
+		auto object = (Tank*)HelloWorld::instance->getChildByTag(packet.TankPacket.id);
+		if (object == nullptr)
+		{
+			object = Tank::create(eObjectId::YELLOW_TANK);
+			object->setPosition(packet.TankPacket.x, packet.TankPacket.y);
+			object->setTag(packet.TankPacket.id);
+			object->setStatus((eStatus)packet.TankPacket.status);
+			object->setDirection((eDirection)packet.TankPacket.direction);
+
+			HelloWorld::instance->addChild(object);
+			return;
+		}
+
+		object->setPosition(packet.TankPacket.x, packet.TankPacket.y);
+		object->setStatus((eStatus)packet.TankPacket.status);
+		object->setDirection((eDirection)packet.TankPacket.direction);
+		
+		break;
+	}
+	case Packet::PLAYER:
+	{
+		auto object = (Player*)HelloWorld::instance->getChildByName("player");
+		if (object == nullptr)
+			return;
+
+		object->setTag(packet.PlayerPacket.uniqueId);
+		object->setPosition(Vec2(0, 0));
+		break;
+	}
+	default:
+		break;
+	}
 }

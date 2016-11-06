@@ -6,7 +6,9 @@
 #include <vector>
 
 #include "Game.h"
-#include "ClientManager.h"
+#include "Base\ClientManager.h"
+#include "Base\GameTime.h"
+#include "Base\PacketHandler.h"
 
 class Server
 {
@@ -41,12 +43,18 @@ private:
 	FD_SET _writeSet;
 	FD_SET _readSet;
 
-	timeval _deltaTime;
+	timeval _timeOut;
 
 	Game* _game;
 	ClientManager* _clientManager;
 
-	ObjectPacket _currentPack;
+	//Packet _oldPacket;
+
+	GameTime* _gameTime;
+	float _detalTime;
+	float _lastTime;
+
+	// PacketHandler* _packetHandler;
 };
 
 #endif // !__SERVER_H__

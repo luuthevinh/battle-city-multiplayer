@@ -2,7 +2,7 @@
 
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0),
-	_direction(eDirection::TOP)
+	_direction(eDirection::UP)
 {
 }
 
@@ -38,8 +38,8 @@ bool Tank::init()
 	_sprite = Sprite::create();
 	this->addChild(_sprite);
 
-	_animations[eDirection::TOP] = SpriteManager::getInstance()->getAnimate(this->getName() + "_up");
-	_animations[eDirection::BOTTOM] = SpriteManager::getInstance()->getAnimate(this->getName() + "_bottom");
+	_animations[eDirection::UP] = SpriteManager::getInstance()->getAnimate(this->getName() + "_up");
+	_animations[eDirection::DOWN] = SpriteManager::getInstance()->getAnimate(this->getName() + "_down");
 	_animations[eDirection::LEFT] = SpriteManager::getInstance()->getAnimate(this->getName() + "_left");
 	_animations[eDirection::RIGHT] = SpriteManager::getInstance()->getAnimate(this->getName() + "_right");
 
@@ -69,13 +69,13 @@ void Tank::updatePosition(float dt)
 	case LEFT:
 		this->setPositionX(this->getPositionX() - _velocity * dt);
 		break;
-	case TOP:
+	case UP:
 		this->setPositionY(this->getPositionY() + _velocity * dt);
 		break;
 	case RIGHT:
 		this->setPositionX(this->getPositionX() + _velocity * dt);
 		break;
-	case BOTTOM:
+	case DOWN:
 		this->setPositionY(this->getPositionY() - _velocity * dt);
 		break;
 	default:

@@ -5,14 +5,18 @@ Server::Server(u_short port, char * address)
 	_port = port;
 	_address = address;
 
-	_deltaTime.tv_sec = 0;
-	_deltaTime.tv_usec = 16666;
+	_timeOut.tv_sec = 0;
+	_timeOut.tv_usec = 500;
+
+	_detalTime = 0;
+	_lastTime = 0;
 }
 
 Server::~Server()
 {
 	delete _game;
 	delete _clientManager;
+	//delete _packetHandler;
 }
 
 bool Server::init()
@@ -64,6 +68,13 @@ bool Server::init()
 
 	_clientManager = new ClientManager();
 
+	// game time
+	_gameTime = new GameTime();
+	_gameTime->init();
+
+	//
+	//_packetHandler = new PacketHandler();
+
 	return true;
 }
 
@@ -90,24 +101,18 @@ void Server::run()
 		int total = 0;
 
 		// select sockets
-		if ((total = select(0, &_readSet, &_writeSet, NULL, &_deltaTime)) == SOCKET_ERROR)
+		if ((total = select(0, &_readSet, &_writeSet, NULL, &_timeOut)) == SOCKET_ERROR)
 		{
-			return;
+			printf("select() error!\n");
+			system("pause");
 		}
-
-		// update game, tạm để 0.33
-		_game->update(0.33f);
-
-		if (total == 0)
-			continue;
 
 		// kiểm tra kết nối tới server
 		if (FD_ISSET(_listenSocket, &_readSet))
 		{
-			total--;
-
 			SOCKET acceptSocket;
 
+			// accept socket mới
 			if ((acceptSocket = accept(_listenSocket, NULL, NULL)) != INVALID_SOCKET)
 			{
 				// set socket kết nối tới server thành non-blocking
@@ -115,7 +120,7 @@ void Server::run()
 				if (ioctlsocket(acceptSocket, FIONBIO, &_nonBlocking) == SOCKET_ERROR)
 				{
 					printf("ioctlsocket(FIONBIO) failed!\n");
-					return;
+					system("pause");
 				}
 
 				// lưu lại socket
@@ -126,7 +131,7 @@ void Server::run()
 				if (WSAGetLastError() != WSAEWOULDBLOCK)
 				{
 					printf("accept() failed");
-					return;
+					system("pause");;
 				}
 
 				printf("accept() is fine!\n");
@@ -139,7 +144,7 @@ void Server::run()
 			SOCKET currentSocket = _clientManager->getClientSocket(i);
 
 			// socket để đọc
-			if (FD_ISSET(currentSocket, &_readSet) && currentSocket == _clientManager->getClientSocket(0))
+			if (FD_ISSET(currentSocket, &_readSet))
 			{
 				// đọc tin
 				this->recievePackage(i);
@@ -149,12 +154,38 @@ void Server::run()
 			if (FD_ISSET(currentSocket, &_writeSet))
 			{
 				// kiểm tra xem list còn client hoặc phải player 0  ko
-				if (_clientManager->getAllClients().size() <= 0 || currentSocket == _clientManager->getClientSocket(0))
+				if (_clientManager->getAllClients().size() <= 0)
 					continue;
 
 				// send package in socket
 				this->sendPackage(i);
 			}
+		}
+
+		// game time update
+		_gameTime->update();
+
+		_detalTime = _gameTime->getTotalTime() - _lastTime;
+
+		if (_detalTime >= _game->getFrameRate())
+		{
+			_lastTime += _game->getFrameRate();
+
+			// update game
+			_game->update(_detalTime);
+
+			// update packet to send to client
+			_clientManager->generatePackets(*_game);
+
+			// title console
+			float f = 1.0f / _detalTime;
+			char buffer[100];
+			sprintf(buffer, "(%.1f/s) | %.4f | Tank Server \n", f, _detalTime); 
+			SetConsoleTitle(buffer);
+		}
+		else
+		{
+			Sleep((_game->getFrameRate() - _detalTime) * 1000.0f);
 		}
 	}
 }
@@ -178,13 +209,15 @@ bool Server::sendMessage(int connectionId, char * message)
 void Server::recievePackage(int index)
 {
 	SOCKET currentSocket = _clientManager->getClientSocket(index);
+	if (currentSocket == 0)
+		return;
 
 	DWORD flags = 0;
 
-	CHAR buffer[sizeof(ObjectPacket)];
+	CHAR buffer[sizeof(Packet)];
 	WSABUF dataBuffer;
 	dataBuffer.buf = buffer;
-	dataBuffer.len = sizeof(ObjectPacket);
+	dataBuffer.len = sizeof(Packet);
 	DWORD recvBytes;
 
 	if (WSARecv(currentSocket, &dataBuffer, 1, &recvBytes, &flags, NULL, NULL) == SOCKET_ERROR)
@@ -206,60 +239,44 @@ void Server::recievePackage(int index)
 		// ...
 		//dataBuffer.buf[recvBytes] = '\0';
 		//printf("data recived socket %d: %s\n", currentSocket, dataBuffer.buf);
-
-		ObjectPacket* packet = (ObjectPacket*)dataBuffer.buf;
-		printf("data recieved socket %d(%d): (%.2f, %.2f)\n", currentSocket, recvBytes, packet->x, packet->y);
+		//printf("data recieved socket %d(%d): (%.2f, %.2f)\n", currentSocket, recvBytes, packet->x, packet->y);
 		
-		// test cập nhật vị tri player 0
-		_game->getPlayer(0)->setPosition(packet->x, packet->y);
+		Packet* packet = (Packet*)dataBuffer.buf;
+		_clientManager->updatePacket(*_game, *packet, index);
 
-		if (packet->direction > 0 && packet->direction <= 4)
-		{
-			_game->getPlayer(0)->setDirection((eDirection)packet->direction);
-			//_game->getPlayer(0)->setVelocity(TANK_NORMAL_VELOCITY);
-			//_game->getPlayer(0)->setPosition(packet->x, packet->y);
-		}
-		else
-		{
-			//_game->getPlayer(0)->setVelocity(0);
-		}
+		//_game->update(dataBuffer.buf);
 
-		// tạm để ở đây vì game cập nhật thằng player 0
-		for (size_t i = 0; i < _clientManager->getAllClients().size(); i++)
-		{
-			_clientManager->setUpdate(i, false);
-		}
-
-
-		_game->update(dataBuffer.buf);
+		// thằng này gửi thì ko gửi lại cho nó
+		// _clientManager->setUpdate(index, true);
 	}
 }
 
 void Server::sendPackage(int index)
 {
-	// test
-	if (_clientManager->isSendNewUpdate(index) &&
-		(_currentPack.x == _game->getPlayer(0)->getPositionX() && _currentPack.y == _game->getPlayer(0)->getPositionY()))
+	if (_clientManager->getPacketInfoQueue().size() <= 0)
+		return;
+
+	auto packetInfo = _clientManager->getPacketInfoQueue().front();
+
+	Packet p = packetInfo.getInfo();
+	SOCKET currentSocket = _clientManager->getClientSocket(index);
+
+	if (currentSocket == 0)
+		return;
+
+	if (p.packetType != Packet::PLAYER)
+	{
+		if(p.fromSocket == currentSocket)
+			return;
+	}
+	else if (p.PlayerPacket.toSocket != currentSocket)
 	{
 		return;
 	}
 
-	SOCKET currentSocket = _clientManager->getClientSocket(index);
-
-	ObjectPacket pack;
-	pack.id = 0;
-	pack.direction = _game->getPlayer(0)->getDirection();
-	pack.x = _game->getPlayer(0)->getPositionX();
-	pack.y = _game->getPlayer(0)->getPositionY();
-	pack.dx = 0;
-	pack.dy = 0;
-
-	_currentPack = pack;
-	_clientManager->setUpdate(index, true);
-
 	WSABUF dataBuffer;
-	dataBuffer.buf = (CHAR*)(&pack);
-	dataBuffer.len = sizeof(ObjectPacket);
+	dataBuffer.buf = (CHAR*)(&p);
+	dataBuffer.len = sizeof(Packet);
 	DWORD sendBytes;
 
 	do
@@ -278,7 +295,7 @@ void Server::sendPackage(int index)
 		}
 		else
 		{
-			printf("Send to %d: (%.2f, %.2f)\n", currentSocket, pack.x, pack.y);
+			//printf("Send to %d: (%.2f, %.2f)\n", currentSocket, pack.x, pack.y);
 			if (sendBytes < dataBuffer.len)
 			{
 				dataBuffer.buf += sendBytes;
@@ -286,6 +303,14 @@ void Server::sendPackage(int index)
 			}
 		}
 	} while (sendBytes < dataBuffer.len);
+
+	// rep xong player
+	if (p.packetType == Packet::PLAYER)
+	{
+		_clientManager->removeFrontPacket();
+	}
+
+	_clientManager->updateFrontPacket(currentSocket, true);
 }
 
 void Server::closeConnection(int index)
@@ -293,14 +318,33 @@ void Server::closeConnection(int index)
 	printf("connection %d closed!", _clientManager->getClientSocket(index));
 
 	closesocket(_clientManager->getClientSocket(index));
+	
 	_clientManager->removeClient(index);
+	_game->removePlayer(index);
 }
 
 void Server::addConnection(SOCKET socket)
 {
-	_game->addPlayer(new Player());
+	int index = _clientManager->addClient(socket);
 
-	_clientManager->addClient(socket);
+	_game->addPlayer(index);
+
+	Packet repPack;
+	repPack.packetType = Packet::PLAYER;
+	repPack.PlayerPacket.uniqueId = index;
+	repPack.PlayerPacket.toSocket = socket;
+
+	_clientManager->addPacketToQueue(repPack);
+
+	Packet packet;
+	packet.fromSocket = socket;
+	packet.packetType = Packet::CREATE;
+	packet.CreatePacket.objectId = eObjectId::YELLOW_TANK;
+	packet.CreatePacket.uniqueId = _game->getPlayer(index)->getTag();
+	packet.CreatePacket.x = 0;
+	packet.CreatePacket.y = 0;
+
+	_clientManager->addPacketToQueue(packet);
 
 	printf("new connection: %d\n", socket);
 }

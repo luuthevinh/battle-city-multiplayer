@@ -2,7 +2,8 @@
 #define __GAME_H__
 
 #include <vector>
-#include "Player.h"
+#include "Base\GameObject.h"
+#include "GameObject\Player.h"
 
 class Game
 {
@@ -11,17 +12,27 @@ public:
 	~Game();
 
 	bool init();
+
 	void update(float dt);
+
 	void update(char* data);
 
-	std::vector<Player*> getAllPlayers();
+	float getFrameRate();
 
-	void addPlayer(Player* player);
+	const std::vector<GameObject*>& getAllGameObjects() const;
+	const std::vector<Player*>& getAllPlayers() const;
+
+	GameObject* getGameObject(eObjectId id);
+
+	void addPlayer(int index);
 	void removePlayer(int index);
 	Player* getPlayer(int index);
 
 private:
+	std::vector<GameObject*> _gameObjects;
 	std::vector<Player*> _players;
+
+	float _frameRate;
 };
 
 #endif // !__GAME_H__

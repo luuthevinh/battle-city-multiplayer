@@ -21,7 +21,7 @@ public:
 	ServerConnector* getConnector();
 
 	Player* _player;
-	Tank* _otherPlayer;
+	//Tank* _otherPlayer;
 
 private:
 	ServerConnector* _serverConnector;
