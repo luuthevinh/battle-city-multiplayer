@@ -1,4 +1,7 @@
 ﻿#include "Server.h"
+#include "Shared\DataPacket.h"
+
+Server* Server::instance = nullptr;
 
 Server::Server(u_short port, char * address)
 {
@@ -11,20 +14,17 @@ Server::Server(u_short port, char * address)
 	_detalTime = 0;
 	_lastTime = 0;
 
-	_serverTick = 20;
-	_serverLastTime = 0.0f;
-	_serverDetal = 1.0f / _serverTick;
 }
 
 Server::~Server()
 {
-	delete _game;
-	delete _clientManager;
-	//delete _packetHandler;
+	this->destroy();
 }
 
 bool Server::init()
 {
+	instance = this;
+
 	// start winsock
 	if (WSAStartup(MAKEWORD(2, 2), &_wsaData) != 0)
 	{
@@ -76,8 +76,11 @@ bool Server::init()
 	_gameTime = new GameTime();
 	_gameTime->init();
 
-	//
-	//_packetHandler = new PacketHandler();
+	// data handler with queue
+	_dataHandler = new DataHandler();
+
+	// factory
+	_factory = new ServerConverterFactory(_dataHandler);
 
 	return true;
 }
@@ -151,25 +154,19 @@ void Server::run()
 			if (FD_ISSET(currentSocket, &_readSet))
 			{
 				// đọc tin
-				this->recievePackage(i);
+				this->recieveData(currentSocket);
 			}
 
-			//float delta = _gameTime->getTotalTime() - _serverLastTime;
-			//if (delta >= _serverDetal)
-			//{
-				//_serverLastTime += _serverDetal;
+			// socket để gửi 
+			if (FD_ISSET(currentSocket, &_writeSet))
+			{
+				// kiểm tra xem list còn client hoặc phải player 0  ko
+				if (_clientManager->getAllClients().size() <= 0)
+					continue;
 
-				// socket để gửi 
-				if (FD_ISSET(currentSocket, &_writeSet))
-				{
-					// kiểm tra xem list còn client hoặc phải player 0  ko
-					if (_clientManager->getAllClients().size() <= 0)
-						continue;
-
-					// send package in socket
-					this->sendPackage(i);
-				}
-			//}
+				// send package in socket
+				this->sendData(currentSocket);
+			}
 		}
 
 		// game time update
@@ -181,11 +178,15 @@ void Server::run()
 		{
 			_lastTime += _game->getFrameRate();
 
+			// update object with recieved data
+			auto data = _factory->convertNext();
+			if (data != nullptr)
+			{
+				_game->handleData(data);
+			}
+
 			// update game
 			_game->update(_detalTime);
-
-			// update packet to send to client
-			_clientManager->generatePackets(*_game);
 
 			// title console
 			float f = 1.0f / _detalTime;
@@ -204,119 +205,89 @@ void Server::destroy()
 {
 	closesocket(_listenSocket);
 	WSACleanup();
+
+	delete _game;
+	delete _clientManager;
+	delete _factory;
+	delete _dataHandler;
 }
 
-bool Server::recieveMessage(int connectionId)
+void Server::recieveData(SOCKET socket)
 {
-	return true;
-}
-
-bool Server::sendMessage(int connectionId, char * message)
-{
-	return true;
-}
-
-void Server::recievePackage(int index)
-{
-	SOCKET currentSocket = _clientManager->getClientSocket(index);
-	if (currentSocket == 0)
+	if (socket == 0)
 		return;
 
 	DWORD flags = 0;
+	CHAR buffer[DATA_BUFFER_RECIEVE_SIZE];
 
-	CHAR buffer[sizeof(Packet)];
 	WSABUF dataBuffer;
 	dataBuffer.buf = buffer;
-	dataBuffer.len = sizeof(Packet);
+	dataBuffer.len = DATA_BUFFER_RECIEVE_SIZE;
+
 	DWORD recvBytes;
 
-	if (WSARecv(currentSocket, &dataBuffer, 1, &recvBytes, &flags, NULL, NULL) == SOCKET_ERROR)
+	if (WSARecv(socket, &dataBuffer, 1, &recvBytes, &flags, NULL, NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSAEWOULDBLOCK)
 		{
-			printf("WSARecv() failed with error %d\n", WSAGetLastError());
-
-			this->closeConnection(index);
+			printf("recieve data failed with error %d\n", WSAGetLastError());
+			this->closeConnection(socket);
 		}
 
-		printf("WSARecv() is OK!\n");
+		// printf("recieve data is OK but not saved to queue! :(\n");
+		return;
+	}
+	else
+	{
+		// nhận được thì bỏ vào queue để đọc
+		_dataHandler->recieve(dataBuffer.buf, recvBytes);
+	}
+}
+
+void Server::sendData(SOCKET socket)
+{
+	if (socket == 0)
+		return;
+
+	// có data ko
+	if (_dataHandler->getSendQueue(socket) == nullptr || _dataHandler->getSendQueue(socket)->getIndex() <= 0)
+		return;
+
+	DWORD sendBytes;
+	WSABUF dataBuffer;
+	dataBuffer.buf = _dataHandler->getSendQueue(socket)->getData();
+	dataBuffer.len = _dataHandler->getSendQueue(socket)->getIndex();
+	
+
+	if (WSASend(socket, &dataBuffer, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSAEWOULDBLOCK)
+		{
+			printf("send failed with error %d\n", WSAGetLastError());
+			this->closeConnection(socket);
+		}
+		else
+		{
+			//printf("send is OK! socket: %d error: %d\n", socket, WSAGetLastError());
+		}
 
 		return;
 	}
 	else
 	{
-		// read data buffer with recvBytes
-		// ...
-		//dataBuffer.buf[recvBytes] = '\0';
-		//printf("data recived socket %d: %s\n", currentSocket, dataBuffer.buf);
-		//printf("data recieved socket %d(%d): (%.2f, %.2f)\n", currentSocket, recvBytes, packet->x, packet->y);
-		
-		Packet* packet = (Packet*)dataBuffer.buf;
-		_clientManager->updatePacket(*_game, *packet, index);
-
-		//_game->update(dataBuffer.buf);
-
-		// thằng này gửi thì ko gửi lại cho nó
-		// _clientManager->setUpdate(index, true);
+		// send xong xóa khỏi queue
+		_dataHandler->getSendQueue(socket)->popFront(sendBytes);
 	}
 }
 
-void Server::sendPackage(int index)
+void Server::closeConnection(SOCKET socket)
 {
-	// lấy socket
-	SOCKET currentSocket = _clientManager->getClientSocket(index);
+	printf("connection %d closed!\n", socket);
 
-	if (currentSocket == 0)
-		return;
+	closesocket(socket);
 
-	// packet của socket này
-	Packet p = _clientManager->getPacket(currentSocket);
-
-	if (p.packetType == Packet::eType::EMPTY)
-		return;
-
-	WSABUF dataBuffer;
-	dataBuffer.buf = (CHAR*)(&p);
-	dataBuffer.len = sizeof(Packet);
-	DWORD sendBytes;
-
-	do
-	{
-		if (WSASend(currentSocket, &dataBuffer, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
-		{
-			if (WSAGetLastError() != WSAEWOULDBLOCK)
-			{
-				printf("WSASend() failed with error %d\n", WSAGetLastError());
-				this->closeConnection(index);
-			}
-			else
-				printf("WSASend() is OK! socket: %d error: %d\n", currentSocket, WSAGetLastError());
-
-			return;
-		}
-		else
-		{
-			//printf("Send to %d: (%.2f, %.2f)\n", currentSocket, pack.x, pack.y);
-			if (sendBytes < dataBuffer.len)
-			{
-				dataBuffer.buf += sendBytes;
-				dataBuffer.len -= sendBytes;
-			}
-		}
-	} while (sendBytes < dataBuffer.len);
-
-	// gửi xong thì xóa
-	_clientManager->removeFrontPacket(currentSocket);
-}
-
-void Server::closeConnection(int index)
-{
-	printf("connection %d closed!", _clientManager->getClientSocket(index));
-
-	closesocket(_clientManager->getClientSocket(index));
-	
-	_clientManager->removeClient(index);
-	_game->removePlayer(index);
+	_clientManager->removeClient(socket);
+	_game->removePlayer(_clientManager->getSocketId(socket));
 }
 
 void Server::addConnection(SOCKET socket)
@@ -325,21 +296,26 @@ void Server::addConnection(SOCKET socket)
 
 	_game->addPlayer(index);
 
-	Packet repPack;
-	repPack.packetType = Packet::PLAYER;
-	repPack.PlayerPacket.uniqueId = index;
+	// reply lại id trong server
+	ReplyPacket* rep = new ReplyPacket();
+	rep->uniqueId = index;
 
-	_clientManager->addPacketToQueue(repPack, socket);
+	_dataHandler->sendTo(socket, rep);
 
-	//Packet packet;
-	//packet.fromSocket = socket;
-	//packet.packetType = Packet::CREATE;
-	//packet.CreatePacket.objectId = eObjectId::YELLOW_TANK;
-	//packet.CreatePacket.uniqueId = _game->getPlayer(index)->getTag();
-	//packet.CreatePacket.x = 0;
-	//packet.CreatePacket.y = 0;
-
-	//_clientManager->addPacketToQueue(packet, socket);
+	delete rep;
 
 	printf("new connection: %d\n", socket);
+}
+
+DataHandler * Server::getDataHandler()
+{
+	return _dataHandler;
+}
+
+void Server::send(Serializable * object)
+{
+	for (auto client : _clientManager->getAllClients())
+	{
+		_dataHandler->sendTo(client, object);
+	}
 }

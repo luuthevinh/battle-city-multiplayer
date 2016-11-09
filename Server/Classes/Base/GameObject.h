@@ -7,6 +7,7 @@
 class GameObject
 {
 public:
+	GameObject() {}
 	GameObject(eObjectId id);
 	~GameObject();
 
@@ -27,6 +28,7 @@ public:
 	virtual eStatus getStatus();
 
 	virtual eObjectId getId();
+	virtual void setId(eObjectId id);
 
 	virtual void setTag(int tag);
 	virtual int getTag();
@@ -35,7 +37,6 @@ public:
 	virtual void setChanged(bool value);
 	virtual bool hasChanged();
 
-	Packet getPacket();
 protected:
 	Vector2 _position;
 	eDirection _direction;
@@ -46,9 +47,6 @@ protected:
 	int _tag;
 
 	bool _hasChanged;
-
-	// giữ packet gửi đi trong đây luôn
-	Packet _packet;
 };
 
 #endif // !__GAMEOBJECT_H__

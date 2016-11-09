@@ -13,29 +13,83 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Base">
+      <UniqueIdentifier>{1883924a-c138-4eed-afcb-448ce33d3fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObject">
+      <UniqueIdentifier>{d67dd644-dc88-4bec-a101-77ff009429fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shared">
+      <UniqueIdentifier>{b26abbdb-5232-4a73-81df-823572e89134}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Classes\Base\GameObject.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\Vector2.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Tank.h">
+      <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\Definitions.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Game.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Player.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Server.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ClientManager.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\Classes\Shared\SharedDefinitions.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Player.h">
+      <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\ClientManager.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\GameTime.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Bullet.h">
+      <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\Buffer.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\DataQueue.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\Serializable.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\ConverterFactory.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\DataHandler.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\ServerConverterFactory.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\DataPacket.h">
+      <Filter>Source Files\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\Game.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Classes\Base\GameObject.cpp">
+      <Filter>Source Files\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Player.cpp">
+    <ClCompile Include="..\Classes\Base\Vector2.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Tank.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Server.cpp">
@@ -44,8 +98,35 @@
     <ClCompile Include="..\Classes\Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ClientManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Classes\GameObject\Player.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\ClientManager.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\GameTime.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Bullet.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\DataQueue.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\Buffer.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\ConverterFactory.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\DataHandler.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\ServerConverterFactory.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\DataPacket.cpp">
+      <Filter>Source Files\Shared</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

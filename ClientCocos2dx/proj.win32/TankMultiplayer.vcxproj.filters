@@ -19,6 +19,9 @@
     <Filter Include="src\Scene">
       <UniqueIdentifier>{833a5eaa-7927-4c17-9c73-9bd370620855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Shared">
+      <UniqueIdentifier>{62af535a-f641-495e-811b-98d9879c2aac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -44,6 +47,30 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Base\ServerConnector.cpp">
       <Filter>src\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Bullet.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Explosion.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Server\Classes\Shared\Buffer.cpp">
+      <Filter>src\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Server\Classes\Shared\DataQueue.cpp">
+      <Filter>src\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Server\Classes\Shared\ConverterFactory.cpp">
+      <Filter>src\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Server\Classes\Shared\DataHandler.cpp">
+      <Filter>src\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\ClientConverterFactory.cpp">
+      <Filter>src\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Server\Classes\Shared\DataPacket.cpp">
+      <Filter>src\Shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +100,36 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Base\ServerConnector.h">
       <Filter>src\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Bullet.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Explosion.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\Buffer.h">
+      <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\DataQueue.h">
+      <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\SharedDefinitions.h">
+      <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\Serializable.h">
+      <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\ConverterFactory.h">
+      <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\DataHandler.h">
+      <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\ClientConverterFactory.h">
+      <Filter>src\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\DataPacket.h">
+      <Filter>src\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,7 @@
 ﻿#include "Game.h"
 #include "GameObject\Bullet.h"
+#include "Server.h"
+#include "Shared\DataPacket.h"
 
 Game* Game::instance = nullptr;
 
@@ -34,16 +36,19 @@ bool Game::init()
 
 void Game::update(float dt)
 {
-	// còn lỗi xóa, nhớ fix
-	//for (auto it = _gameObjects.begin(); it != _gameObjects.end(); )
-	//{
-	//	if ((*it)->getStatus() == eStatus::DIE)
-	//	{
-	//		delete *it;
-	//		_gameObjects.erase(it);
-	//		break;
-	//	}
-	//}
+	// xóa object có status là die
+	for (auto it = _gameObjects.begin(); it != _gameObjects.end(); )
+	{
+		if ((*it)->getStatus() == eStatus::DIE)
+		{
+			delete *it;
+			it = _gameObjects.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
 
 	for(auto object : _gameObjects)
 	{
@@ -53,6 +58,12 @@ void Game::update(float dt)
 	for (auto player : _players)
 	{
 		player->update(dt);
+
+		if (player->hasChanged())
+		{
+			Server::instance->send(player);
+			player->setChanged(false);
+		}
 	}
 
 }
@@ -121,6 +132,32 @@ int Game::addObject(GameObject* object)
 void Game::handlePlayerInput(int playerTag, eKeyInput input, bool start)
 {
 	this->getPlayer(playerTag)->updateInput(input, start);
+}
+
+void Game::handleData(Serializable * object)
+{
+	auto type = object->getType();
+
+	switch (type)
+	{
+	case OBJECT:
+	{
+		break;
+	}
+	case PACKET:
+		break;
+	case REPLY_ID:
+		break;
+	case COMMAND:
+	{
+		if (auto command = dynamic_cast<CommandPacket*>(object))
+			this->handlePlayerInput(command->uniqueId, command->input, command->begin);
+
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void Game::removeObject(int tag)

@@ -63,16 +63,6 @@ void Bullet::update(float dt)
 	}
 }
 
-void Bullet::updateWithPacket(const Packet & packet)
-{
-}
-
-const Packet & Bullet::getPacket()
-{
-	// TODO: insert return statement here
-	return Packet();
-}
-
 void Bullet::setDirection(eDirection direction)
 {
 	_direction = direction;

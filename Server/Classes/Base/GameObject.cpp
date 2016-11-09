@@ -76,6 +76,11 @@ eStatus GameObject::getStatus()
 	return _status;
 }
 
+void GameObject::setId(eObjectId id)
+{
+	_id = id;
+}
+
 eObjectId GameObject::getId()
 {
 	return _id;
@@ -104,9 +109,4 @@ void GameObject::setChanged(bool value)
 bool GameObject::hasChanged()
 {
 	return _hasChanged;
-}
-
-Packet GameObject::getPacket()
-{
-	return _packet;
 }

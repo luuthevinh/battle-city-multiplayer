@@ -2,10 +2,10 @@
 #include "Base\SpriteManager.h"
 #include "Scene\HelloWorldScene.h"
 #include "Bullet.h"
+#include "..\Server\Classes\Shared\DataPacket.h"
 
 Player::Player(eObjectId id) : Tank(id)
 {
-	_packet.packetType = Packet::TANK;
 }
 
 Player::~Player()
@@ -97,6 +97,7 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 	}
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 	{
+		this->setDirection(eDirection::RIGHT);
 		input = eKeyInput::KEY_RIGHT;
 		break;
 	}
@@ -118,13 +119,14 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 			_status = (eStatus)(_status | eStatus::RUNNING);
 		}
 
-		Packet packet;
-		packet.packetType = Packet::eType::PLAYER;
-		packet.PlayerPacket.uniqueId = this->getTag();
-		packet.PlayerPacket.playerInput = input;
-		packet.PlayerPacket.start = true;
+		auto command = new CommandPacket();
+		command->input = input;
+		command->uniqueId = this->getTag();
+		command->begin = true;
 
-		HelloWorld::instance->getConnector()->sendData(packet);
+		HelloWorld::instance->getConnector()->send(command);
+
+		delete command;
 	}
 }
 
@@ -172,12 +174,13 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 
 	if (input != eKeyInput::KEY_NONE)
 	{
-		Packet packet;
-		packet.packetType = Packet::eType::PLAYER;
-		packet.PlayerPacket.uniqueId = this->getTag();
-		packet.PlayerPacket.playerInput = input;
-		packet.PlayerPacket.start = false;
+		auto command = new CommandPacket();
+		command->input = input;
+		command->uniqueId = this->getTag();
+		command->begin = false;
 
-		HelloWorld::instance->getConnector()->sendData(packet);
+		HelloWorld::instance->getConnector()->send(command);
+
+		delete command;
 	}
 }

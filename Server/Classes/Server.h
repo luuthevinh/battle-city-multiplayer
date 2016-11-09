@@ -8,11 +8,14 @@
 #include "Game.h"
 #include "Base\ClientManager.h"
 #include "Base\GameTime.h"
-#include "Base\PacketHandler.h"
+#include "Base\ServerConverterFactory.h"
+#include "Shared\DataHandler.h"
 
 class Server
 {
 public:
+	static Server* instance;
+
 	Server(u_short port, char* address);
 	~Server();
 
@@ -20,14 +23,15 @@ public:
 	void run();
 	void destroy();
 
-	bool recieveMessage(int connectionId);
-	bool sendMessage(int connectionId, char* message);
+	void recieveData(SOCKET socket);
+	void sendData(SOCKET socket);
 
-	void recievePackage(int index);
-	void sendPackage(int index);
-
-	void closeConnection(int index);
+	void closeConnection(SOCKET socket);
 	void addConnection(SOCKET socket);
+
+	DataHandler* getDataHandler();
+
+	void send(Serializable* object);
 
 private:
 	u_short _port;
@@ -48,17 +52,12 @@ private:
 	Game* _game;
 	ClientManager* _clientManager;
 
-	//Packet _oldPacket;
-
 	GameTime* _gameTime;
 	float _detalTime;
 	float _lastTime;
 
-	// PacketHandler* _packetHandler;
-
-	int _serverTick;
-	float _serverDetal;
-	float _serverLastTime;
+	DataHandler* _dataHandler;
+	ServerConverterFactory* _factory;
 };
 
 #endif // !__SERVER_H__

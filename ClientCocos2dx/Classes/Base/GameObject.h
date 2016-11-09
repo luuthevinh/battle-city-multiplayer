@@ -9,12 +9,16 @@ USING_NS_CC;
 class GameObject : public Node
 {
 public:
+	GameObject() {}
 	GameObject(eObjectId id);
 	~GameObject();
 
 	virtual void addStatus(eStatus status);
 	virtual void setStatus(eStatus status);
 	virtual eStatus getStatus();
+
+	virtual void setId(eObjectId id);
+	virtual eObjectId getId();
 
 protected:
 	Sprite* _sprite;

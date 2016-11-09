@@ -26,3 +26,13 @@ eStatus GameObject::getStatus()
 {
 	return _status;
 }
+
+void GameObject::setId(eObjectId id)
+{
+	_id = id;
+}
+
+eObjectId GameObject::getId()
+{
+	return _id;
+}

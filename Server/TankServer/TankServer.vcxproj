@@ -114,17 +114,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Classes\ClientManager.h" />
+    <ClInclude Include="..\Classes\Base\ClientManager.h" />
+    <ClInclude Include="..\Classes\Base\GameObject.h" />
+    <ClInclude Include="..\Classes\Base\GameTime.h" />
+    <ClInclude Include="..\Classes\Base\ServerConverterFactory.h" />
+    <ClInclude Include="..\Classes\Base\Vector2.h" />
     <ClInclude Include="..\Classes\Definitions.h" />
     <ClInclude Include="..\Classes\Game.h" />
-    <ClInclude Include="..\Classes\Player.h" />
+    <ClInclude Include="..\Classes\GameObject\Bullet.h" />
+    <ClInclude Include="..\Classes\GameObject\Player.h" />
+    <ClInclude Include="..\Classes\GameObject\Tank.h" />
     <ClInclude Include="..\Classes\Server.h" />
+    <ClInclude Include="..\Classes\Shared\Buffer.h" />
+    <ClInclude Include="..\Classes\Shared\ConverterFactory.h" />
+    <ClInclude Include="..\Classes\Shared\DataHandler.h" />
+    <ClInclude Include="..\Classes\Shared\DataPacket.h" />
+    <ClInclude Include="..\Classes\Shared\DataQueue.h" />
+    <ClInclude Include="..\Classes\Shared\Serializable.h" />
+    <ClInclude Include="..\Classes\Shared\SharedDefinitions.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\ClientManager.cpp" />
+    <ClCompile Include="..\Classes\Base\ClientManager.cpp" />
+    <ClCompile Include="..\Classes\Base\GameObject.cpp" />
+    <ClCompile Include="..\Classes\Base\GameTime.cpp" />
+    <ClCompile Include="..\Classes\Base\ServerConverterFactory.cpp" />
+    <ClCompile Include="..\Classes\Base\Vector2.cpp" />
     <ClCompile Include="..\Classes\Game.cpp" />
-    <ClCompile Include="..\Classes\Player.cpp" />
+    <ClCompile Include="..\Classes\GameObject\Bullet.cpp" />
+    <ClCompile Include="..\Classes\GameObject\Player.cpp" />
+    <ClCompile Include="..\Classes\GameObject\Tank.cpp" />
     <ClCompile Include="..\Classes\Server.cpp" />
+    <ClCompile Include="..\Classes\Shared\Buffer.cpp" />
+    <ClCompile Include="..\Classes\Shared\ConverterFactory.cpp" />
+    <ClCompile Include="..\Classes\Shared\DataHandler.cpp" />
+    <ClCompile Include="..\Classes\Shared\DataPacket.cpp" />
+    <ClCompile Include="..\Classes\Shared\DataQueue.cpp" />
     <ClCompile Include="..\Classes\Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

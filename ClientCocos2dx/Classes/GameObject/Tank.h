@@ -5,15 +5,19 @@
 
 #include "Base\GameObject.h"
 #include "Base\SpriteManager.h"
-#include "Base\IOnlineObject.h"
 
-class Tank : public GameObject, public IOnlineObject
+// shared
+#include "..\Server\Classes\Shared\Serializable.h"
+
+class Tank : public GameObject, public Serializable
 {
 public:
 	Tank(eObjectId id);
+	Tank(Buffer& data);
 	~Tank();
 
 	static Tank* create(eObjectId id);
+	static Tank* createWithBuffer(Buffer& data);
 
 	virtual bool init() override;
 	virtual void update(float dt) override;
@@ -22,9 +26,9 @@ public:
 	virtual void setDirection(eDirection direction);
 	virtual eDirection getDirection();
 
-	// Inherited via IOnlineObject
-	virtual void updateWithPacket(const Packet & packet) override;
-	virtual const Packet & getPacket() override;
+	// Inherited via ISerializable
+	virtual Buffer* serialize() override;
+	virtual void deserialize(Buffer & data) override;
 
 protected:
 	float _velocity;

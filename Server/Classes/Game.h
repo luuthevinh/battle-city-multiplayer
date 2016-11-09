@@ -33,6 +33,7 @@ public:
 	Player* getPlayer(int index);
 
 	void handlePlayerInput(int playerTag, eKeyInput input, bool start = true);
+	void handleData(Serializable* object);
 
 private:
 	std::vector<GameObject*> _gameObjects;

@@ -2,6 +2,14 @@
 #include "Scene\HelloWorldScene.h"
 #include "GameObject\Player.h"
 #include "GameObject\Bullet.h"
+#include "ClientConverterFactory.h"
+
+//shared
+#include "..\..\Server\Classes\Shared\Buffer.h"
+#include "..\..\Server\Classes\Shared\DataHandler.h"
+#include "..\..\Server\Classes\Shared\Serializable.h"
+#include "..\..\Server\Classes\Shared\DataPacket.h"
+
 
 ServerConnector::ServerConnector()
 {
@@ -12,6 +20,9 @@ ServerConnector::~ServerConnector()
 	// close socket
 	closesocket(_socket);
 	WSACleanup();
+
+	delete _dataHandler;
+	delete _factory;
 }
 
 bool ServerConnector::init(u_short port, char * address)
@@ -35,13 +46,12 @@ bool ServerConnector::init(u_short port, char * address)
 
 	_connecting = false;
 
-	_oldPack.TankPacket.direction = 0;
-	_oldPack.TankPacket.id = 0;
-	_oldPack.TankPacket.x = 0;
-	_oldPack.TankPacket.y = 0;
-
 	_timeVal.tv_sec = 0;
 	_timeVal.tv_usec = 0;
+
+	// data handler
+	_dataHandler = new DataHandler();
+	_factory = new ClientConverterFactory(_dataHandler);
 
 	return true;
 }
@@ -71,33 +81,25 @@ void ServerConnector::recieveData()
 {
 	DWORD flags = 0;
 
-	CHAR buffer[sizeof(Packet)];
+	CHAR buffer[DATA_BUFFER_RECIEVE_SIZE];
 	WSABUF dataBuffer;
 	dataBuffer.buf = buffer;
-	dataBuffer.len = sizeof(Packet);
+	dataBuffer.len = DATA_BUFFER_RECIEVE_SIZE;
 	DWORD recvBytes;
 
-	//do
-	//{
-		if (WSARecv(_socket, &dataBuffer, 1, &recvBytes, &flags, NULL, NULL) == SOCKET_ERROR)
+	if (WSARecv(_socket, &dataBuffer, 1, &recvBytes, &flags, NULL, NULL) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSAEWOULDBLOCK)
 		{
-			if (WSAGetLastError() != WSAEWOULDBLOCK)
-			{
-				this->closeConnection();
-			}
-			return;
+			this->closeConnection();
 		}
-		else
-		{
-			// read data buffer with recvBytes
-			if (recvBytes < dataBuffer.len)
-				return;
-
-			// lấy packet xử lý
-			Packet* packet = (Packet*)dataBuffer.buf;
-			this->handlePacket(*packet);
-		}
-	//} while (recvBytes < dataBuffer.len);
+		return;
+	}
+	else
+	{
+		// lưu byte
+		_dataHandler->recieve(dataBuffer.buf, recvBytes);
+	}
 }
 
 void ServerConnector::update(cocos2d::Layer* scene)
@@ -107,18 +109,26 @@ void ServerConnector::update(cocos2d::Layer* scene)
 
 	// select
 	FD_ZERO(&_readSet);
+	FD_ZERO(&_writeSet);
 	FD_SET(_socket, &_readSet);
+	FD_SET(_socket, &_writeSet);
 
-	int total = select(0, &_readSet, NULL, NULL, &_timeVal);
+	int total = select(0, &_readSet, &_writeSet, NULL, &_timeVal);
 
 	if (total > 0)
 	{
 		if (FD_ISSET(_socket, &_readSet))
 		{
-			recieveData();
+			this->recieveData();
+		}
+
+		if (FD_ISSET(_socket, &_writeSet))
+		{
+			this->sendData(_socket);
 		}
 	}
 
+	this->handleData();
 }
 
 void ServerConnector::closeConnection()
@@ -127,66 +137,34 @@ void ServerConnector::closeConnection()
 	_connecting = false;
 }
 
-void ServerConnector::sendData(char * buffer)
+void ServerConnector::sendData(SOCKET socket)
 {
-	WSABUF dataBuffer;
-	dataBuffer.buf = buffer;
-	dataBuffer.len = strlen(buffer);
+	if (_dataHandler->getSendQueue(_socket) == nullptr || _dataHandler->getSendQueue(_socket)->getIndex() <= 0)
+		return;
+
 	DWORD sendBytes;
+	WSABUF dataBuffer;
+	dataBuffer.buf = _dataHandler->getSendQueue(_socket)->getData();
+	dataBuffer.len = _dataHandler->getSendQueue(_socket)->getIndex();
 
 	if (WSASend(_socket, &dataBuffer, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSAEWOULDBLOCK)
 		{
-			//printf("WSASend() failed with error %d\n", WSAGetLastError());
 			this->closeConnection();
 		}
-
-		// printf("WSASend() is OK!\n");
 		return;
 	}
 	else
 	{
-
+		// gửi ok thì xóa
+		_dataHandler->getSendQueue(_socket)->popFront(sendBytes);
 	}
 }
 
-void ServerConnector::sendData(const Packet & packet)
+void ServerConnector::send(Serializable * object)
 {
-	if (_oldPack == packet)
-		return; // ko gửi package trùng
-
-	_oldPack = packet;
-
-	WSABUF dataBuffer;
-	dataBuffer.buf = (char*)&packet;
-	dataBuffer.len = sizeof(Packet);
-	DWORD sendBytes;
-
-	do
-	{
-		if (WSASend(_socket, &dataBuffer, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
-		{
-			if (WSAGetLastError() != WSAEWOULDBLOCK)
-			{
-				//printf("WSASend() failed with error %d\n", WSAGetLastError());
-				this->closeConnection();
-			}
-
-			// printf("WSASend() is OK!\n");
-			return;
-		}
-		else
-		{
-			if (sendBytes < dataBuffer.len)
-			{
-				dataBuffer.buf += sendBytes;
-				dataBuffer.len -= sendBytes;
-				sendBytes = 0;
-			}
-		}
-	}
-	while (sendBytes < dataBuffer.len);
+	_dataHandler->sendTo(_socket, object);
 }
 
 u_long ServerConnector::getDataPendingInSocket(SOCKET socket)
@@ -203,80 +181,44 @@ int ServerConnector::getServerIndex()
 	return _serverIndex;
 }
 
-void ServerConnector::handlePacket(const Packet & packet)
+void ServerConnector::handleData()
 {
-	switch ((Packet::eType)packet.packetType)
-	{
-	//case Packet::CREATE:
-	//{
-	//	auto object = Tank::create((eObjectId)packet.CreatePacket.objectId);
-	//	object->setPosition(packet.CreatePacket.x, packet.CreatePacket.y);
-	//	object->setTag(packet.CreatePacket.uniqueId);
+	auto data = _factory->convertNext();
+	if (data == nullptr)
+		return;
 
-	//	HelloWorld::instance->addChild(object);
+	auto type = data->getType();
 
-	//	break;
-	//}
-	case Packet::OBJECT:
+	switch (type)
 	{
-		auto object = (GameObject*)HelloWorld::instance->getChildByTag(packet.ObjectPacket.uniqueId);
-		if (object == nullptr)
+	case eDataType::OBJECT:
+	{
+		Tank* gameObject = dynamic_cast<Tank*>(data);
+		if (gameObject)
 		{
-			switch ((eObjectId)packet.ObjectPacket.objectType)
+			auto object = (Tank*)HelloWorld::instance->getChildByTag(gameObject->getTag());
+			if (object == nullptr)
 			{
-			case eObjectId::BULLET:
-			{
-				auto pos = Vec2(packet.ObjectPacket.x, packet.ObjectPacket.y);
-
-				auto bullet = Bullet::create(pos, (eDirection)packet.ObjectPacket.direction);
-				bullet->setTag(packet.ObjectPacket.uniqueId);
-				bullet->setStatus((eStatus)packet.ObjectPacket.status);
-				
-				HelloWorld::instance->addChild(bullet);
-
+				HelloWorld::instance->addChild(gameObject);
 				return;
 			}
-			default:
-				break;
-			}
+
+			object->deserialize(*data->serialize());
 		}
-
-		object->setStatus((eStatus)packet.ObjectPacket.status);
-
-		auto pos = Vec2(packet.ObjectPacket.x, packet.ObjectPacket.y);
-		object->setPosition(pos);
-
 		break;
 	}
-	case Packet::TANK:
+	case eDataType::REPLY_ID: 
 	{
-		auto object = (Tank*)HelloWorld::instance->getChildByTag(packet.TankPacket.id);
-		if (object == nullptr)
+		ReplyPacket* packet = dynamic_cast<ReplyPacket*>(data);
+		if (packet)
 		{
-			auto tank = Tank::create(eObjectId::YELLOW_TANK);
-			tank->setPosition(packet.TankPacket.x, packet.TankPacket.y);
-			tank->setTag(packet.TankPacket.id);
-			tank->setStatus((eStatus)packet.TankPacket.status);
-			tank->setDirection((eDirection)packet.TankPacket.direction);
+			auto object = (Player*)HelloWorld::instance->getChildByName("player");
+			if (object == nullptr)
+				return;
 
-			HelloWorld::instance->addChild(tank);
-			return;
+			object->setTag(packet->uniqueId);
 		}
 
-		object->updateWithPacket(packet);
-
-		break;
-	}
-	case Packet::PLAYER:
-	{
-		auto object = (Player*)HelloWorld::instance->getChildByName("player");
-		if (object == nullptr)
-			return;
-
-		// lấy tag làm unique id cho object
-		object->setTag(packet.PlayerPacket.uniqueId);
-		object->setPosition(Vec2(0, 0));
-		break;
 	}
 	default:
 		break;

@@ -7,7 +7,6 @@ Bullet::Bullet(const Vector2 & position, eDirection direction) : GameObject(eObj
 	_speed = 500.0f;
 	_direction = direction;
 	_status = eStatus::NORMAL;
-	_packet.packetType = Packet::eType::OBJECT;
 }
 
 Bullet::~Bullet()
@@ -43,20 +42,7 @@ void Bullet::update(float dt)
 
 void Bullet::onChanged()
 {
-	if (_packet.ObjectPacket.direction != this->getDirection() ||
-		_packet.ObjectPacket.x != this->getPosition().x ||
-		_packet.ObjectPacket.y != this->getPosition().y ||
-		_packet.ObjectPacket.status != this->getStatus())
-	{
-		this->setChanged(true);
-
-		_packet.ObjectPacket.x = this->getPosition().x;
-		_packet.ObjectPacket.y = this->getPosition().y;
-		_packet.ObjectPacket.status = this->getStatus();
-		_packet.ObjectPacket.direction = this->getDirection();
-		_packet.ObjectPacket.uniqueId = this->getTag();
-		_packet.ObjectPacket.objectType = this->getId();
-	}
+	this->setChanged(true);
 }
 
 void Bullet::checkPosition()

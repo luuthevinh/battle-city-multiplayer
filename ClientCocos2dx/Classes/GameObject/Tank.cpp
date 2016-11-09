@@ -1,9 +1,19 @@
 ﻿#include "Tank.h"
 
+// shared
+#include "..\Server\Classes\Shared\Buffer.h"
+
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0),
 	_direction(eDirection::UP)
 {
+	_buffer = new Buffer(25);
+}
+
+Tank::Tank(Buffer& data)
+{
+	_buffer = new Buffer(25);
+	this->deserialize(data);
 }
 
 Tank::~Tank()
@@ -12,6 +22,8 @@ Tank::~Tank()
 	{
 		i->second->release();
 	}
+
+	delete _buffer;
 }
 
 Tank* Tank::create(eObjectId id)
@@ -19,6 +31,23 @@ Tank* Tank::create(eObjectId id)
 	Tank* tank = new(std::nothrow) Tank(id);
 	if (tank && tank->init())
 	{
+		tank->autorelease();
+		return tank;
+	}
+	else
+	{
+		delete tank;
+		tank = nullptr;
+		return nullptr;
+	}
+}
+
+Tank * Tank::createWithBuffer(Buffer &data)
+{
+	Tank* tank = new(std::nothrow) Tank(eObjectId::YELLOW_TANK);
+	if (tank && tank->init())
+	{
+		tank->deserialize(data);
 		tank->autorelease();
 		return tank;
 	}
@@ -107,26 +136,37 @@ eDirection Tank::getDirection()
 	return _direction;
 }
 
-void Tank::updateWithPacket(const Packet & packet)
+Buffer* Tank::serialize()
 {
-	// update lại với dữ liệu từ server gửi xuống
-	// chưa có tính toán
-	this->setPosition(packet.TankPacket.x, packet.TankPacket.y);
-	this->setStatus((eStatus)packet.TankPacket.status);
-	this->setDirection((eDirection)packet.TankPacket.direction);
+	_buffer->setIndex(0);
+	_buffer->setBeginRead(0);
+	
+	_buffer->writeInt(eDataType::OBJECT);
+	_buffer->writeInt(this->getId());
+	_buffer->writeInt(this->getTag());
+	_buffer->writeInt(this->getStatus());
+	_buffer->writeByte(this->getDirection());
+	_buffer->writeFloat(this->getPosition().x);
+	_buffer->writeFloat(this->getPosition().y);
+
+	return _buffer;
 }
 
-const Packet & Tank::getPacket()
+void Tank::deserialize(Buffer & data)
 {
-	if (_velocity != 0)
-		_packet.TankPacket.direction = _direction;
-	//else
-	//	_packet.TankPacket.direction = 0;
+	data.setBeginRead(0);
 
-	_packet.TankPacket.id = _id;
-	_packet.TankPacket.x = this->getPositionX();
-	_packet.TankPacket.y = this->getPositionY();
-	_packet.TankPacket.status = this->getStatus();
+	eDataType type = (eDataType)data.readInt();
+	if (type != eDataType::OBJECT)
+		return;
 
-	return _packet;
+	this->setType(type);
+	this->setId((eObjectId)data.readInt());
+	this->setTag(data.readInt());
+	this->setStatus((eStatus)data.readInt());
+	this->setDirection((eDirection)data.readByte());
+	this->setPosition(data.readFloat(), data.readFloat());
+
+	data.setBeginRead(0);
 }
+

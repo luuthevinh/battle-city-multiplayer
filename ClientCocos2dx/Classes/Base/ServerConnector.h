@@ -3,8 +3,12 @@
 
 #include <WinSock2.h>
 #include "cocos2d.h"
-
 #include "Base\Definitions.h"
+
+class Buffer;
+class DataHandler;
+class ConverterFactory;
+class Serializable;
 
 class ServerConnector
 {
@@ -20,19 +24,20 @@ public:
 	void update(cocos2d::Layer* scene);
 
 	void closeConnection();
-	void sendData(char* buffer);
-	void sendData(const Packet &packet);
+	void sendData(SOCKET socket);
+
+	void send(Serializable* object);
 
 	u_long getDataPendingInSocket(SOCKET socket);
 
 	int getServerIndex();
-
-	void handlePacket(const Packet &packet);
+	void handleData();
 
 private:
 	WSADATA _wsaData;
 	SOCKET _socket;
 	fd_set _readSet;
+	fd_set _writeSet;
 	timeval _timeVal;
 
 	struct sockaddr_in _server;
@@ -41,7 +46,8 @@ private:
 
 	int _serverIndex;
 
-	Packet _oldPack;
+	DataHandler* _dataHandler;
+	ConverterFactory* _factory;
 };
 
 
