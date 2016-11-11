@@ -36,23 +36,15 @@ bool Game::init()
 
 void Game::update(float dt)
 {
-	// xóa object có status là die
-	for (auto it = _gameObjects.begin(); it != _gameObjects.end(); )
-	{
-		if ((*it)->getStatus() == eStatus::DIE)
-		{
-			delete *it;
-			it = _gameObjects.erase(it);
-		}
-		else
-		{
-			it++;
-		}
-	}
-
 	for(auto object : _gameObjects)
 	{
 		object->update(dt);
+
+		if (object->hasChanged())
+		{
+			Server::instance->send(object);
+			object->setChanged(false);
+		}
 	}
 
 	for (auto player : _players)
@@ -66,6 +58,19 @@ void Game::update(float dt)
 		}
 	}
 
+	// xóa object có status là die
+	for (auto it = _gameObjects.begin(); it != _gameObjects.end(); )
+	{
+		if ((*it)->getStatus() == eStatus::DIE)
+		{
+			delete *it;
+			it = _gameObjects.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
 }
 
 void Game::update(char * data)
@@ -151,8 +156,9 @@ void Game::handleData(Serializable * object)
 	case COMMAND:
 	{
 		if (auto command = dynamic_cast<CommandPacket*>(object))
+		{
 			this->handlePlayerInput(command->uniqueId, command->input, command->begin);
-
+		}
 		break;
 	}
 	default:

@@ -20,6 +20,8 @@ void Player::shoot()
 {
 	auto bullet = new Bullet(this->getPosition(), this->getDirection());
 	Game::instance->addObject(bullet);
+
+	//printf("shoot: %.2f, %.2f\n", bullet->getPosition().x, bullet->getPosition().y);
 }
 
 void Player::updateInput(eKeyInput input, bool start)

@@ -22,18 +22,34 @@ Bullet * Bullet::create(const Vec2 & position, eDirection direction)
 		return bullet;
 	}
 
+	CC_SAFE_DELETE(bullet);
+	return nullptr;
+}
+
+Bullet * Bullet::createWithBuffer(Buffer & buffer)
+{
+	Bullet* bullet = new(std::nothrow) Bullet();
+	bullet->deserialize(buffer);
+
+	if (bullet->init())
+	{
+		bullet->autorelease();
+		return bullet;
+	}
+
+	CC_SAFE_DELETE(bullet);
 	return nullptr;
 }
 
 bool Bullet::init()
 {
-	this->setStatus(eStatus::NORMAL);
 	this->scheduleUpdate();
 
 	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BULLET));
 	this->addChild(_sprite);
 
 	_speed = 500.0f;
+
 
 	return true;
 }
@@ -85,11 +101,15 @@ void Bullet::setStatus(eStatus status)
 	{
 	case DIE:
 	{
+		if (this->getParent() == nullptr)
+			break;
+
 		auto explosion = Explosion::create(false);
 		explosion->setPosition(this->getPosition());
 
 		this->getParent()->addChild(explosion);
 		this->runAction(RemoveSelf::create());
+
 		break;
 	}
 	default:

@@ -2,13 +2,14 @@
 #define __GAMEOBJECT_H__
 
 #include "Vector2.h"
-#include "../Definitions.h"
+#include "..\Definitions.h"
+#include "..\Shared\Serializable.h"
 
-class GameObject
+class GameObject : public Serializable
 {
 public:
-	GameObject() {}
 	GameObject(eObjectId id);
+	GameObject(Buffer& buffer);
 	~GameObject();
 
 	virtual bool init();
@@ -37,6 +38,10 @@ public:
 	virtual void setChanged(bool value);
 	virtual bool hasChanged();
 
+	// Inherited via Serializable
+	virtual Buffer * serialize() override;
+	virtual void deserialize(Buffer & data) override;
+
 protected:
 	Vector2 _position;
 	eDirection _direction;
@@ -47,6 +52,7 @@ protected:
 	int _tag;
 
 	bool _hasChanged;
+
 };
 
 #endif // !__GAMEOBJECT_H__

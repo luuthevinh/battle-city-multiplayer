@@ -7,7 +7,7 @@
 class Serializable
 {
 public:
-	Serializable() { }
+	Serializable() { _buffer = nullptr; }
 	~Serializable() { }
 
 	virtual Buffer* serialize() = 0;

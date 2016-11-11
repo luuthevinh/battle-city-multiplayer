@@ -193,10 +193,10 @@ void ServerConnector::handleData()
 	{
 	case eDataType::OBJECT:
 	{
-		Tank* gameObject = dynamic_cast<Tank*>(data);
+		GameObject* gameObject = dynamic_cast<GameObject*>(data);
 		if (gameObject)
 		{
-			auto object = (Tank*)HelloWorld::instance->getChildByTag(gameObject->getTag());
+			auto object = (GameObject*)HelloWorld::instance->getChildByTag(gameObject->getTag());
 			if (object == nullptr)
 			{
 				HelloWorld::instance->addChild(gameObject);

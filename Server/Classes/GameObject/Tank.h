@@ -2,9 +2,8 @@
 #define __TANK_H__
 
 #include "..\Base\GameObject.h"
-#include "..\Shared\Serializable.h"
 
-class Tank : public GameObject, public Serializable
+class Tank : public GameObject
 {
 public:
 	Tank(eObjectId id);
@@ -18,10 +17,6 @@ public:
 	virtual float getVeloctiy();
 
 	virtual void onChanged() override;
-
-	// Inherited via ISerializable
-	virtual Buffer* serialize() override;
-	virtual void deserialize(Buffer& data) override;
 
 private:
 	float _velocity;

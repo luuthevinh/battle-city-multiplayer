@@ -4,16 +4,13 @@
 #include "..\Server\Classes\Shared\Buffer.h"
 
 Tank::Tank(eObjectId id) : GameObject(id),
-	_velocity(0),
-	_direction(eDirection::UP)
+	_velocity(0)
 {
-	_buffer = new Buffer(25);
 }
 
-Tank::Tank(Buffer& data)
+Tank::Tank(Buffer& data) : GameObject(data),
+	_velocity(0)
 {
-	_buffer = new Buffer(25);
-	this->deserialize(data);
 }
 
 Tank::~Tank()
@@ -22,8 +19,6 @@ Tank::~Tank()
 	{
 		i->second->release();
 	}
-
-	delete _buffer;
 }
 
 Tank* Tank::create(eObjectId id)
@@ -44,10 +39,9 @@ Tank* Tank::create(eObjectId id)
 
 Tank * Tank::createWithBuffer(Buffer &data)
 {
-	Tank* tank = new(std::nothrow) Tank(eObjectId::YELLOW_TANK);
+	Tank* tank = new(std::nothrow) Tank(data);
 	if (tank && tank->init())
 	{
-		tank->deserialize(data);
 		tank->autorelease();
 		return tank;
 	}
@@ -131,42 +125,4 @@ void Tank::setDirection(eDirection direction)
 	}
 }
 
-eDirection Tank::getDirection()
-{
-	return _direction;
-}
-
-Buffer* Tank::serialize()
-{
-	_buffer->setIndex(0);
-	_buffer->setBeginRead(0);
-	
-	_buffer->writeInt(eDataType::OBJECT);
-	_buffer->writeInt(this->getId());
-	_buffer->writeInt(this->getTag());
-	_buffer->writeInt(this->getStatus());
-	_buffer->writeByte(this->getDirection());
-	_buffer->writeFloat(this->getPosition().x);
-	_buffer->writeFloat(this->getPosition().y);
-
-	return _buffer;
-}
-
-void Tank::deserialize(Buffer & data)
-{
-	data.setBeginRead(0);
-
-	eDataType type = (eDataType)data.readInt();
-	if (type != eDataType::OBJECT)
-		return;
-
-	this->setType(type);
-	this->setId((eObjectId)data.readInt());
-	this->setTag(data.readInt());
-	this->setStatus((eStatus)data.readInt());
-	this->setDirection((eDirection)data.readByte());
-	this->setPosition(data.readFloat(), data.readFloat());
-
-	data.setBeginRead(0);
-}
 

@@ -18,7 +18,6 @@ Server::Server(u_short port, char * address)
 
 Server::~Server()
 {
-	this->destroy();
 }
 
 bool Server::init()
@@ -111,7 +110,7 @@ void Server::run()
 		if ((total = select(0, &_readSet, &_writeSet, NULL, &_timeOut)) == SOCKET_ERROR)
 		{
 			printf("select() error!\n");
-			system("pause");
+			continue;
 		}
 
 		// kiểm tra kết nối tới server

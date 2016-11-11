@@ -6,10 +6,8 @@
 #include "Base\GameObject.h"
 #include "Base\SpriteManager.h"
 
-// shared
-#include "..\Server\Classes\Shared\Serializable.h"
 
-class Tank : public GameObject, public Serializable
+class Tank : public GameObject
 {
 public:
 	Tank(eObjectId id);
@@ -23,16 +21,10 @@ public:
 	virtual void update(float dt) override;
 	virtual void updatePosition(float dt);
 
-	virtual void setDirection(eDirection direction);
-	virtual eDirection getDirection();
-
-	// Inherited via ISerializable
-	virtual Buffer* serialize() override;
-	virtual void deserialize(Buffer & data) override;
+	virtual void setDirection(eDirection direction) override;
 
 protected:
 	float _velocity;
-	eDirection _direction;
 
 	std::map<eDirection, Animate*> _animations;
 

@@ -11,6 +11,7 @@ public:
 	~Bullet();
 
 	static Bullet* create(const Vec2& position, eDirection direction);
+	static Bullet* createWithBuffer(Buffer& buffer);
 
 	virtual bool init() override;
 	virtual void update(float dt) override;

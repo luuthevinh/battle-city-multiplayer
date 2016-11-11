@@ -127,6 +127,8 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		HelloWorld::instance->getConnector()->send(command);
 
 		delete command;
+
+		//CCLOG("shoot: %.2f, %.2f", this->getPositionX(), this->getPositionY());
 	}
 }
 

@@ -1,5 +1,6 @@
 ﻿#include "ServerConverterFactory.h"
 #include "..\GameObject\Tank.h"
+#include "..\GameObject\Bullet.h"
 #include "..\Shared\DataPacket.h"
 
 ServerConverterFactory::ServerConverterFactory(DataHandler* handler) : ConverterFactory(handler)
@@ -46,7 +47,10 @@ Serializable * ServerConverterFactory::convertNext()
 			break;
 		}
 		case BULLET:
+		{
+			ret = new Bullet(*buffer);
 			break;
+		}
 		case EXPLOSION:
 			break;
 		default:

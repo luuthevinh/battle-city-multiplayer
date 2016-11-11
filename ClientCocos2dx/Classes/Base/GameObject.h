@@ -6,11 +6,14 @@
 
 USING_NS_CC;
 
-class GameObject : public Node
+// shared
+#include "..\Server\Classes\Shared\Serializable.h"
+
+class GameObject : public Node, public Serializable
 {
 public:
-	GameObject() {}
 	GameObject(eObjectId id);
+	GameObject(Buffer& buffer);
 	~GameObject();
 
 	virtual void addStatus(eStatus status);
@@ -20,12 +23,20 @@ public:
 	virtual void setId(eObjectId id);
 	virtual eObjectId getId();
 
+	virtual void setDirection(eDirection direction);
+	virtual eDirection getDirection();
+
+	// Inherited via Serializable
+	virtual Buffer * serialize() override;
+	virtual void deserialize(Buffer & data) override;
+
 protected:
 	Sprite* _sprite;
 
 	eObjectId _id;
 	eStatus _status;
 
+	eDirection _direction;
 };
 
 

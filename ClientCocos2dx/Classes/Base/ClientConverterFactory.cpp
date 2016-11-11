@@ -1,5 +1,6 @@
 ﻿#include "ClientConverterFactory.h"
 #include "GameObject\Tank.h"
+#include "GameObject\Bullet.h"
 #include "..\Server\Classes\Shared\DataPacket.h"
 
 ClientConverterFactory::ClientConverterFactory(DataHandler * handler) : ConverterFactory(handler)
@@ -46,7 +47,11 @@ Serializable * ClientConverterFactory::convertNext()
 			break;
 		}
 		case BULLET:
+		{
+			ret = Bullet::createWithBuffer(*buffer);
+		
 			break;
+		}
 		case EXPLOSION:
 			break;
 		default:
@@ -72,7 +77,6 @@ Serializable * ClientConverterFactory::convertNext()
 
 	// ko dùng buffer này nữa
 	delete buffer;
-
 	readQueue->popFront(size);
 
 	return ret;
