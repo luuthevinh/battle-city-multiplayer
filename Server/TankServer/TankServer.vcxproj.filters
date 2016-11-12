@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Shared">
       <UniqueIdentifier>{b26abbdb-5232-4a73-81df-823572e89134}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scene">
+      <UniqueIdentifier>{f50c5942-3244-442e-849d-1410c16877f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\Base\GameObject.h">
@@ -78,6 +81,15 @@
     <ClInclude Include="..\Classes\Shared\DataPacket.h">
       <Filter>Source Files\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Base\Scene.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\SceneManager.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\Scene01.h">
+      <Filter>Source Files\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\GameObject.cpp">
@@ -127,6 +139,15 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Shared\DataPacket.cpp">
       <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\SceneManager.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\Scene01.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\Scene.cpp">
+      <Filter>Source Files\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

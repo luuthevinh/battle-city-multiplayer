@@ -1,5 +1,6 @@
 ﻿#include "Server.h"
 #include "Shared\DataPacket.h"
+#include "Base\SceneManager.h"
 
 Server* Server::instance = nullptr;
 
@@ -177,12 +178,8 @@ void Server::run()
 		{
 			_lastTime += _game->getFrameRate();
 
-			// update object with recieved data
-			auto data = _factory->convertNext();
-			if (data != nullptr)
-			{
-				_game->handleData(data);
-			}
+			// data
+			_game->handleData(_factory);
 
 			// update game
 			_game->update(_detalTime);
@@ -205,7 +202,9 @@ void Server::destroy()
 	closesocket(_listenSocket);
 	WSACleanup();
 
+	_game->destroy();
 	delete _game;
+
 	delete _clientManager;
 	delete _factory;
 	delete _dataHandler;
@@ -286,18 +285,19 @@ void Server::closeConnection(SOCKET socket)
 	closesocket(socket);
 
 	_clientManager->removeClient(socket);
-	_game->removePlayer(_clientManager->getSocketId(socket));
+	SceneManager::getInstance()->getCurrentScene()->removePlayer(_clientManager->getSocketId(socket));
 }
 
 void Server::addConnection(SOCKET socket)
 {
 	int index = _clientManager->addClient(socket);
 
-	_game->addPlayer(index);
+	// tạo player
+	int tag = SceneManager::getInstance()->getCurrentScene()->addPlayer(index);
 
 	// reply lại id trong server
 	ReplyPacket* rep = new ReplyPacket();
-	rep->uniqueId = index;
+	rep->uniqueId = tag;
 
 	_dataHandler->sendTo(socket, rep);
 

@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "Bullet.h"
-#include "..\Game.h"
+#include "..\Base\SceneManager.h"
 
 Player::Player(eObjectId id, int index) : Tank(id),
 	_index(index)
@@ -19,7 +19,7 @@ int Player::getIndex()
 void Player::shoot()
 {
 	auto bullet = new Bullet(this->getPosition(), this->getDirection());
-	Game::instance->addObject(bullet);
+	SceneManager::getInstance()->getCurrentScene()->addObject(bullet);
 
 	//printf("shoot: %.2f, %.2f\n", bullet->getPosition().x, bullet->getPosition().y);
 }
