@@ -6,13 +6,15 @@ GameObject::GameObject(eObjectId id) :
 	_position(0, 0),
 	_status(eStatus::STAND),
 	_direction(eDirection::UP),
-	_hasChanged(true)
+	_hasChanged(true),
+	_boudingBox(0, 0, 0, 0)
 {
 	_buffer = new Buffer(25);
 }
 
 GameObject::GameObject(Buffer & buffer) :
-	_hasChanged(true)
+	_hasChanged(true),
+	_boudingBox(0, 0, 0, 0)
 {
 	_buffer = new Buffer(25);
 	this->deserialize(buffer);
@@ -156,4 +158,18 @@ void GameObject::deserialize(Buffer & data)
 	this->setPosition(x, y);
 
 	data.setBeginRead(0);
+}
+
+Rect GameObject::getBoundingBox() const
+{
+	return _boudingBox;
+}
+
+Vector2 GameObject::getVelocity() const
+{
+	return Vector2(0, 0);
+}
+
+void GameObject::checkCollision(GameObject & other, float dt)
+{
 }

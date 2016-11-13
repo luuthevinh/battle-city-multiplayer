@@ -44,6 +44,13 @@ bool Player::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+	//auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
+	//body->setContactTestBitmask(1);
+
+	//body->setDynamic(false);
+	//this->setPhysicsBody(body);
+
+
 	return true;
 }
 

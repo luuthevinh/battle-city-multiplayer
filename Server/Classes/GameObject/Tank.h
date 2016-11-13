@@ -2,6 +2,7 @@
 #define __TANK_H__
 
 #include "..\Base\GameObject.h"
+#include "..\Base\AABB.h"
 
 class Tank : public GameObject
 {
@@ -16,13 +17,18 @@ public:
 	virtual void setVelocity(float velocity);
 	virtual float getVeloctiy();
 
+	virtual Vector2 getVelocity() const override;
+
 	virtual void onChanged() override;
+	virtual void checkCollision(GameObject& other, float dt) override;
 
 private:
 	float _velocity;
 
 	void updatePosition(float dt);
+	void updatePosition(float dt, float velocity);
 
+	AABB* _collisionChecker;
 };
 
 #endif // !__TANK_H__

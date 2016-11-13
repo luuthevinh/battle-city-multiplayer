@@ -28,9 +28,17 @@ void GameObject::addStatus(eStatus status)
 	_status = (eStatus)(_status | status);
 }
 
+void GameObject::removeStatus(eStatus status)
+{
+	_status = (eStatus)(_status & (~status));
+}
+
 void GameObject::setStatus(eStatus status)
 {
 	_status = status;
+
+	// update with status
+	this->updateWithStatus(_status);
 }
 
 eStatus GameObject::getStatus()
@@ -95,4 +103,8 @@ void GameObject::deserialize(Buffer & data)
 	this->setPosition(x, y);
 
 	data.setBeginRead(0);
+}
+
+void GameObject::updateWithStatus(eStatus status)
+{
 }

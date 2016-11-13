@@ -19,7 +19,7 @@ public:
 	void setDirection(eDirection direction);
 	eDirection getDirection();
 
-	virtual void setStatus(eStatus status) override;
+	virtual void updateWithStatus(eStatus status) override;
 
 private:
 	eDirection _direction;

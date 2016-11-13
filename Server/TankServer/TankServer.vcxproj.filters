@@ -90,6 +90,12 @@
     <ClInclude Include="..\Classes\Scene\Scene01.h">
       <Filter>Source Files\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Base\AABB.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\Rect.h">
+      <Filter>Source Files\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\GameObject.cpp">
@@ -147,6 +153,12 @@
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Base\Scene.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\AABB.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base\Rect.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,7 +8,10 @@ HelloWorld* HelloWorld::instance = nullptr;
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
-    auto scene = Scene::create();
+    auto scene = Scene::createWithPhysics();
+	scene->getPhysicsWorld()->setGravity(Vec2::ZERO);
+
+	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
@@ -41,10 +44,6 @@ bool HelloWorld::init()
 	_player->setName("player");
 	this->addChild(_player);
 
-	//_otherPlayer = Tank::create(eObjectId::YELLOW_TANK);
-	//_otherPlayer->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-	//this->addChild(_otherPlayer);
-
 	// init server
 	_serverConnector = new ServerConnector();
 	if (_serverConnector->init(PORT, SERVER_ADD))
@@ -69,3 +68,4 @@ ServerConnector * HelloWorld::getConnector()
 {
 	return _serverConnector;
 }
+

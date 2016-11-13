@@ -17,6 +17,7 @@ public:
 	~GameObject();
 
 	virtual void addStatus(eStatus status);
+	virtual void removeStatus(eStatus status);
 	virtual void setStatus(eStatus status);
 	virtual eStatus getStatus();
 
@@ -29,6 +30,8 @@ public:
 	// Inherited via Serializable
 	virtual Buffer * serialize() override;
 	virtual void deserialize(Buffer & data) override;
+
+	virtual void updateWithStatus(eStatus status);
 
 protected:
 	Sprite* _sprite;

@@ -2,8 +2,10 @@
 #define __GAMEOBJECT_H__
 
 #include "Vector2.h"
+#include "Rect.h"
 #include "..\Definitions.h"
 #include "..\Shared\Serializable.h"
+
 
 class GameObject : public Serializable
 {
@@ -42,12 +44,20 @@ public:
 	virtual Buffer * serialize() override;
 	virtual void deserialize(Buffer & data) override;
 
+	virtual Rect getBoundingBox() const;
+
+	virtual Vector2 getVelocity() const;
+
+	virtual void checkCollision(GameObject &other, float dt);
+
 protected:
 	Vector2 _position;
 	eDirection _direction;
 
 	eObjectId _id;
 	eStatus _status;
+
+	Rect _boudingBox;
 
 	int _tag;
 

@@ -1,6 +1,7 @@
 ﻿#include "Game.h"
 #include "Base\SceneManager.h"
 #include "Scene\Scene01.h"
+#include "Base\ServerConverterFactory.h"
 
 Game* Game::instance = nullptr;
 

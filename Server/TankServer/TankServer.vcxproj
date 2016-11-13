@@ -115,8 +115,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\Base\ClientManager.h" />
+    <ClInclude Include="..\Classes\Base\AABB.h" />
     <ClInclude Include="..\Classes\Base\GameObject.h" />
     <ClInclude Include="..\Classes\Base\GameTime.h" />
+    <ClInclude Include="..\Classes\Base\Rect.h" />
     <ClInclude Include="..\Classes\Base\Scene.h" />
     <ClInclude Include="..\Classes\Base\SceneManager.h" />
     <ClInclude Include="..\Classes\Base\ServerConverterFactory.h" />
@@ -138,8 +140,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\ClientManager.cpp" />
+    <ClCompile Include="..\Classes\Base\AABB.cpp" />
     <ClCompile Include="..\Classes\Base\GameObject.cpp" />
     <ClCompile Include="..\Classes\Base\GameTime.cpp" />
+    <ClCompile Include="..\Classes\Base\Rect.cpp" />
     <ClCompile Include="..\Classes\Base\Scene.cpp" />
     <ClCompile Include="..\Classes\Base\SceneManager.cpp" />
     <ClCompile Include="..\Classes\Base\ServerConverterFactory.cpp" />

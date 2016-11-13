@@ -89,14 +89,8 @@ eDirection Bullet::getDirection()
 	return _direction;
 }
 
-void Bullet::setStatus(eStatus status)
+void Bullet::updateWithStatus(eStatus status)
 {
-	if (_status == status)
-		return;
-
-	GameObject::setStatus(status);
-
-	// update with status
 	switch (status)
 	{
 	case DIE:

@@ -6,7 +6,6 @@
 #include "Base\GameObject.h"
 #include "Base\SpriteManager.h"
 
-
 class Tank : public GameObject
 {
 public:
@@ -23,11 +22,14 @@ public:
 
 	virtual void setDirection(eDirection direction) override;
 
+	bool onContactBegin(PhysicsContact &contact);
+
+	void updateWithStatus(eStatus status) override;
+
 protected:
 	float _velocity;
 
 	std::map<eDirection, Animate*> _animations;
-
 };
 
 #endif // !__TANK_H__

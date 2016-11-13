@@ -20,6 +20,11 @@ void Scene01::update(float dt)
 {
 	for (auto object : _gameObjects)
 	{
+		for (auto p : _players)
+		{
+			object->checkCollision(*p, dt);
+		}
+
 		object->update(dt);
 
 		if (object->hasChanged())
@@ -31,6 +36,14 @@ void Scene01::update(float dt)
 
 	for (auto player : _players)
 	{
+		for (auto other : _players)
+		{
+			if (other != player)
+			{
+				player->checkCollision(*other, dt);
+			}
+		}
+
 		player->update(dt);
 
 		if (player->hasChanged())
@@ -38,6 +51,8 @@ void Scene01::update(float dt)
 			Server::instance->send(player);
 			player->setChanged(false);
 		}
+
+
 	}
 
 	// kiểm tra trạng thái object
@@ -68,6 +83,19 @@ void Scene01::checkStatusObjects()
 		{
 			delete *it;
 			it = _gameObjects.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+
+	for (auto it = _players.begin(); it != _players.end(); )
+	{
+		if ((*it)->getStatus() == eStatus::DIE)
+		{
+			delete *it;
+			it = _players.erase(it);
 		}
 		else
 		{

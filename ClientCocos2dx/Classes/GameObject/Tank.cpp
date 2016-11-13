@@ -1,4 +1,5 @@
 ﻿#include "Tank.h"
+#include "Explosion.h"
 
 // shared
 #include "..\Server\Classes\Shared\Buffer.h"
@@ -73,6 +74,20 @@ bool Tank::init()
 
 	_sprite->runAction(_animations[_direction]);
 
+	auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
+	this->setPhysicsBody(body);
+
+	body->setContactTestBitmask(1);				// gọi callback với tất cả category
+	//body->setRotationEnable(false);
+
+	body->getShapes().at(0)->setSensor(true);	// vẫn gọi callback nhưng ko có tương tác vật lý
+
+	// listener
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(Tank::onContactBegin, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+
 	return true;
 }
 
@@ -80,6 +95,7 @@ void Tank::update(float dt)
 {
 	// update postion
 	this->updatePosition(dt);
+
 }
 
 void Tank::updatePosition(float dt)
@@ -126,3 +142,40 @@ void Tank::setDirection(eDirection direction)
 }
 
 
+bool Tank::onContactBegin(PhysicsContact & contact)
+{
+	_velocity = 0;
+	this->removeStatus(eStatus::RUNNING);
+	
+	return true;
+}
+
+void Tank::updateWithStatus(eStatus status)
+{
+	switch (status)
+	{
+	case DIE:
+	{
+		if (this->getParent() == nullptr)
+			break;
+
+		auto explosion = Explosion::create(false);
+		explosion->setPosition(this->getPosition());
+
+		this->getParent()->addChild(explosion);
+		this->runAction(RemoveSelf::create());
+
+		break;
+	}
+	case NORMAL:
+		break;
+	case PROTECTED:
+		break;
+	case RUNNING:
+		break;
+	case STAND:
+		break;
+	default:
+		break;
+	}
+}
