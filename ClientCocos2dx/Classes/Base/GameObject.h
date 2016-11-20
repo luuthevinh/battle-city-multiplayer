@@ -1,4 +1,4 @@
-#ifndef __GAMEOBJECT_H__
+﻿#ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 
 #include "cocos2d.h"
@@ -32,7 +32,11 @@ public:
 	virtual void deserialize(Buffer & data) override;
 
 	virtual void updateWithStatus(eStatus status);
+	
+	virtual void reconcile(Buffer &data);
 
+	virtual void update(float dt) override;
+	virtual void predict(float dt) {};
 protected:
 	Sprite* _sprite;
 
@@ -40,6 +44,13 @@ protected:
 	eStatus _status;
 
 	eDirection _direction;
+
+	float _lifeTime;
+	std::deque<Buffer*> _pendingBuffer;		// trạng thái dự đoán chưa được server xác nhận
+	int _currentPendingBufferIndex;
+	
+	void addToPendingBuffer();
+	void reconcilePendingBuffer();
 };
 
 

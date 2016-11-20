@@ -12,8 +12,10 @@ Server::Server(u_short port, char * address)
 	_timeOut.tv_sec = 0;
 	_timeOut.tv_usec = 500;
 
-	_detalTime = 0;
+	_timeStep = 1.0f / 8; // gửi tới client mỗi 100ms
 	_lastTime = 0;
+
+	_running = true;
 
 }
 
@@ -66,134 +68,41 @@ bool Server::init()
 		return false;
 	}
 
-	// create main game
-	_game = new Game();
-	_game->init();
-
 	_clientManager = new ClientManager();
-
-	// game time
-	_gameTime = new GameTime();
-	_gameTime->init();
 
 	// data handler with queue
 	_dataHandler = new DataHandler();
 
-	// factory
-	_factory = new ServerConverterFactory(_dataHandler);
+	// create main game
+	_game = Game::createWithConverter(new ServerConverterFactory(_dataHandler));
+
+	// server time
+	_serverTime = new GameTime();
+	_serverTime->init();
 
 	return true;
 }
 
 void Server::run()
 {
-	_running = true;
-
 	while (_running)
 	{
-		// clear read and write set
-		FD_ZERO(&_readSet);
-		FD_ZERO(&_writeSet);
+		_serverTime->update();
 
-		// add listen socket into readset
-		FD_SET(_listenSocket, &_readSet);
+		// select socket
+		this->selectSockets();
 
-		// set socket để select
-		for (auto i = 0; i < _clientManager->getAllClients().size(); i++)
-		{
-			FD_SET(_clientManager->getClientSocket(i), &_readSet);
-			FD_SET(_clientManager->getClientSocket(i), &_writeSet);
-		}
+		// nhận kết nối mới
+		this->acceptAndAddConnection();
 
-		int total = 0;
+		// nhận dữ liệu từ client
+		this->recieveDataFromAll();
 
-		// select sockets
-		if ((total = select(0, &_readSet, &_writeSet, NULL, &_timeOut)) == SOCKET_ERROR)
-		{
-			printf("select() error!\n");
-			continue;
-		}
+		// game update
+		_game->run();
 
-		// kiểm tra kết nối tới server
-		if (FD_ISSET(_listenSocket, &_readSet))
-		{
-			SOCKET acceptSocket;
-
-			// accept socket mới
-			if ((acceptSocket = accept(_listenSocket, NULL, NULL)) != INVALID_SOCKET)
-			{
-				// set socket kết nối tới server thành non-blocking
-				_nonBlocking = 1;
-				if (ioctlsocket(acceptSocket, FIONBIO, &_nonBlocking) == SOCKET_ERROR)
-				{
-					printf("ioctlsocket(FIONBIO) failed!\n");
-					system("pause");
-				}
-
-				// lưu lại socket
-				addConnection(acceptSocket);
-			}
-			else
-			{
-				if (WSAGetLastError() != WSAEWOULDBLOCK)
-				{
-					printf("accept() failed");
-					system("pause");;
-				}
-
-				printf("accept() is fine!\n");
-			}
-		}
-
-		// xử lý kết nối
-		for (int i = 0; i < _clientManager->getAllClients().size(); i++)
-		{
-			SOCKET currentSocket = _clientManager->getClientSocket(i);
-
-			// socket để đọc
-			if (FD_ISSET(currentSocket, &_readSet))
-			{
-				// đọc tin
-				this->recieveData(currentSocket);
-			}
-
-			// socket để gửi 
-			if (FD_ISSET(currentSocket, &_writeSet))
-			{
-				// kiểm tra xem list còn client hoặc phải player 0  ko
-				if (_clientManager->getAllClients().size() <= 0)
-					continue;
-
-				// send package in socket
-				this->sendData(currentSocket);
-			}
-		}
-
-		// game time update
-		_gameTime->update();
-
-		_detalTime = _gameTime->getTotalTime() - _lastTime;
-
-		if (_detalTime >= _game->getFrameRate())
-		{
-			_lastTime += _game->getFrameRate();
-
-			// data
-			_game->handleData(_factory);
-
-			// update game
-			_game->update(_detalTime);
-
-			// title console
-			float f = 1.0f / _detalTime;
-			char buffer[100];
-			sprintf(buffer, "(%.1f/s) | %.4f | Tank Server \n", f, _detalTime); 
-			SetConsoleTitle(buffer);
-		}
-		else
-		{
-			Sleep((_game->getFrameRate() - _detalTime) * 1000.0f);
-		}
+		// gửi dữ liệu
+		this->sendDataToAllWithTimeStep();
 	}
 }
 
@@ -206,8 +115,84 @@ void Server::destroy()
 	delete _game;
 
 	delete _clientManager;
-	delete _factory;
 	delete _dataHandler;
+}
+
+int Server::selectSockets()
+{
+	// clear read and write set
+	FD_ZERO(&_readSet);
+	FD_ZERO(&_writeSet);
+
+	// add listen socket into readset
+	FD_SET(_listenSocket, &_readSet);
+
+	// set socket để select
+	for (auto i = 0; i < _clientManager->getAllClients().size(); i++)
+	{
+		FD_SET(_clientManager->getClientSocket(i), &_readSet);
+		FD_SET(_clientManager->getClientSocket(i), &_writeSet);
+	}
+
+	int total = 0;
+
+	// select sockets
+	if ((total = select(0, &_readSet, &_writeSet, NULL, &_timeOut)) == SOCKET_ERROR)
+	{
+		printf("select() error!\n");
+	}
+
+	return total;
+}
+
+void Server::acceptAndAddConnection()
+{
+	// kiểm tra kết nối tới server
+	if (FD_ISSET(_listenSocket, &_readSet))
+	{
+		SOCKET acceptSocket;
+
+		// accept socket mới
+		if ((acceptSocket = accept(_listenSocket, NULL, NULL)) != INVALID_SOCKET)
+		{
+			// set socket kết nối tới server thành non-blocking
+			_nonBlocking = 1;
+			if (ioctlsocket(acceptSocket, FIONBIO, &_nonBlocking) == SOCKET_ERROR)
+			{
+				printf("ioctlsocket(FIONBIO) failed!\n");
+				system("pause");
+			}
+
+			// lưu lại socket
+			addConnection(acceptSocket);
+		}
+		else
+		{
+			if (WSAGetLastError() != WSAEWOULDBLOCK)
+			{
+				printf("accept() failed");
+				system("pause");;
+			}
+
+			printf("accept() is fine!\n");
+		}
+	}
+}
+
+void Server::recieveDataFromAll()
+{
+	// đọc data từ tất cả client
+	for (int i = 0; i < _clientManager->getAllClients().size(); i++)
+	{
+		SOCKET currentSocket = _clientManager->getClientSocket(i);
+
+		// socket để đọc
+		if (FD_ISSET(currentSocket, &_readSet))
+		{
+			// đọc tin
+			this->recieveData(currentSocket);
+		}
+	}
 }
 
 void Server::recieveData(SOCKET socket)
@@ -278,6 +263,34 @@ void Server::sendData(SOCKET socket)
 	}
 }
 
+void Server::sendDataToAllWithTimeStep()
+{
+	float delta = _serverTime->getTotalTime() - _lastTime;
+	if (delta < _timeStep)
+		return;
+
+	_lastTime += _timeStep;
+
+	// gửi cho tất cả client
+	for (int i = 0; i < _clientManager->getAllClients().size(); i++)
+	{
+		SOCKET currentSocket = _clientManager->getClientSocket(i);
+
+		// socket để gửi 
+		if (FD_ISSET(currentSocket, &_writeSet))
+		{
+			// kiểm tra xem list còn client ko
+			if (_clientManager->getAllClients().size() <= 0)
+				continue;
+
+			// send package to socket
+			this->sendData(currentSocket);
+
+			printf("send data to %d, time: %.2f\n", currentSocket, _lastTime);
+		}
+	}
+}
+
 void Server::closeConnection(SOCKET socket)
 {
 	printf("connection %d closed!\n", socket);
@@ -298,10 +311,14 @@ void Server::addConnection(SOCKET socket)
 	// reply lại id trong server
 	ReplyPacket* rep = new ReplyPacket();
 	rep->uniqueId = tag;
+	rep->beginTime = _game->getGameTime()->getTotalTime();
 
 	_dataHandler->sendTo(socket, rep);
 
 	delete rep;
+
+	// send dữ liệu khởi tạo
+	SceneManager::getInstance()->getCurrentScene()->sendInitDataTo(socket);
 
 	printf("new connection: %d\n", socket);
 }
@@ -317,4 +334,9 @@ void Server::send(Serializable * object)
 	{
 		_dataHandler->sendTo(client, object);
 	}
+}
+
+void Server::sendTo(SOCKET socket, Serializable * object)
+{
+	_dataHandler->sendTo(socket, object);
 }

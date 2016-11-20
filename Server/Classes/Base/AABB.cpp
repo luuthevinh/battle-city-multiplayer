@@ -174,5 +174,16 @@ bool AABB::isColliding(const Rect& object, const Rect& other, float & moveX, flo
 	else
 		moveX = 0.0f;
 
+	float offset = 1;
+	if (moveX > 0)
+		moveX += offset;
+	if (moveX < 0)
+		moveX -= offset;
+
+	if (moveY > 0)
+		moveY += offset;
+	if (moveY < 0)
+		moveY -= offset;
+
 	return true;
 }

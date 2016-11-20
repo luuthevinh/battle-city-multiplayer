@@ -1,4 +1,5 @@
 ﻿#include "Tank.h"
+#include "..\Base\AABB.h"
 
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0)
@@ -14,12 +15,13 @@ Tank::Tank(Buffer& data) : GameObject(data),
 
 Tank::~Tank()
 {
+	delete _collisionChecker;
 }
 
 bool Tank::init()
 {
-	_boudingBox.position.x = this->getPosition().x;
-	_boudingBox.position.y = this->getPosition().y;
+	_boudingBox.position.x = this->getPosition().x - 13;
+	_boudingBox.position.y = this->getPosition().y - 13;
 	_boudingBox.width = 26;
 	_boudingBox.height = 26;
 
@@ -34,8 +36,8 @@ void Tank::update(float dt)
 	this->updatePosition(dt);
 
 	// update bounding box
-	_boudingBox.position.x = this->getPosition().x;
-	_boudingBox.position.y = this->getPosition().y;
+	_boudingBox.position.x = this->getPosition().x - 13;
+	_boudingBox.position.y = this->getPosition().y - 13;
 }
 
 void Tank::updatePosition(float dt)
@@ -141,6 +143,9 @@ void Tank::onChanged()
 
 void Tank::checkCollision(GameObject & other, float dt)
 {
+	if (!this->canCollisionWith(other.getCategoryBitmask()))
+		return;
+
 	eDirection result;
 	float time = _collisionChecker->checkCollision(*this, other, result, dt);
 

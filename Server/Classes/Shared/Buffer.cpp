@@ -1,4 +1,5 @@
 #include "Buffer.h"
+#include <cstring>
 
 Buffer::Buffer(unsigned int size)
 {
@@ -134,6 +135,15 @@ float Buffer::readFloat()
 	ret = *(float*)(this->getData() + _readIndex);
 
 	_readIndex += sizeof(float);
+
+	return ret;
+}
+
+Buffer * Buffer::clone()
+{
+	Buffer* ret = new Buffer(this->getSize());
+	// copy byte array
+	std::memcpy(ret->getData(), this->getData(), this->getSize());
 
 	return ret;
 }

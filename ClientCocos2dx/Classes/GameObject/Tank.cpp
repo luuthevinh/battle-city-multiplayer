@@ -1,5 +1,6 @@
 ﻿#include "Tank.h"
 #include "Explosion.h"
+#include "Base\ServerConnector.h"
 
 // shared
 #include "..\Server\Classes\Shared\Buffer.h"
@@ -87,15 +88,29 @@ bool Tank::init()
 	contactListener->onContactBegin = CC_CALLBACK_1(Tank::onContactBegin, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+	
+	_currentPendingBufferIndex = -1;
 
 	return true;
 }
 
 void Tank::update(float dt)
 {
-	// update postion
-	this->updatePosition(dt);
+	GameObject::update(dt);
 
+	//if (_currentPendingBufferIndex < _pendingBuffer.size() - 1)
+	//{
+	//	this->reconcilePendingBuffer();
+	//}
+	//else
+	//{
+	//	// predict position
+	//	this->updatePosition(dt);
+	//	if (ServerConnector::instance->isRunning())
+	//	{
+	//		this->addToPendingBuffer();
+	//	}
+	//}
 }
 
 void Tank::updatePosition(float dt)
@@ -120,6 +135,11 @@ void Tank::updatePosition(float dt)
 	default:
 		break;
 	}
+}
+
+void Tank::predict(float dt)
+{
+	this->updatePosition(dt);
 }
 
 void Tank::setDirection(eDirection direction)
@@ -179,3 +199,57 @@ void Tank::updateWithStatus(eStatus status)
 		break;
 	}
 }
+
+//void Tank::addToPendingBuffer()
+//{
+//	auto currentBuffer = this->serialize()->clone();
+//	
+//	_pendingBuffer.push_back(currentBuffer);
+//	_currentPendingBufferIndex = _pendingBuffer.size() - 1;
+//}
+
+//void Tank::reconcile(Buffer &data)
+//{
+//	if (_pendingBuffer.size() <= 0)
+//	{
+//		this->deserialize(data);
+//		return;
+//	}
+//
+//	data.setBeginRead(data.getSize() - 4);
+//	float time = data.readFloat();
+//
+//	int index = _pendingBuffer.size() - 1;
+//	for (index; index >= 0; index--)
+//	{
+//		_pendingBuffer[index]->setBeginRead(_pendingBuffer[index]->getSize() - 4);
+//		auto t = _pendingBuffer[index]->readFloat();
+//
+//		// thời gian nhận được sau pending thì cập nhật lại từ đây
+//		if (time >= t)
+//		{
+//			this->deserialize(data);
+//			break;
+//		}
+//	}
+//
+//	// xóa tất cả thằng trc đó đi
+//	for (auto i = 0; i <= index; i++)
+//	{
+//		delete _pendingBuffer.front();
+//		_pendingBuffer.pop_front();
+//	}
+//
+//	_currentPendingBufferIndex = 0;
+//}
+
+//void Tank::reconcilePendingBuffer()
+//{
+//	if (_pendingBuffer.size() <= 0)
+//		return;
+//
+//	this->deserialize(*_pendingBuffer.front());
+//	
+//	delete _pendingBuffer.front();
+//	_pendingBuffer.pop_front();
+//}

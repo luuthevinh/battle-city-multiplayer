@@ -6,6 +6,7 @@
 #include "..\Definitions.h"
 #include "..\Shared\Serializable.h"
 
+class AABB;
 
 class GameObject : public Serializable
 {
@@ -50,6 +51,16 @@ public:
 
 	virtual void checkCollision(GameObject &other, float dt);
 
+	virtual AABB* getCollisionChecker();
+	
+	void setCategoryBitmask(int category);
+	int getCategoryBitmask();
+
+	void setCollisionBitmask(int collsiion);
+	int getCollisionBitmask();
+
+	bool canCollisionWith(int category);
+
 protected:
 	Vector2 _position;
 	eDirection _direction;
@@ -63,6 +74,9 @@ protected:
 
 	bool _hasChanged;
 
+	AABB* _collisionChecker;
+	int _categoryBitmask;
+	int _collisionBitmask;
 };
 
 #endif // !__GAMEOBJECT_H__

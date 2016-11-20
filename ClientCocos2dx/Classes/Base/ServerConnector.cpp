@@ -10,6 +10,7 @@
 #include "..\..\Server\Classes\Shared\Serializable.h"
 #include "..\..\Server\Classes\Shared\DataPacket.h"
 
+ServerConnector* ServerConnector::instance  = nullptr;
 
 ServerConnector::ServerConnector()
 {
@@ -52,6 +53,11 @@ bool ServerConnector::init(u_short port, char * address)
 	// data handler
 	_dataHandler = new DataHandler();
 	_factory = new ClientConverterFactory(_dataHandler);
+
+	instance = this;
+
+	_timer = 0.0f;
+	_isRunning = false;
 
 	return true;
 }
@@ -131,6 +137,11 @@ void ServerConnector::update(cocos2d::Layer* scene)
 	this->handleData();
 }
 
+void ServerConnector::update(float dt)
+{
+	_timer += dt;
+}
+
 void ServerConnector::closeConnection()
 {
 	closesocket(_socket);
@@ -203,7 +214,8 @@ void ServerConnector::handleData()
 				return;
 			}
 
-			object->deserialize(*data->serialize());
+			//object->deserialize(*data->serialize());
+			object->reconcile(*data->serialize());
 		}
 		break;
 	}
@@ -212,15 +224,29 @@ void ServerConnector::handleData()
 		ReplyPacket* packet = dynamic_cast<ReplyPacket*>(data);
 		if (packet)
 		{
+			_timer = packet->beginTime;
+
 			auto object = (Player*)HelloWorld::instance->getChildByName("player");
 			if (object == nullptr)
 				return;
 
 			object->setTag(packet->uniqueId);
+			
+			_isRunning = true;
 		}
 
 	}
 	default:
 		break;
 	}
+}
+
+float ServerConnector::getTime()
+{
+	return _timer;
+}
+
+bool ServerConnector::isRunning()
+{
+	return _isRunning;
 }

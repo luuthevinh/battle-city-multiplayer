@@ -13,6 +13,7 @@ public:
 	bool isColliding(const Rect &object, const Rect &other);
 	bool isColliding(const Rect& object, const Rect &other, float & moveX, float & moveY, float dt);
 	Rect getSweptBroadphaseRect(const GameObject &object, float dt);
+	
 private:
 	float _dxEntry, _dyEntry, _dxExit, _dyExit;
 	float _txEntry, _tyEntry, _txExit, _tyExit;

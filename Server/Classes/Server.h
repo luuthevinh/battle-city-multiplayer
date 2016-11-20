@@ -25,13 +25,13 @@ public:
 
 	void recieveData(SOCKET socket);
 	void sendData(SOCKET socket);
-
 	void closeConnection(SOCKET socket);
 	void addConnection(SOCKET socket);
 
 	DataHandler* getDataHandler();
 
 	void send(Serializable* object);
+	void sendTo(SOCKET socket, Serializable* object);
 
 private:
 	u_short _port;
@@ -52,12 +52,18 @@ private:
 	Game* _game;
 	ClientManager* _clientManager;
 
-	GameTime* _gameTime;
-	float _detalTime;
+	float _timeStep;
 	float _lastTime;
+	GameTime* _serverTime;
 
 	DataHandler* _dataHandler;
-	ServerConverterFactory* _factory;
+
+	int selectSockets();
+	void acceptAndAddConnection();
+
+	void recieveDataFromAll();
+	void sendDataToAllWithTimeStep();
+
 };
 
 #endif // !__SERVER_H__

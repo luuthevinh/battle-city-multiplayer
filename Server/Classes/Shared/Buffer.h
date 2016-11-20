@@ -30,6 +30,8 @@ public:
 	bool readBool();
 	float readFloat();
 
+	Buffer* clone();
+
 protected:
 	char* _data;
 	unsigned int _size;

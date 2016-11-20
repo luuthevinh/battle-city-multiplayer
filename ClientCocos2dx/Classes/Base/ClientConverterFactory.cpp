@@ -1,6 +1,7 @@
 ﻿#include "ClientConverterFactory.h"
 #include "GameObject\Tank.h"
 #include "GameObject\Bullet.h"
+#include "GameObject\Wall.h"
 #include "..\Server\Classes\Shared\DataPacket.h"
 
 ClientConverterFactory::ClientConverterFactory(DataHandler * handler) : ConverterFactory(handler)
@@ -52,8 +53,11 @@ Serializable * ClientConverterFactory::convertNext()
 		
 			break;
 		}
-		case EXPLOSION:
+		case BRICK_WALL:
+		{
+			ret = Wall::createWithBuffer(*buffer);
 			break;
+		}
 		default:
 			break;
 		}

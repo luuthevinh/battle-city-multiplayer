@@ -62,6 +62,7 @@ bool HelloWorld::init()
 void HelloWorld::update(float dt)
 {
 	_serverConnector->update(this);
+	_serverConnector->update(dt);
 }
 
 ServerConnector * HelloWorld::getConnector()

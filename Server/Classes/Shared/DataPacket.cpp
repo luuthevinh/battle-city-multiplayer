@@ -48,12 +48,12 @@ void CommandPacket::deserialize(Buffer &data)
 
 ReplyPacket::ReplyPacket()
 {
-	_buffer = new Buffer(8);
+	_buffer = new Buffer(12);
 }
 
 ReplyPacket::ReplyPacket(Buffer &data)
 {
-	_buffer = new Buffer(8);
+	_buffer = new Buffer(12);
 	this->deserialize(data);
 }
 
@@ -70,6 +70,7 @@ Buffer* ReplyPacket::serialize()
 
 	_buffer->writeInt(eDataType::REPLY_ID);
 	_buffer->writeInt(uniqueId);
+	_buffer->writeFloat(beginTime);
 
 	return _buffer;
 }
@@ -84,6 +85,7 @@ void ReplyPacket::deserialize(Buffer & data)
 
 	this->_type = type;
 	this->uniqueId = data.readInt();
+	this->beginTime = data.readFloat();
 
 	data.setBeginRead(0);
 }

@@ -26,10 +26,15 @@ public:
 
 	void updateWithStatus(eStatus status) override;
 
+	virtual void predict(float dt) override;
 protected:
 	float _velocity;
 
 	std::map<eDirection, Animate*> _animations;
+
+	//void addToPendingBuffer();
+	//virtual void reconcile(Buffer &data) override;
+	//void reconcilePendingBuffer();
 };
 
 #endif // !__TANK_H__

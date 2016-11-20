@@ -21,6 +21,8 @@ public:
 
 	void handleData(Serializable * object) override;
 
+	virtual void sendInitDataTo(SOCKET socket) override;
+
 private:
 	void checkStatusObjects();
 };

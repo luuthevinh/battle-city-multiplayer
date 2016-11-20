@@ -2,7 +2,6 @@
 #define __TANK_H__
 
 #include "..\Base\GameObject.h"
-#include "..\Base\AABB.h"
 
 class Tank : public GameObject
 {
@@ -27,8 +26,6 @@ private:
 
 	void updatePosition(float dt);
 	void updatePosition(float dt, float velocity);
-
-	AABB* _collisionChecker;
 };
 
 #endif // !__TANK_H__

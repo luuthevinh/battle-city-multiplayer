@@ -90,6 +90,9 @@ void SpriteManager::mappingNames()
 
 	_objectNames[eObjectId::BULLET] = "bullet.png";
 	_objectNames[eObjectId::EXPLOSION] = "explosion";
+
+	_objectNames[eObjectId::STELL_WALL] = "steel";
+	_objectNames[eObjectId::BRICK_WALL] = "brick";
 }
 
 Animate* SpriteManager::createAniamte(char* frameName, ...)

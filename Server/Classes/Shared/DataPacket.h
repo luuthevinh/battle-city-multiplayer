@@ -34,6 +34,7 @@ public:
 	virtual void deserialize(Buffer &data) override;
 
 	int uniqueId;
+	float beginTime;
 
 };
 

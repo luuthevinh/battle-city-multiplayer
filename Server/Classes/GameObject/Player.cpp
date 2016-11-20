@@ -18,7 +18,28 @@ int Player::getIndex()
 
 void Player::shoot()
 {
-	auto bullet = new Bullet(this->getPosition(), this->getDirection());
+	Vector2 shootPosition = this->getPosition();
+	float offset = 12;
+
+	switch (_direction)
+	{
+	case LEFT:
+		shootPosition.x -= offset;
+		break;
+	case UP:
+		shootPosition.y += offset;
+		break;
+	case RIGHT:
+		shootPosition.x += offset;
+		break;
+	case DOWN:
+		shootPosition.y -= offset;
+		break;
+	default:
+		break;
+	}
+
+	auto bullet = new Bullet(shootPosition, this->getDirection());
 	SceneManager::getInstance()->getCurrentScene()->addObject(bullet);
 
 	//printf("shoot: %.2f, %.2f\n", bullet->getPosition().x, bullet->getPosition().y);

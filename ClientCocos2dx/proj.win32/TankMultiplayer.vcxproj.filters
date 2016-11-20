@@ -72,6 +72,9 @@
     <ClCompile Include="..\..\Server\Classes\Shared\DataPacket.cpp">
       <Filter>src\Shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Wall.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Server\Classes\Shared\DataPacket.h">
       <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Wall.h">
+      <Filter>src\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

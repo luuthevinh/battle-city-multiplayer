@@ -1,5 +1,7 @@
 ﻿#include "GameObject.h"
 #include "..\Shared\Buffer.h"
+#include "..\Game.h"
+#include "AABB.h"
 
 GameObject::GameObject(eObjectId id) :
 	_id(id),
@@ -7,16 +9,20 @@ GameObject::GameObject(eObjectId id) :
 	_status(eStatus::STAND),
 	_direction(eDirection::UP),
 	_hasChanged(true),
-	_boudingBox(0, 0, 0, 0)
+	_boudingBox(0, 0, 0, 0),
+	_collisionChecker(nullptr),
+	_collisionBitmask(1),
+	_categoryBitmask(1)
 {
-	_buffer = new Buffer(25);
+	_buffer = new Buffer(29);
 }
 
 GameObject::GameObject(Buffer & buffer) :
 	_hasChanged(true),
-	_boudingBox(0, 0, 0, 0)
+	_boudingBox(0, 0, 0, 0),
+	_collisionChecker(nullptr)
 {
-	_buffer = new Buffer(25);
+	_buffer = new Buffer(29);
 	this->deserialize(buffer);
 }
 
@@ -137,6 +143,8 @@ Buffer * GameObject::serialize()
 	_buffer->writeFloat(this->getPosition().x);
 	_buffer->writeFloat(this->getPosition().y);
 
+	_buffer->writeFloat(Game::instance->getGameTime()->getTotalTime());
+
 	return _buffer;
 }
 
@@ -157,6 +165,8 @@ void GameObject::deserialize(Buffer & data)
 	float y = data.readFloat();
 	this->setPosition(x, y);
 
+	float time = data.readFloat();
+
 	data.setBeginRead(0);
 }
 
@@ -172,4 +182,37 @@ Vector2 GameObject::getVelocity() const
 
 void GameObject::checkCollision(GameObject & other, float dt)
 {
+}
+
+AABB * GameObject::getCollisionChecker()
+{
+	return _collisionChecker;
+}
+
+void GameObject::setCategoryBitmask(int category)
+{
+	_categoryBitmask = category;
+}
+
+int GameObject::getCategoryBitmask()
+{
+	return _categoryBitmask;
+}
+
+void GameObject::setCollisionBitmask(int collision)
+{
+	_collisionBitmask = collision;
+}
+
+int GameObject::getCollisionBitmask()
+{
+	return _collisionBitmask;
+}
+
+bool GameObject::canCollisionWith(int category)
+{
+	if ((_collisionBitmask & category) == category)
+		return true;
+
+	return false;
 }

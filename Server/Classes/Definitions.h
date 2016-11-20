@@ -10,7 +10,7 @@
 #define DATA_BUFFER_SIZE 5120			// 5 Mb
 #define DATA_BUFFER_RECIEVE_SIZE 1024	// 1 Mb
 
-#define GAME_FRAMERATE 30
+#define GAME_FRAMERATE 60
 
 // uncomment to disable assert
 // #define NDEBUG

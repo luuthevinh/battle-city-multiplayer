@@ -20,7 +20,7 @@ public:
 	eDirection getDirection();
 
 	virtual void updateWithStatus(eStatus status) override;
-
+	virtual void predict(float dt) override;
 private:
 	eDirection _direction;
 	float _speed;

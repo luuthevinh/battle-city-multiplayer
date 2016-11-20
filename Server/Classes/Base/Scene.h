@@ -24,6 +24,8 @@ public:
 	virtual void removePlayer(int socketIndex);
 	virtual Player* getPlayer(int tag);
 
+	virtual void sendInitDataTo(SOCKET socket);
+
 protected:
 	std::vector<GameObject*> _gameObjects;
 	std::vector<Player*> _players;

@@ -42,7 +42,8 @@ int Scene::addPlayer(int socketIndex)
 
 	auto player = new Player(eObjectId::YELLOW_TANK, socketIndex);
 	player->setTag(_uniqueIdCounter);
-	
+	player->setPosition(WINDOW_WIDTH / 2, 64);
+
 	_players.push_back(player);
 
 	return _uniqueIdCounter;
@@ -68,4 +69,8 @@ Player * Scene::getPlayer(int tag)
 	}
 	
 	return nullptr;
+}
+
+void Scene::sendInitDataTo(SOCKET socket)
+{
 }

@@ -56,6 +56,30 @@ bool Bullet::init()
 
 void Bullet::update(float dt)
 {
+	GameObject::update(dt);
+
+	// update sprite rotate
+	switch (_direction)
+	{
+	case LEFT:
+		this->setRotation(0.0f);
+		break;
+	case UP:
+		this->setRotation(90.0f);
+		break;
+	case RIGHT:
+		this->setRotation(180.0f);
+		break;
+	case DOWN:
+		this->setRotation(-90.0f);
+		break;
+	default:
+		break;
+	}
+}
+
+void Bullet::predict(float dt)
+{
 	switch (_direction)
 	{
 	case LEFT:

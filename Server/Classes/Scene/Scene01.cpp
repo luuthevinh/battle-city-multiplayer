@@ -1,5 +1,6 @@
 ﻿#include "Scene01.h"
 #include "..\Server.h"
+#include "..\GameObject\Wall.h"
 
 #include "..\Shared\DataPacket.h"
 
@@ -13,11 +14,29 @@ Scene01::~Scene01()
 
 bool Scene01::init()
 {
+	// demo wall
+	for (size_t r = 0; r < 8; r++)
+	{
+		if (r % 2 != 0)
+			continue;
+
+		for (size_t c = 0; c < 14; c++)
+		{
+			if (c % 2 != 0)
+				continue;
+
+			auto wall = Wall::createWithPosition(eObjectId::BRICK_WALL, Vector2(64 + (32 * c), 256 + (32 * r)));
+			this->addObject(wall);
+		}
+
+	}
+
 	return true;
 }
 
 void Scene01::update(float dt)
 {
+	// update and check collision
 	for (auto object : _gameObjects)
 	{
 		for (auto p : _players)
@@ -25,8 +44,20 @@ void Scene01::update(float dt)
 			object->checkCollision(*p, dt);
 		}
 
-		object->update(dt);
+		for (auto other : _gameObjects)
+		{
+			if (other == object)
+				continue;
 
+			object->checkCollision(*other, dt);
+		}
+
+		object->update(dt);
+	}
+
+	// gửi object có thay đổi
+	for (auto object : _gameObjects)
+	{
 		if (object->hasChanged())
 		{
 			Server::instance->send(object);
@@ -42,6 +73,11 @@ void Scene01::update(float dt)
 			{
 				player->checkCollision(*other, dt);
 			}
+		}
+
+		for (auto object : _gameObjects)
+		{
+			player->checkCollision(*object, dt);
 		}
 
 		player->update(dt);
@@ -128,5 +164,18 @@ void Scene01::handleData(Serializable * object)
 	}
 	default:
 		break;
+	}
+}
+
+void Scene01::sendInitDataTo(SOCKET socket)
+{
+	for (auto object : _gameObjects)
+	{
+		Server::instance->sendTo(socket, object);
+	}
+
+	for (auto player : _players)
+	{
+		Server::instance->sendTo(socket, player);
 	}
 }
