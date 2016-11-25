@@ -18,6 +18,8 @@ public:
 	virtual void handleData(Serializable* object);
 
 	virtual int addObject(GameObject* object);
+	virtual int addStaticObject(GameObject* object);
+
 	virtual void removeObject(int tag);
 
 	virtual int addPlayer(int socketIndex);
@@ -28,9 +30,9 @@ public:
 
 protected:
 	std::vector<GameObject*> _gameObjects;
-	std::vector<Player*> _players;
+	std::vector<GameObject*> _staticObjects;
 
-	int _uniqueIdCounter;
+	std::vector<Player*> _players;
 };
 
 #endif // !__SCENE_H__

@@ -61,7 +61,7 @@ eObjectId GameObject::getId()
 
 void GameObject::setDirection(eDirection direction)
 {
-	if (_direction == direction || direction <= 0 || direction > 4)
+	if (_direction == direction || direction <= 0 || direction > 8)
 		return;
 
 	_direction = direction;
@@ -171,17 +171,19 @@ void GameObject::reconcilePendingBuffer()
 
 void GameObject::update(float dt)
 {
-	if (_currentPendingBufferIndex < _pendingBuffer.size() - 1)
-	{
-		this->reconcilePendingBuffer();
-	}
-	else
-	{
-		this->predict(dt);
+	//if (_currentPendingBufferIndex < _pendingBuffer.size() - 1)
+	//{
+	//	this->reconcilePendingBuffer();
+	//}
+	//else
+	//{
+	//	this->predict(dt);
 
-		if (ServerConnector::instance->isRunning())
-		{
-			this->addToPendingBuffer();
-		}
-	}
+	//	if (ServerConnector::instance->isRunning())
+	//	{
+	//		this->addToPendingBuffer();
+	//	}
+	//}
+
+	// this->predict(dt);
 }

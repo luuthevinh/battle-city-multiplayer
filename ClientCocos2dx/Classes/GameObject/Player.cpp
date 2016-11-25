@@ -59,25 +59,6 @@ void Player::update(float dt)
 	Tank::update(dt);
 }
 
-void Player::setDirection(eDirection direction)
-{
-	if (_direction == direction)
-		return;
-
-	_direction = direction;
-
-	_sprite->stopAllActions();
-
-	if ((_status & eStatus::RUNNING) == eStatus::RUNNING)
-	{
-		_sprite->runAction(RepeatForever::create(_animations[_direction]));
-	}
-	else
-	{
-		_sprite->runAction(_animations[_direction]);
-	}
-}
-
 void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 {
 	eKeyInput input = eKeyInput::KEY_NONE;
@@ -86,25 +67,25 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 	{
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 	{
-		this->setDirection(eDirection::UP);
+		//this->setDirection(eDirection::UP);
 		input = eKeyInput::KEY_UP;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 	{
-		this->setDirection(eDirection::DOWN);
+		//this->setDirection(eDirection::DOWN);
 		input = eKeyInput::KEY_DOWN;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 	{
-		this->setDirection(eDirection::LEFT);
+		//this->setDirection(eDirection::LEFT);
 		input = eKeyInput::KEY_LEFT;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 	{
-		this->setDirection(eDirection::RIGHT);
+		//this->setDirection(eDirection::RIGHT);
 		input = eKeyInput::KEY_RIGHT;
 		break;
 	}
@@ -122,8 +103,8 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		if (input != eKeyInput::KEY_SHOOT)
 		{
 			_keyDirectionCounter++;
-			_velocity = TANK_NORMAL_VELOCITY;
-			_status = (eStatus)(_status | eStatus::RUNNING);
+			//_velocity = TANK_NORMAL_VELOCITY;
+			//_status = (eStatus)(_status | eStatus::RUNNING);
 		}
 
 		auto command = new CommandPacket();
@@ -175,8 +156,8 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 
 	if (_velocity != 0.0f && _keyDirectionCounter <= 0)
 	{
-		_velocity = 0.0f;
-		_status = (eStatus)(_status & (~eStatus::RUNNING));
+		//_velocity = 0.0f;
+		//_status = (eStatus)(_status & (~eStatus::RUNNING));
 		_sprite->stopAllActions();
 
 	}

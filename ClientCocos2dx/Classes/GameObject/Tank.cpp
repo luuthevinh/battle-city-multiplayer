@@ -73,7 +73,7 @@ bool Tank::init()
 		i->second->retain();
 	}
 
-	_sprite->runAction(_animations[_direction]);
+	this->runAnimateByDirection(eDirection::UP);
 
 	auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
 	this->setPhysicsBody(body);
@@ -97,20 +97,6 @@ bool Tank::init()
 void Tank::update(float dt)
 {
 	GameObject::update(dt);
-
-	//if (_currentPendingBufferIndex < _pendingBuffer.size() - 1)
-	//{
-	//	this->reconcilePendingBuffer();
-	//}
-	//else
-	//{
-	//	// predict position
-	//	this->updatePosition(dt);
-	//	if (ServerConnector::instance->isRunning())
-	//	{
-	//		this->addToPendingBuffer();
-	//	}
-	//}
 }
 
 void Tank::updatePosition(float dt)
@@ -142,23 +128,31 @@ void Tank::predict(float dt)
 	this->updatePosition(dt);
 }
 
-void Tank::setDirection(eDirection direction)
+void Tank::runAnimateByDirection(eDirection direction)
 {
-	if (_direction == direction || direction <= 0 || direction > 4)
+	if (direction <= 0 || direction > 8)
 		return;
-
-	_direction = direction;
 
 	_sprite->stopAllActions();
 
 	if ((_status & eStatus::RUNNING) == eStatus::RUNNING)
 	{
-		_sprite->runAction(RepeatForever::create(_animations[_direction]));
+		_sprite->runAction(RepeatForever::create(_animations[direction]));
 	}
 	else
 	{
-		_sprite->runAction(_animations[_direction]);
+		_sprite->runAction(_animations[direction]);
 	}
+}
+
+void Tank::setDirection(eDirection direction)
+{
+	if (_direction == direction)
+		return;
+
+	_direction = direction;
+
+	this->runAnimateByDirection(direction);
 }
 
 
@@ -199,57 +193,3 @@ void Tank::updateWithStatus(eStatus status)
 		break;
 	}
 }
-
-//void Tank::addToPendingBuffer()
-//{
-//	auto currentBuffer = this->serialize()->clone();
-//	
-//	_pendingBuffer.push_back(currentBuffer);
-//	_currentPendingBufferIndex = _pendingBuffer.size() - 1;
-//}
-
-//void Tank::reconcile(Buffer &data)
-//{
-//	if (_pendingBuffer.size() <= 0)
-//	{
-//		this->deserialize(data);
-//		return;
-//	}
-//
-//	data.setBeginRead(data.getSize() - 4);
-//	float time = data.readFloat();
-//
-//	int index = _pendingBuffer.size() - 1;
-//	for (index; index >= 0; index--)
-//	{
-//		_pendingBuffer[index]->setBeginRead(_pendingBuffer[index]->getSize() - 4);
-//		auto t = _pendingBuffer[index]->readFloat();
-//
-//		// thời gian nhận được sau pending thì cập nhật lại từ đây
-//		if (time >= t)
-//		{
-//			this->deserialize(data);
-//			break;
-//		}
-//	}
-//
-//	// xóa tất cả thằng trc đó đi
-//	for (auto i = 0; i <= index; i++)
-//	{
-//		delete _pendingBuffer.front();
-//		_pendingBuffer.pop_front();
-//	}
-//
-//	_currentPendingBufferIndex = 0;
-//}
-
-//void Tank::reconcilePendingBuffer()
-//{
-//	if (_pendingBuffer.size() <= 0)
-//		return;
-//
-//	this->deserialize(*_pendingBuffer.front());
-//	
-//	delete _pendingBuffer.front();
-//	_pendingBuffer.pop_front();
-//}

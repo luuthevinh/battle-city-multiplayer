@@ -24,7 +24,10 @@ public:
 	virtual void sendInitDataTo(SOCKET socket) override;
 
 private:
+	void checkCollisionObjects(float dt);
 	void checkStatusObjects();
+	void sendChangedObjects();
+
 };
 
 

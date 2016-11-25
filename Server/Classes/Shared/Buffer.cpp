@@ -59,12 +59,12 @@ void Buffer::writeInt(int value)
 
 void Buffer::writeByte(char value)
 {
-	assert(this->getIndex() + sizeof(unsigned char) <= this->getSize());
+	assert(this->getIndex() + sizeof(char) <= this->getSize());
 
 	// little endian
-	*((unsigned char*)(this->getData() + this->getIndex())) = value;
+	*((char*)(this->getData() + this->getIndex())) = value;
 
-	this->setIndex(this->getIndex() + sizeof(unsigned char));
+	this->setIndex(this->getIndex() + sizeof(char));
 }
 
 void Buffer::writeBool(bool value)

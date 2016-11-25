@@ -9,24 +9,24 @@ public:
 	Vector2(const Vector2& other);
 	~Vector2();
 
-	Vector2 operator+(const Vector2& v);
+	Vector2 operator+(const Vector2& v) const;
 
-	Vector2 operator-(const Vector2& v);
+	Vector2 operator-(const Vector2& v) const;
 
-	Vector2 operator*(const Vector2& v);
+	Vector2 operator*(const Vector2& v) const;
 
-	Vector2 operator*(float value);
+	Vector2 operator*(float value) const;
 
-	Vector2 operator/(const Vector2& v);
-	Vector2 operator/(float value);
+	Vector2 operator/(const Vector2& v) const;
+	Vector2 operator/(float value) const;
 
-	bool operator==(const Vector2& v);
+	bool operator==(const Vector2& v) const;
 
-	bool operator!=(const Vector2& v);
+	bool operator!=(const Vector2& v) const;
 
-	bool operator>(const Vector2& v);
+	bool operator>(const Vector2& v) const;
 
-	bool operator<(const Vector2& v);
+	bool operator<(const Vector2& v) const;
 
 	float x;
 	float y;

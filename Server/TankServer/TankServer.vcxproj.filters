@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Scene">
       <UniqueIdentifier>{f50c5942-3244-442e-849d-1410c16877f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\tmx">
+      <UniqueIdentifier>{bb6a22e3-42a1-4c11-bf4c-b63f8e9eaeee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\Base\GameObject.h">
@@ -99,6 +102,15 @@
     <ClInclude Include="..\Classes\GameObject\Wall.h">
       <Filter>Source Files\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\tmx\tmx.h">
+      <Filter>Source Files\tmx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\tmx\tmx_utils.h">
+      <Filter>Source Files\tmx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\MapLoader.h">
+      <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\GameObject.cpp">
@@ -167,5 +179,25 @@
     <ClCompile Include="..\Classes\GameObject\Wall.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\tmx\tmx.c">
+      <Filter>Source Files\tmx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\tmx\tmx_err.c">
+      <Filter>Source Files\tmx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\tmx\tmx_utils.c">
+      <Filter>Source Files\tmx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\tmx\tmx_xml.c">
+      <Filter>Source Files\tmx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\MapLoader.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\map\map_01.tmx">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

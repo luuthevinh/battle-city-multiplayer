@@ -3,6 +3,8 @@
 #include "..\Game.h"
 #include "AABB.h"
 
+int GameObject::_nextTag = 0;
+
 GameObject::GameObject(eObjectId id) :
 	_id(id),
 	_position(0, 0),
@@ -52,7 +54,7 @@ void GameObject::setPosition(const Vector2 & position)
 	_position.y = position.y;
 }
 
-Vector2 GameObject::getPosition()
+const Vector2& GameObject::getPosition() const
 {
 	return _position;
 }
@@ -170,7 +172,7 @@ void GameObject::deserialize(Buffer & data)
 	data.setBeginRead(0);
 }
 
-Rect GameObject::getBoundingBox() const
+const Rect& GameObject::getBoundingBox() const
 {
 	return _boudingBox;
 }
@@ -215,4 +217,14 @@ bool GameObject::canCollisionWith(int category)
 		return true;
 
 	return false;
+}
+
+void GameObject::setBoundingBox(const Rect & box)
+{
+	_boudingBox = box;
+}
+
+int GameObject::getNextTag()
+{
+	return _nextTag++;
 }

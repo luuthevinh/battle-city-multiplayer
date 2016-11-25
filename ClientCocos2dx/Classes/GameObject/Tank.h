@@ -32,9 +32,7 @@ protected:
 
 	std::map<eDirection, Animate*> _animations;
 
-	//void addToPendingBuffer();
-	//virtual void reconcile(Buffer &data) override;
-	//void reconcilePendingBuffer();
+	void runAnimateByDirection(eDirection direction);
 };
 
 #endif // !__TANK_H__

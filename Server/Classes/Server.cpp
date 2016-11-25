@@ -286,7 +286,7 @@ void Server::sendDataToAllWithTimeStep()
 			// send package to socket
 			this->sendData(currentSocket);
 
-			printf("send data to %d, time: %.2f\n", currentSocket, _lastTime);
+			// printf("send data to %d, time: %.2f\n", currentSocket, _lastTime);
 		}
 	}
 }

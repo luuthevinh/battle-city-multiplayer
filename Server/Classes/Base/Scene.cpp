@@ -2,7 +2,6 @@
 
 Scene::Scene()
 {
-	_uniqueIdCounter = 0;
 }
 
 Scene::~Scene()
@@ -15,12 +14,18 @@ void Scene::handleData(Serializable * object)
 
 int Scene::addObject(GameObject * object)
 {
-	_uniqueIdCounter++;
-
 	_gameObjects.push_back(object);
-	object->setTag(_uniqueIdCounter);
+	object->setTag(GameObject::getNextTag());
 
-	return _uniqueIdCounter;
+	return object->getTag();
+}
+
+int Scene::addStaticObject(GameObject * object)
+{
+	_staticObjects.push_back(object);
+	object->setTag(GameObject::getNextTag());
+
+	return object->getTag();
 }
 
 void Scene::removeObject(int tag)
@@ -38,15 +43,14 @@ void Scene::removeObject(int tag)
 
 int Scene::addPlayer(int socketIndex)
 {
-	_uniqueIdCounter++;
-
 	auto player = new Player(eObjectId::YELLOW_TANK, socketIndex);
-	player->setTag(_uniqueIdCounter);
+	player->setTag(GameObject::getNextTag());
+
 	player->setPosition(WINDOW_WIDTH / 2, 64);
 
 	_players.push_back(player);
 
-	return _uniqueIdCounter;
+	return player->getTag();
 }
 
 void Scene::removePlayer(int index)

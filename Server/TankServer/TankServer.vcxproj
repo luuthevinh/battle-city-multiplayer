@@ -68,7 +68,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>D:\all-cocos2d-x\projects\TankMultiplayer\libs\libxml2\include;D:\all-cocos2d-x\projects\TankMultiplayer\libs\zlib\include;D:\all-cocos2d-x\projects\TankMultiplayer\libs\iconv\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\all-cocos2d-x\projects\TankMultiplayer\libs\libxml2\lib;D:\all-cocos2d-x\projects\TankMultiplayer\libs\iconv\lib;D:\all-cocos2d-x\projects\TankMultiplayer\libs\zlib\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -77,8 +80,12 @@
       <PreprocessorDefinitions>_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;iconv.lib;zdll.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -126,6 +133,7 @@
     <ClInclude Include="..\Classes\Definitions.h" />
     <ClInclude Include="..\Classes\Game.h" />
     <ClInclude Include="..\Classes\GameObject\Bullet.h" />
+    <ClInclude Include="..\Classes\GameObject\MapLoader.h" />
     <ClInclude Include="..\Classes\GameObject\Player.h" />
     <ClInclude Include="..\Classes\GameObject\Tank.h" />
     <ClInclude Include="..\Classes\GameObject\Wall.h" />
@@ -138,6 +146,8 @@
     <ClInclude Include="..\Classes\Shared\DataQueue.h" />
     <ClInclude Include="..\Classes\Shared\Serializable.h" />
     <ClInclude Include="..\Classes\Shared\SharedDefinitions.h" />
+    <ClInclude Include="..\Classes\tmx\tmx.h" />
+    <ClInclude Include="..\Classes\tmx\tmx_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\ClientManager.cpp" />
@@ -151,6 +161,7 @@
     <ClCompile Include="..\Classes\Base\Vector2.cpp" />
     <ClCompile Include="..\Classes\Game.cpp" />
     <ClCompile Include="..\Classes\GameObject\Bullet.cpp" />
+    <ClCompile Include="..\Classes\GameObject\MapLoader.cpp" />
     <ClCompile Include="..\Classes\GameObject\Player.cpp" />
     <ClCompile Include="..\Classes\GameObject\Tank.cpp" />
     <ClCompile Include="..\Classes\GameObject\Wall.cpp" />
@@ -162,6 +173,13 @@
     <ClCompile Include="..\Classes\Shared\DataPacket.cpp" />
     <ClCompile Include="..\Classes\Shared\DataQueue.cpp" />
     <ClCompile Include="..\Classes\Source.cpp" />
+    <ClCompile Include="..\Classes\tmx\tmx.c" />
+    <ClCompile Include="..\Classes\tmx\tmx_err.c" />
+    <ClCompile Include="..\Classes\tmx\tmx_utils.c" />
+    <ClCompile Include="..\Classes\tmx\tmx_xml.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\map\map_01.tmx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

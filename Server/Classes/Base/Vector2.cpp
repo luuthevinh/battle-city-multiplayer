@@ -22,48 +22,48 @@ Vector2::~Vector2()
 {
 }
 
-Vector2 Vector2::operator+(const Vector2 & v)
+Vector2 Vector2::operator+(const Vector2 & v) const
 {
 
 	return Vector2(v.x + x, v.y + y);
 }
 
-Vector2 Vector2::operator-(const Vector2 & v)
+Vector2 Vector2::operator-(const Vector2 & v) const
 {
 	return Vector2(x - v.x, y - v.y);
 }
 
-Vector2 Vector2::operator*(const Vector2 & v)
+Vector2 Vector2::operator*(const Vector2 & v) const
 {
 	return Vector2(x * v.x, y * v.y);
 }
 
-Vector2 Vector2::operator*(float value)
+Vector2 Vector2::operator*(float value) const
 {
 	return Vector2(x * value, y * value);
 }
 
-Vector2 Vector2::operator/(const Vector2 & v)
+Vector2 Vector2::operator/(const Vector2 & v) const
 {
 	return Vector2(x / v.x, y / v.y);
 }
 
-Vector2 Vector2::operator/(float value)
+Vector2 Vector2::operator/(float value) const
 {
 	return Vector2(x / value, y / value);
 }
 
-bool Vector2::operator==(const Vector2 & v)
+bool Vector2::operator==(const Vector2 & v) const
 {
 	return x == v.x && y == v.y;
 }
 
-bool Vector2::operator!=(const Vector2 & v)
+bool Vector2::operator!=(const Vector2 & v) const
 {
 	return x != v.x || y != v.y;
 }
 
-bool Vector2::operator>(const Vector2 & v)
+bool Vector2::operator>(const Vector2 & v) const
 {
 	if (x == v.x)
 	{
@@ -72,7 +72,7 @@ bool Vector2::operator>(const Vector2 & v)
 	return x > v.x;
 }
 
-bool Vector2::operator<(const Vector2 & v)
+bool Vector2::operator<(const Vector2 & v) const
 {
 	if (x == v.x)
 	{

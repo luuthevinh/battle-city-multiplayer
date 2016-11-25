@@ -91,7 +91,7 @@ void SpriteManager::mappingNames()
 	_objectNames[eObjectId::BULLET] = "bullet.png";
 	_objectNames[eObjectId::EXPLOSION] = "explosion";
 
-	_objectNames[eObjectId::STELL_WALL] = "steel";
+	_objectNames[eObjectId::STEEL_WALL] = "steel";
 	_objectNames[eObjectId::BRICK_WALL] = "brick";
 }
 

@@ -78,5 +78,6 @@ void Player::updateInput(eKeyInput input, bool start)
 	{
 		this->removeStatus(eStatus::RUNNING);
 		this->setVelocity(0.0f);
+		_inputTurns.clear();
 	}
 }

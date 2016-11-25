@@ -41,7 +41,7 @@ Wall * Wall::createWithBuffer(Buffer & buffer)
 
 bool Wall::init()
 {
-	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_00.png");
+	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_05.png");
 	this->addChild(_sprite);
 
 	auto body = PhysicsBody::createBox(_sprite->getContentSize(), PhysicsMaterial(0, 0, 0));

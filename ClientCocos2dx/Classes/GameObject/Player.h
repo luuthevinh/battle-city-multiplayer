@@ -13,7 +13,6 @@ public:
 
 	virtual bool init() override;
 	virtual void update(float dt) override;
-	virtual void setDirection(eDirection direction) override;
 
 	void onKeyPressed(EventKeyboard::KeyCode keycode, Event* e);
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* e);

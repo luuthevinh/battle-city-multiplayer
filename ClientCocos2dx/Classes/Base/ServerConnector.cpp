@@ -214,8 +214,8 @@ void ServerConnector::handleData()
 				return;
 			}
 
-			//object->deserialize(*data->serialize());
-			object->reconcile(*data->serialize());
+			object->deserialize(*data->serialize());
+			//object->reconcile(*data->serialize());
 		}
 		break;
 	}

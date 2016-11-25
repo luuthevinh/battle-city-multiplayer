@@ -24,10 +24,10 @@ Wall * Wall::createWithPosition(eObjectId type, const Vector2 &position)
 
 bool Wall::init()
 {
-	_boudingBox.position.x = this->getPosition().x - 16;
-	_boudingBox.position.y = this->getPosition().y - 16;
-	_boudingBox.width = 32;
-	_boudingBox.height = 32;
+	_boudingBox.position.x = this->getPosition().x - 8;
+	_boudingBox.position.y = this->getPosition().y - 8;
+	_boudingBox.width = 16;
+	_boudingBox.height = 16;
 
 	return true;
 }

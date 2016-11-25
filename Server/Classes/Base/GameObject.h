@@ -20,7 +20,7 @@ public:
 
 	virtual void setPosition(float x, float y);
 	virtual void setPosition(const Vector2 &position);
-	virtual Vector2 getPosition();
+	virtual const Vector2& getPosition() const;
 
 	virtual void setDirection(eDirection direction);
 	virtual eDirection getDirection();
@@ -45,8 +45,6 @@ public:
 	virtual Buffer * serialize() override;
 	virtual void deserialize(Buffer & data) override;
 
-	virtual Rect getBoundingBox() const;
-
 	virtual Vector2 getVelocity() const;
 
 	virtual void checkCollision(GameObject &other, float dt);
@@ -60,6 +58,11 @@ public:
 	int getCollisionBitmask();
 
 	bool canCollisionWith(int category);
+
+	virtual const Rect& getBoundingBox() const;
+	virtual void setBoundingBox(const Rect &box);
+
+	static int getNextTag();
 
 protected:
 	Vector2 _position;
@@ -77,6 +80,8 @@ protected:
 	AABB* _collisionChecker;
 	int _categoryBitmask;
 	int _collisionBitmask;
+
+	static int _nextTag;
 };
 
 #endif // !__GAMEOBJECT_H__

@@ -2,8 +2,16 @@
 #include <limits>
 #include <stdio.h>
 
+#define _USE_MATH_DEFINES
+
+#include <math.h>
+
+
+
 AABB::AABB()
 {
+	_offsetX = 0;
+	_offsetY = 0;
 }
 
 AABB::~AABB()
@@ -13,8 +21,8 @@ AABB::~AABB()
 float AABB::checkCollision(const GameObject & object, const GameObject & other, eDirection &result, float dt)
 {
 
-	Rect myRect = object.getBoundingBox();
-	Rect otherRect = other.getBoundingBox();
+	auto& myRect = object.getBoundingBox();
+	auto& otherRect = other.getBoundingBox();
 
 	// dùng broadphase để check trc
 	Rect rect = this->getSweptBroadphaseRect(object, dt);
@@ -96,7 +104,7 @@ float AABB::checkCollision(const GameObject & object, const GameObject & other, 
 	// xét hướng va chạm
 	if (_txEntry > _tyEntry)
 	{
-		if (_dxEntry < 0.0f)
+		if (_dxEntry > 0.0f)
 		{
 			result = eDirection::RIGHT;
 			printf("collided right.\n");
@@ -109,7 +117,7 @@ float AABB::checkCollision(const GameObject & object, const GameObject & other, 
 	}
 	else
 	{
-		if (_dyEntry < 0.0f)
+		if (_dyEntry > 0.0f)
 		{
 			result = eDirection::UP;
 			printf("collided up.\n");
@@ -131,6 +139,12 @@ bool AABB::isColliding(const Rect & object, const Rect & other)
 	float right = other.getMaxX() - object.getMinX();
 	float bottom = other.getMinY() - object.getMaxY();
 
+	if ((abs(left) <= _offsetX && (abs(bottom) <= _offsetY || abs(top) <= _offsetY)) ||
+		(abs(right) <= _offsetX && (abs(bottom) <= _offsetY || abs(top) <= _offsetY)))
+	{
+		return false;
+	}
+
 	return !(left > 0 || right < 0 || top < 0 || bottom > 0);
 }
 
@@ -148,6 +162,46 @@ Rect AABB::getSweptBroadphaseRect(const GameObject & object, float dt)
 	return Rect(x, y, w, h);
 }
 
+eDirection AABB::getSideOverlap(const Rect &rect, const Rect &otherRect)
+{
+	float left = otherRect.getMinX() - rect.getMaxX();
+	float top = otherRect.getMaxY() - rect.getMinY();
+	float right = otherRect.getMaxX() - rect.getMinX();
+	float bottom = otherRect.getMinY() - rect.getMaxY();
+
+	if (left > 0 || right < 0 || top < 0 || bottom > 0)
+		return eDirection::NONE;
+
+	// khoảng cách cạnh bên phải của other 
+	// so với cạnh trái của object phải nhỏ hơn offset 
+	// và y đang nằm trong top-down của object
+	if (abs(right) <= _offsetX && (top >= _offsetY && abs(bottom) >= _offsetY))
+		return eDirection::LEFT;
+
+	if (abs(left) <= _offsetX && (top >= _offsetY && abs(bottom) >= _offsetY))
+		return eDirection::RIGHT;
+
+	if (abs(top) <= _offsetY && (right >= _offsetX && abs(left) >= _offsetX))
+		return eDirection::DOWN;
+
+	if (abs(bottom) <= _offsetY && (right >= _offsetX && abs(left) >= _offsetX))
+		return eDirection::UP;
+
+	return eDirection::NONE;
+}
+
+void AABB::setOffset(float offset)
+{
+	_offsetX = offset;
+	_offsetY = offset;
+}
+
+void AABB::setOffset(float x, float y)
+{
+	_offsetX = x;
+	_offsetY = y;
+}
+
 bool AABB::isColliding(const Rect& object, const Rect& other, float & moveX, float & moveY, float dt)
 {
 	moveX = moveY = 0.0f;
@@ -160,7 +214,7 @@ bool AABB::isColliding(const Rect& object, const Rect& other, float & moveX, flo
 	//  kt coi có va chạm không
 	//  có va chạm khi 
 	//  left < 0 && right > 0 && top > 0 && bottom < 0
-	if (left > 0 || right < 0 || top < 0 || bottom > 0)
+	if (left >= 0 || right <= 0 || top <= 0 || bottom >= 0)
 		return false;
 
 	// tính offset x, y để đi hết va chạm
@@ -173,17 +227,6 @@ bool AABB::isColliding(const Rect& object, const Rect& other, float & moveX, flo
 		moveY = 0.0f;
 	else
 		moveX = 0.0f;
-
-	float offset = 1;
-	if (moveX > 0)
-		moveX += offset;
-	if (moveX < 0)
-		moveX -= offset;
-
-	if (moveY > 0)
-		moveY += offset;
-	if (moveY < 0)
-		moveY -= offset;
 
 	return true;
 }
