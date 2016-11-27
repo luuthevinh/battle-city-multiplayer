@@ -274,6 +274,12 @@ void Tank::checkCollision(GameObject & other, float dt)
 	if (!this->canCollisionWith(other.getCategoryBitmask()))
 		return;
 
+	if (other.getId() == eObjectId::BULLET)
+	{
+		return;
+	}
+
+
 	this->updateBoundingBoxPosition();
 
 	this->checkCollidingSide(other);

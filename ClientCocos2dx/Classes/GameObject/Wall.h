@@ -17,9 +17,10 @@ public:
 	virtual bool init() override;
 
 	virtual void updateWithStatus(eStatus status) override;
+	virtual void setDirection(eDirection direction) override;
 
 private:
-
+	void updateDirection();
 };
 
 #endif // !__WALL_H__

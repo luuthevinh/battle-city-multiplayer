@@ -44,8 +44,10 @@ bool Wall::init()
 	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_05.png");
 	this->addChild(_sprite);
 
-	auto body = PhysicsBody::createBox(_sprite->getContentSize(), PhysicsMaterial(0, 0, 0));
-	this->setPhysicsBody(body);
+	//auto body = PhysicsBody::createBox(_sprite->getContentSize(), PhysicsMaterial(0, 0, 0));
+	//this->setPhysicsBody(body);
+
+	this->updateDirection();
 
 	return true;
 }
@@ -66,6 +68,34 @@ void Wall::updateWithStatus(eStatus status)
 	case RUNNING:
 		break;
 	case STAND:
+		break;
+	default:
+		break;
+	}
+}
+
+void Wall::setDirection(eDirection direction)
+{
+	GameObject::setDirection(direction);
+
+	this->updateDirection();
+}
+
+void Wall::updateDirection()
+{
+	switch (_direction)
+	{
+	case LEFT:
+		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_08.png");
+		break;
+	case UP:
+		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_09.png");
+		break;
+	case RIGHT:
+		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_06.png");
+		break;
+	case DOWN:
+		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_07.png");
 		break;
 	default:
 		break;

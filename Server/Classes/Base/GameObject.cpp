@@ -228,3 +228,7 @@ int GameObject::getNextTag()
 {
 	return _nextTag++;
 }
+
+void GameObject::gotHit(Damage * damage)
+{
+}

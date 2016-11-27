@@ -19,6 +19,12 @@ public:
 
 	virtual Vector2 getVelocity() const override;
 
+	virtual void setOwner(GameObject* owner);
+	virtual GameObject* getOwner();
+
+	virtual void setDamageValue(int value);
+	virtual int getDamageValue();
+
 private:
 	float _speed;
 
@@ -26,6 +32,11 @@ private:
 	void updateBoudingBox();
 
 	AABB* _collisionChecker;
+
+	GameObject* _owner;
+	int _damageValue;
+
+	int _damagedObjectCounter;
 };
 
 

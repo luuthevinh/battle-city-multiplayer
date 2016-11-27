@@ -6,14 +6,14 @@ Bullet::Bullet(const Vector2 & position, eDirection direction) : GameObject(eObj
 	_position = position;
 	_direction = direction;
 	_status = eStatus::NORMAL;
-	_speed = 500.0f;
+	_speed = 200.0f;
 
 	this->init();
 }
 
 Bullet::Bullet(Buffer & buffer) : GameObject(buffer)
 {
-	_speed = 500.0f;
+	_speed = 200.0f;
 
 	this->init();
 }
@@ -31,6 +31,9 @@ bool Bullet::init()
 	this->updateBoudingBox();
 
 	_collisionChecker = new AABB();
+
+	_damageValue = 1;
+	_damagedObjectCounter = 0;
 
 	return true;
 }
@@ -71,15 +74,23 @@ void Bullet::onChanged()
 
 void Bullet::checkCollision(GameObject & object, float dt)
 {
+	if (_owner == &object)
+		return;
+
 	eDirection result;
-	float time = _collisionChecker->checkCollision(*this, object, result ,dt);
+	float time = _collisionChecker->checkCollision(*this, object, result, dt);
 	if (result != eDirection::NONE)
 	{
 		this->setStatus(DIE);
 		this->onChanged();
 		
-		object.setStatus(eStatus::DIE);
-		object.onChanged();
+		if (_damagedObjectCounter < 2)
+		{
+			object.gotHit(Damage::create(_owner->getId(), _damageValue, _direction));
+			object.onChanged();
+
+			_damagedObjectCounter++;
+		}
 	}
 }
 
@@ -100,6 +111,26 @@ Vector2 Bullet::getVelocity() const
 	}
 
 	return Vector2(0.0f, 0.0f);
+}
+
+void Bullet::setOwner(GameObject * owner)
+{
+	_owner = owner;
+}
+
+GameObject * Bullet::getOwner()
+{
+	return _owner;
+}
+
+void Bullet::setDamageValue(int value)
+{
+	_damageValue = value;
+}
+
+int Bullet::getDamageValue()
+{
+	return _damageValue;
 }
 
 void Bullet::checkPosition()

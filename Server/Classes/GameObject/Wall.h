@@ -16,8 +16,12 @@ public:
 
 	virtual void checkCollision(GameObject& object, float dt) override;
 
-private:
+	virtual void gotHit(Damage* damage) override;
 
+private:
+	int _health;
+
+	void updateBoundingBox();
 };
 
 #endif // !__WALL_H__

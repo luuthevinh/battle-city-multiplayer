@@ -48,7 +48,7 @@ bool Bullet::init()
 	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BULLET));
 	this->addChild(_sprite);
 
-	_speed = 500.0f;
+	_speed = 200.0f;
 
 
 	return true;

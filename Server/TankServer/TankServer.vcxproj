@@ -133,6 +133,7 @@
     <ClInclude Include="..\Classes\Definitions.h" />
     <ClInclude Include="..\Classes\Game.h" />
     <ClInclude Include="..\Classes\GameObject\Bullet.h" />
+    <ClInclude Include="..\Classes\GameObject\Damage.h" />
     <ClInclude Include="..\Classes\GameObject\MapLoader.h" />
     <ClInclude Include="..\Classes\GameObject\Player.h" />
     <ClInclude Include="..\Classes\GameObject\Tank.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="..\Classes\GameObject\Bullet.cpp" />
     <ClCompile Include="..\Classes\GameObject\MapLoader.cpp" />
     <ClCompile Include="..\Classes\GameObject\Player.cpp" />
+    <ClCompile Include="..\Classes\GameObject\Damage.cpp" />
     <ClCompile Include="..\Classes\GameObject\Tank.cpp" />
     <ClCompile Include="..\Classes\GameObject\Wall.cpp" />
     <ClCompile Include="..\Classes\Scene\Scene01.cpp" />

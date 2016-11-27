@@ -5,6 +5,7 @@
 #include "Rect.h"
 #include "..\Definitions.h"
 #include "..\Shared\Serializable.h"
+#include "..\GameObject\Damage.h"
 
 class AABB;
 
@@ -63,6 +64,8 @@ public:
 	virtual void setBoundingBox(const Rect &box);
 
 	static int getNextTag();
+
+	virtual void gotHit(Damage* damage);
 
 protected:
 	Vector2 _position;
