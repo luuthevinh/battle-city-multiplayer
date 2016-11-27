@@ -23,6 +23,7 @@ private:
 	float _speed;
 
 	void checkPosition();
+	void updateBoudingBox();
 
 	AABB* _collisionChecker;
 };

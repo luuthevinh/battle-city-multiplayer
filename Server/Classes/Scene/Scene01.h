@@ -28,6 +28,8 @@ private:
 	void checkStatusObjects();
 	void sendChangedObjects();
 
+	int** _objectIndex;
+
 };
 
 

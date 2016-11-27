@@ -23,6 +23,12 @@ bool Scene01::init()
 		this->addStaticObject(obj);
 	}
 
+	//_objectIndex = new int*[32];
+	//for (size_t i = 0; i < 32; i++)
+	//{
+	//	_objectIndex[i] = new int[32];
+	//}
+
 	return true;
 }
 
@@ -86,6 +92,8 @@ void Scene01::checkCollisionObjects(float dt)
 		{
 			player->checkCollision(*other, dt);
 		}
+
+		// player->checkWithIndexMap(_objectIndex);
 	}
 
 	for (auto object : _gameObjects)

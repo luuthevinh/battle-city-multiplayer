@@ -59,6 +59,10 @@ void Game::run()
 		// data
 		this->handleData();
 
+		// lock frame ko cho dồn nhiều, chắc chưa tối ưu
+		//if (_detalTime >= _frameRate * 2)
+		//	_detalTime = _frameRate;
+
 		// update game
 		this->update(_detalTime);
 

@@ -101,6 +101,12 @@ float AABB::checkCollision(const GameObject & object, const GameObject & other, 
 		return 1.0f;
 	}
 
+	if (abs(_dxEntry) <= _offsetX || abs(_dyEntry) <= _offsetY)
+	{ 
+		result = eDirection::NONE;
+		return 1.0f;
+	}
+
 	// xét hướng va chạm
 	if (_txEntry > _tyEntry)
 	{

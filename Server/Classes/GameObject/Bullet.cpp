@@ -25,10 +25,10 @@ Bullet::~Bullet()
 
 bool Bullet::init()
 {
-	_boudingBox.position.x = this->getPosition().x;
-	_boudingBox.position.y = this->getPosition().y;
 	_boudingBox.width = 6;
 	_boudingBox.height = 6;
+
+	this->updateBoudingBox();
 
 	_collisionChecker = new AABB();
 
@@ -61,8 +61,7 @@ void Bullet::update(float dt)
 	this->onChanged();
 	this->checkPosition();
 
-	_boudingBox.position.x = this->getPosition().x;
-	_boudingBox.position.y = this->getPosition().y;
+	this->updateBoudingBox();
 }
 
 void Bullet::onChanged()
@@ -105,10 +104,16 @@ Vector2 Bullet::getVelocity() const
 
 void Bullet::checkPosition()
 {
-	if (this->getPosition().x >= WINDOW_WIDTH - 32 || this->getPosition().x <= 32 || 
-		this->getPosition().y >= WINDOW_HEIGHT - 32|| this->getPosition().y <= 32)
+	if (this->getPosition().x >= WINDOW_WIDTH || this->getPosition().x <= 0 || 
+		this->getPosition().y >= WINDOW_HEIGHT|| this->getPosition().y <= 0)
 	{
 		this->setStatus(eStatus::DIE);
 		this->onChanged();
 	}
+}
+
+void Bullet::updateBoudingBox()
+{
+	_boudingBox.position.x = this->getPosition().x - _boudingBox.width / 2;
+	_boudingBox.position.y = this->getPosition().y - _boudingBox.height / 2;
 }

@@ -19,7 +19,7 @@ int Player::getIndex()
 void Player::shoot()
 {
 	Vector2 shootPosition = this->getPosition();
-	float offset = 12;
+	float offset = 16;
 
 	switch (_direction)
 	{
@@ -77,7 +77,5 @@ void Player::updateInput(eKeyInput input, bool start)
 	else
 	{
 		this->removeStatus(eStatus::RUNNING);
-		this->setVelocity(0.0f);
-		_inputTurns.clear();
 	}
 }
