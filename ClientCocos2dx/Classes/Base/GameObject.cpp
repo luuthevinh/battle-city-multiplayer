@@ -84,7 +84,7 @@ Buffer * GameObject::serialize()
 	_buffer->writeByte(this->getDirection());
 	_buffer->writeFloat(this->getPosition().x);
 	_buffer->writeFloat(this->getPosition().y);
-	_buffer->writeFloat(ServerConnector::instance->getTime());
+	_buffer->writeFloat(ServerConnector::getInstance()->getTime());
 
 	return _buffer;
 }

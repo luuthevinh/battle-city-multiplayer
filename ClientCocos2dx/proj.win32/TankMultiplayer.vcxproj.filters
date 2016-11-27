@@ -30,9 +30,6 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Scene\HelloWorldScene.cpp">
-      <Filter>src\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\GameObject\Player.cpp">
       <Filter>src\GameObject</Filter>
     </ClCompile>
@@ -75,6 +72,15 @@
     <ClCompile Include="..\Classes\GameObject\Wall.cpp">
       <Filter>src\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Scene\MenuScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\WaitingScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\ServerPlayScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -82,9 +88,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Scene\HelloWorldScene.h">
-      <Filter>src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameObject\Player.h">
       <Filter>src\GameObject</Filter>
@@ -136,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\GameObject\Wall.h">
       <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\MenuScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\WaitingScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\ServerPlayScene.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

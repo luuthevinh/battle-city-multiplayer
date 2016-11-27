@@ -217,4 +217,12 @@ void Scene01::sendInitDataTo(SOCKET socket)
 	{
 		Server::instance->sendTo(socket, player);
 	}
+
+	auto reppack = new ReplyPacket();
+	reppack->uniqueId = 0;
+	reppack->beginTime = -1.0f;
+
+	Server::instance->sendTo(socket, reppack);
+
+	delete reppack;
 }

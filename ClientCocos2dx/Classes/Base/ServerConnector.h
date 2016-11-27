@@ -13,7 +13,7 @@ class Serializable;
 class ServerConnector
 {
 public:
-	static ServerConnector* instance;
+	static ServerConnector* getInstance();
 
 	ServerConnector();
 	~ServerConnector();
@@ -23,7 +23,6 @@ public:
 
 	void recieveData();
 
-	void update(cocos2d::Layer* scene);
 	void update(float dt);
 
 	void closeConnection();
@@ -34,12 +33,20 @@ public:
 	u_long getDataPendingInSocket(SOCKET socket);
 
 	int getServerIndex();
-	void handleData();
+	void handleData(cocos2d::Layer* scene);
 
+	void setTime(float time);
 	float getTime();
+
+	void setRun(bool value);
 	bool isRunning();
 
+	ConverterFactory* getFactory();
+
+
 private:
+	static ServerConnector* _instance;
+
 	WSADATA _wsaData;
 	SOCKET _socket;
 	fd_set _readSet;

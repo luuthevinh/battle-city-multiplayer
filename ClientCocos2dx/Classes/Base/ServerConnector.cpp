@@ -1,5 +1,4 @@
 ﻿#include "ServerConnector.h"
-#include "Scene\HelloWorldScene.h"
 #include "GameObject\Player.h"
 #include "GameObject\Bullet.h"
 #include "ClientConverterFactory.h"
@@ -10,7 +9,17 @@
 #include "..\..\Server\Classes\Shared\Serializable.h"
 #include "..\..\Server\Classes\Shared\DataPacket.h"
 
-ServerConnector* ServerConnector::instance  = nullptr;
+ServerConnector* ServerConnector::_instance  = nullptr;
+
+ServerConnector * ServerConnector::getInstance()
+{
+	if (_instance == nullptr)
+	{
+		_instance = new ServerConnector();
+	}
+
+	return _instance;
+}
 
 ServerConnector::ServerConnector()
 {
@@ -53,8 +62,6 @@ bool ServerConnector::init(u_short port, char * address)
 	// data handler
 	_dataHandler = new DataHandler();
 	_factory = new ClientConverterFactory(_dataHandler);
-
-	instance = this;
 
 	_timer = 0.0f;
 	_isRunning = false;
@@ -108,7 +115,7 @@ void ServerConnector::recieveData()
 	}
 }
 
-void ServerConnector::update(cocos2d::Layer* scene)
+void ServerConnector::update(float dt)
 {
 	if (!_connecting)
 		return;
@@ -134,11 +141,6 @@ void ServerConnector::update(cocos2d::Layer* scene)
 		}
 	}
 
-	this->handleData();
-}
-
-void ServerConnector::update(float dt)
-{
 	_timer += dt;
 }
 
@@ -192,7 +194,7 @@ int ServerConnector::getServerIndex()
 	return _serverIndex;
 }
 
-void ServerConnector::handleData()
+void ServerConnector::handleData(cocos2d::Layer* layer)
 {
 	auto data = _factory->convertNext();
 	if (data == nullptr)
@@ -207,10 +209,10 @@ void ServerConnector::handleData()
 		GameObject* gameObject = dynamic_cast<GameObject*>(data);
 		if (gameObject)
 		{
-			auto object = (GameObject*)HelloWorld::instance->getChildByTag(gameObject->getTag());
+			auto object = (GameObject*)layer->getChildByTag(gameObject->getTag());
 			if (object == nullptr)
 			{
-				HelloWorld::instance->addChild(gameObject);
+				layer->addChild(gameObject);
 				return;
 			}
 
@@ -226,7 +228,7 @@ void ServerConnector::handleData()
 		{
 			_timer = packet->beginTime;
 
-			auto object = (Player*)HelloWorld::instance->getChildByName("player");
+			auto object = (Player*)layer->getChildByName("player");
 			if (object == nullptr)
 				return;
 
@@ -246,7 +248,22 @@ float ServerConnector::getTime()
 	return _timer;
 }
 
+void ServerConnector::setRun(bool value)
+{
+	_isRunning = value;
+}
+
 bool ServerConnector::isRunning()
 {
 	return _isRunning;
+}
+
+ConverterFactory * ServerConnector::getFactory()
+{
+	return _factory;
+}
+
+void ServerConnector::setTime(float time)
+{
+	_timer = time;
 }

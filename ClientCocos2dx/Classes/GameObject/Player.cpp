@@ -1,7 +1,9 @@
 #include "Player.h"
-#include "Base\SpriteManager.h"
-#include "Scene\HelloWorldScene.h"
 #include "Bullet.h"
+#include "Base\SpriteManager.h"
+#include "Base\ServerConnector.h"
+
+// shared
 #include "..\Server\Classes\Shared\DataPacket.h"
 
 Player::Player(eObjectId id) : Tank(id)
@@ -112,7 +114,7 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		command->uniqueId = this->getTag();
 		command->begin = true;
 
-		HelloWorld::instance->getConnector()->send(command);
+		ServerConnector::getInstance()->send(command);
 
 		delete command;
 
@@ -169,7 +171,7 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 		command->uniqueId = this->getTag();
 		command->begin = false;
 
-		HelloWorld::instance->getConnector()->send(command);
+		ServerConnector::getInstance()->send(command);
 
 		delete command;
 	}
