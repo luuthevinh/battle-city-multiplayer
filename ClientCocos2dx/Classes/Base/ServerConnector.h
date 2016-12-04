@@ -43,6 +43,8 @@ public:
 
 	ConverterFactory* getFactory();
 
+	void setUniqueId(int id);
+	int getUniqueId();
 
 private:
 	static ServerConnector* _instance;
@@ -64,6 +66,8 @@ private:
 
 	float _timer;
 	bool _isRunning;
+
+	int _uniqueIdOnServer;
 };
 
 

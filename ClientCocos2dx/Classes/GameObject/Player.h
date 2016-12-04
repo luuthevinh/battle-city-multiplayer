@@ -19,6 +19,7 @@ public:
 
 private:
 	int _keyDirectionCounter;
+
 };
 
 #endif // !__PLAYER_H__

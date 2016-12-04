@@ -128,6 +128,16 @@ void Tank::predict(float dt)
 	this->updatePosition(dt);
 }
 
+void Tank::setId(eObjectId id)
+{
+	if (_id != id)
+	{
+		GameObject::setId(id);
+		this->updateSpriteWithId();
+	}
+
+}
+
 void Tank::runAnimateByDirection(eDirection direction)
 {
 	if (direction <= 0 || direction > 8)
@@ -142,6 +152,27 @@ void Tank::runAnimateByDirection(eDirection direction)
 	else
 	{
 		_sprite->runAction(_animations[direction]);
+	}
+}
+
+void Tank::updateSpriteWithId()
+{
+	// xóa cái cũ đi
+	for (auto i = _animations.begin(); i != _animations.end(); i++)
+	{
+		i->second->release();
+	}
+	
+	auto idName = SpriteManager::getInstance()->getObjectName(this->getId());
+
+	_animations[eDirection::UP] = SpriteManager::getInstance()->getAnimate(idName + "_up");
+	_animations[eDirection::DOWN] = SpriteManager::getInstance()->getAnimate(idName + "_down");
+	_animations[eDirection::LEFT] = SpriteManager::getInstance()->getAnimate(idName + "_left");
+	_animations[eDirection::RIGHT] = SpriteManager::getInstance()->getAnimate(idName + "_right");
+
+	for (auto i = _animations.begin(); i != _animations.end(); i++)
+	{
+		i->second->retain();
 	}
 }
 

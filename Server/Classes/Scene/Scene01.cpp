@@ -190,6 +190,16 @@ void Scene01::handleData(Serializable * object)
 	{
 	case OBJECT:
 	{
+		if (auto obj = dynamic_cast<GameObject*>(object))
+		{
+			// update player
+			auto player = this->getPlayer(obj->getTag());
+			if (player != nullptr)
+			{
+				player->deserialize(*(obj->serialize()));
+				player->onChanged();
+			}
+		}
 		break;
 	}
 	case PACKET:

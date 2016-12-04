@@ -27,12 +27,16 @@ public:
 	void updateWithStatus(eStatus status) override;
 
 	virtual void predict(float dt) override;
+
+	virtual void setId(eObjectId id) override;
+
 protected:
 	float _velocity;
 
 	std::map<eDirection, Animate*> _animations;
 
 	void runAnimateByDirection(eDirection direction);
+	void updateSpriteWithId();
 };
 
 #endif // !__TANK_H__

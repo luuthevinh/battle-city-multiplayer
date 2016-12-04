@@ -24,6 +24,7 @@ public:
 class ReplyPacket : public Serializable
 {
 public:
+
 	ReplyPacket();
 	ReplyPacket(Buffer &data);
 	~ReplyPacket();
@@ -36,6 +37,28 @@ public:
 	int uniqueId;
 	float beginTime;
 
+};
+
+
+class IntegerPacket : public Serializable
+{
+public:
+	enum Type
+	{
+		PLAYER_CHARACTER_SELECTION = 1,
+		READY
+	};
+
+	IntegerPacket();
+	IntegerPacket(Buffer &data);
+
+	// Inherited via Serializable
+	virtual Buffer* serialize() override;
+	virtual void deserialize(Buffer &data) override;
+
+	Type integerType;
+	int value;
+	int uniqueId;
 };
 
 #endif // !__DATA_PACKET_H__

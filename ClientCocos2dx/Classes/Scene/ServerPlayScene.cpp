@@ -32,11 +32,11 @@ bool ServerPlayScene::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto player = Player::create(eObjectId::YELLOW_TANK);
-	player->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-	player->setName("player");
+	//auto player = Player::create(eObjectId::YELLOW_TANK);
+	//player->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	//player->setName("player");
 
-	this->addChild(player);
+	//this->addChild(player);
 
 	// update
 	this->scheduleUpdate();

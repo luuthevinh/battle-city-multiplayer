@@ -66,7 +66,7 @@ ReplyPacket::~ReplyPacket()
 Buffer* ReplyPacket::serialize()
 {
 	_buffer->setIndex(0);
-	_buffer->setIndex(0);
+	_buffer->setBeginRead(0);
 
 	_buffer->writeInt(eDataType::REPLY_ID);
 	_buffer->writeInt(uniqueId);
@@ -86,6 +86,46 @@ void ReplyPacket::deserialize(Buffer & data)
 	this->_type = type;
 	this->uniqueId = data.readInt();
 	this->beginTime = data.readFloat();
+
+	data.setBeginRead(0);
+}
+
+IntegerPacket::IntegerPacket()
+{
+	_buffer = new Buffer(16);
+}
+
+IntegerPacket::IntegerPacket(Buffer & data)
+{
+	_buffer = new Buffer(16);
+	this->deserialize(data);
+}
+
+Buffer * IntegerPacket::serialize()
+{
+	_buffer->setIndex(0);
+	_buffer->setBeginRead(0);
+
+	_buffer->writeInt(eDataType::PACKET);
+	_buffer->writeInt(integerType);
+	_buffer->writeInt(uniqueId);
+	_buffer->writeInt(value);
+
+	return _buffer;
+}
+
+void IntegerPacket::deserialize(Buffer & data)
+{
+	data.setBeginRead(0);
+
+	auto type = (eDataType)data.readInt();
+	if (type != eDataType::INTEGER)
+		return;
+
+	_type = type;
+	this->integerType = (IntegerPacket::Type)data.readInt();
+	this->uniqueId = data.readInt();
+	this->value = data.readInt();
 
 	data.setBeginRead(0);
 }

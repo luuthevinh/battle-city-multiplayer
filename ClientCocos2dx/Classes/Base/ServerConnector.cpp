@@ -263,6 +263,16 @@ ConverterFactory * ServerConnector::getFactory()
 	return _factory;
 }
 
+void ServerConnector::setUniqueId(int id)
+{
+	_uniqueIdOnServer = id;
+}
+
+int ServerConnector::getUniqueId()
+{
+	return _uniqueIdOnServer;
+}
+
 void ServerConnector::setTime(float time)
 {
 	_timer = time;

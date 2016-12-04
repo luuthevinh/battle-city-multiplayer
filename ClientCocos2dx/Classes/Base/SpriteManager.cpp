@@ -54,6 +54,12 @@ void SpriteManager::initAnimate()
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_down"].push_back(createAniamte("tank_05.png", "tank_06.png", NULL));
 	this->_animates[_objectNames[eObjectId::YELLOW_TANK] + "_right"].push_back(createAniamte("tank_07.png", "tank_08.png", NULL));
 
+	// xe xanh cấp 1
+	this->_animates[_objectNames[eObjectId::GREEN_TANK] + "_up"].push_back(createAniamte("tank_green_01.png", "tank_green_02.png", NULL));
+	this->_animates[_objectNames[eObjectId::GREEN_TANK] + "_left"].push_back(createAniamte("tank_green_03.png", "tank_green_04.png", NULL));
+	this->_animates[_objectNames[eObjectId::GREEN_TANK] + "_down"].push_back(createAniamte("tank_green_05.png", "tank_green_06.png", NULL));
+	this->_animates[_objectNames[eObjectId::GREEN_TANK] + "_right"].push_back(createAniamte("tank_green_07.png", "tank_green_08.png", NULL));
+
 	// animate nổ
 	this->_animates[_objectNames[eObjectId::EXPLOSION]].push_back(createAniamte(
 		"explosion_00.png",

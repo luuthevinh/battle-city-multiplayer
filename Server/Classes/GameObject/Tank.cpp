@@ -125,8 +125,8 @@ void Tank::turnWithInputQueue(float dt)
 	
 	int unit = 16;
 	float integral = 0.0f;
-	float fractional = 0.0f;
-	fractional = modf(position.x, &integral);
+	float fractional = 0.0f;	// phần lẻ sau dấu phẩy của vị trí ban đầu
+	fractional = modf(position.x, &integral);				
 	float remainX = unit - (((int)integral % unit) + fractional);
 
 	float integralY = 0.0f;
@@ -135,10 +135,19 @@ void Tank::turnWithInputQueue(float dt)
 	float remainY = unit - (((int)integralY % unit) + fractionalY);
 
 	_remainMoveForTurn = fractional > fractionalY ? remainX : remainY;
+
+	//if (_remainMoveForTurn > unit / 2)
+	//{
+	//	_remainMoveForTurn = 0.0f;
+	//	this->updateDirection(direction);
+	//	return;
+	//}
 	
 	_inputTurns.clear();
 	_inputTurns.push_back(direction);
 	_inputTurns.push_back(_direction);
+
+	printf("begin remain: %.2f, current dir: %d, dir: %d\n", _remainMoveForTurn, _direction, direction);
 
 	return;
 }
@@ -165,12 +174,16 @@ void Tank::move(float distance)
 	if (_remainMoveForTurn > distance)
 	{
 		_remainMoveForTurn -= distance;
+		printf("remain: %.2f\n", _remainMoveForTurn);
 	}
 	else if (_remainMoveForTurn > 0.0f)
 	{
 		distance = _remainMoveForTurn;
 		_remainMoveForTurn = 0.0f;
+		printf("end: %.2f\n", _remainMoveForTurn);
 	}
+
+	
 
 	switch (_direction)
 	{
@@ -278,7 +291,6 @@ void Tank::checkCollision(GameObject & other, float dt)
 	{
 		return;
 	}
-
 
 	this->updateBoundingBoxPosition();
 
