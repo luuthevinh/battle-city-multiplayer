@@ -34,7 +34,7 @@ bool MapLoader::initWithTMX(const char * path)
 
 }
 
-std::vector<GameObject*> MapLoader::getObjectsAtLayer(const char * name)
+std::vector<GameObject*> MapLoader::getObjectsInLayer(const char * name)
 {
 	std::vector<GameObject*> objects;
 	

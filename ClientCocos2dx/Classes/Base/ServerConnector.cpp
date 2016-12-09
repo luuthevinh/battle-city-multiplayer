@@ -209,15 +209,15 @@ void ServerConnector::handleData(cocos2d::Layer* layer)
 		GameObject* gameObject = dynamic_cast<GameObject*>(data);
 		if (gameObject)
 		{
-			auto object = (GameObject*)layer->getChildByTag(gameObject->getTag());
+			auto object = (GameObject*)layer->getChildByTag(gameObject->getUniqueId());
 			if (object == nullptr)
 			{
 				layer->addChild(gameObject);
 				return;
 			}
 
-			object->deserialize(*data->serialize());
-			//object->reconcile(*data->serialize());
+			//object->deserialize(*data->serialize());
+			object->reconcile(*data->serialize());
 		}
 		break;
 	}
@@ -232,7 +232,7 @@ void ServerConnector::handleData(cocos2d::Layer* layer)
 			if (object == nullptr)
 				return;
 
-			object->setTag(packet->uniqueId);
+			object->setTag(packet->getUniqueId());
 			
 			_isRunning = true;
 		}

@@ -15,24 +15,24 @@ void Scene::handleData(Serializable * object)
 int Scene::addObject(GameObject * object)
 {
 	_gameObjects.push_back(object);
-	object->setTag(GameObject::getNextTag());
+	object->setUniqueId(GameObject::getNextUniqueId());
 
-	return object->getTag();
+	return object->getUniqueId();
 }
 
 int Scene::addStaticObject(GameObject * object)
 {
 	_staticObjects.push_back(object);
-	object->setTag(GameObject::getNextTag());
+	object->setUniqueId(GameObject::getNextUniqueId());
 
-	return object->getTag();
+	return object->getUniqueId();
 }
 
 void Scene::removeObject(int tag)
 {
 	for (auto it = _gameObjects.begin(); it != _gameObjects.end(); it++)
 	{
-		if ((*it)->getTag() == tag)
+		if ((*it)->getUniqueId() == tag)
 		{
 			delete *it;
 			_gameObjects.erase(it);
@@ -44,13 +44,13 @@ void Scene::removeObject(int tag)
 int Scene::addPlayer(int socketIndex)
 {
 	auto player = new Player(eObjectId::YELLOW_TANK, socketIndex);
-	player->setTag(GameObject::getNextTag());
+	player->setUniqueId(GameObject::getNextUniqueId());
 
 	player->setPosition(WINDOW_WIDTH / 2, 64);
 
 	_players.push_back(player);
 
-	return player->getTag();
+	return player->getUniqueId();
 }
 
 void Scene::removePlayer(int index)
@@ -68,7 +68,7 @@ Player * Scene::getPlayer(int tag)
 {
 	for (auto player : _players)
 	{
-		if (player->getTag() == tag)
+		if (player->getUniqueId() == tag)
 			return player;
 	}
 	

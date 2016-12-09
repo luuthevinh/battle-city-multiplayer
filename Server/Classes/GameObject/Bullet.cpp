@@ -1,5 +1,6 @@
 ﻿#include "Bullet.h"
 #include "..\Base\Vector2.h"
+#include "Tank.h"
 
 Bullet::Bullet(const Vector2 & position, eDirection direction) : GameObject(eObjectId::BULLET)
 {
@@ -74,23 +75,19 @@ void Bullet::onChanged()
 
 void Bullet::checkCollision(GameObject & object, float dt)
 {
-	if (_owner == &object)
+	if (_owner == &object || _damagedObjectCounter >= 2)
 		return;
 
 	eDirection result;
 	float time = _collisionChecker->checkCollision(*this, object, result, dt);
 	if (result != eDirection::NONE)
 	{
-		this->setStatus(DIE);
-		this->onChanged();
+		this->explode();
 		
-		if (_damagedObjectCounter < 2)
-		{
-			object.gotHit(Damage::create(_owner->getId(), _damageValue, _direction));
-			object.onChanged();
+		object.gotHit(Damage::create(_owner->getId(), _damageValue, _direction));
+		object.onChanged();
 
-			_damagedObjectCounter++;
-		}
+		_damagedObjectCounter++;
 	}
 }
 
@@ -138,8 +135,7 @@ void Bullet::checkPosition()
 	if (this->getPosition().x >= WINDOW_WIDTH || this->getPosition().x <= 0 || 
 		this->getPosition().y >= WINDOW_HEIGHT|| this->getPosition().y <= 0)
 	{
-		this->setStatus(eStatus::DIE);
-		this->onChanged();
+		this->explode();
 	}
 }
 
@@ -147,4 +143,20 @@ void Bullet::updateBoudingBox()
 {
 	_boudingBox.position.x = this->getPosition().x - _boudingBox.width / 2;
 	_boudingBox.position.y = this->getPosition().y - _boudingBox.height / 2;
+}
+
+void Bullet::explode()
+{
+	if (_status == eStatus::DIE)
+		return;
+
+	this->setStatus(DIE);
+	this->onChanged();
+
+	//
+	auto tank = dynamic_cast<Tank*>(_owner);
+	if (tank)
+	{
+		tank->setNumberOfBullets(tank->getNumberOfBullets() - 1);
+	}
 }

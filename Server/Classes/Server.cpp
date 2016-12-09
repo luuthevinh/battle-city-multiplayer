@@ -285,10 +285,10 @@ void Server::sendDataToAllWithTimeStep()
 
 			// send package to socket
 			this->sendData(currentSocket);
-
-			// printf("send data to %d, time: %.2f\n", currentSocket, _lastTime);
 		}
 	}
+
+	printf("send data at time: %.2f\n", _lastTime);
 }
 
 void Server::closeConnection(SOCKET socket)
@@ -310,7 +310,7 @@ void Server::addConnection(SOCKET socket)
 
 	// reply lại id trong server
 	ReplyPacket* rep = new ReplyPacket();
-	rep->uniqueId = tag;
+	rep->setUniqueId(tag);
 	rep->beginTime = _game->getGameTime()->getTotalTime();
 
 	_dataHandler->sendTo(socket, rep);

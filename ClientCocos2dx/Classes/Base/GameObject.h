@@ -31,12 +31,17 @@ public:
 	virtual Buffer * serialize() override;
 	virtual void deserialize(Buffer & data) override;
 
+	virtual void setTag(int tag) override;
+
 	virtual void updateWithStatus(eStatus status);
 	
 	virtual void reconcile(Buffer &data);
 
 	virtual void update(float dt) override;
 	virtual void predict(float dt) {};
+
+	virtual bool hasChanged() { return _hasChanged; }
+	virtual void onChanged(bool value = true) { _hasChanged = value; }
 protected:
 	Sprite* _sprite;
 
@@ -51,6 +56,9 @@ protected:
 	
 	void addToPendingBuffer();
 	void reconcilePendingBuffer();
+
+	bool _hasChanged;
+	int _packetNumber;
 };
 
 

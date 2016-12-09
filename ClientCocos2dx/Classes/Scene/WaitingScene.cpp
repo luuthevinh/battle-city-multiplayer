@@ -135,13 +135,13 @@ void WaitingScene::handleData()
 	case eDataType::OBJECT:
 	{
 		GameObject* gameObject = dynamic_cast<GameObject*>(data);
-		if (gameObject->getTag() == ServerConnector::getInstance()->getUniqueId())
+		if (gameObject->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
 		{
 			return;
 		}
 		if (gameObject)
 		{
-			auto object = _playLayer->getChildByTag(gameObject->getTag());
+			auto object = _playLayer->getChildByTag(gameObject->getUniqueId());
 			if (object == nullptr)
 			{
 				_playLayer->addChild(gameObject);
@@ -162,7 +162,7 @@ void WaitingScene::handleData()
 			{
 				ServerConnector::getInstance()->setTime(packet->beginTime);
 				ServerConnector::getInstance()->setRun(true);
-				ServerConnector::getInstance()->setUniqueId(packet->uniqueId);
+				ServerConnector::getInstance()->setUniqueId(packet->getUniqueId());
 			} 
 			else if (packet->beginTime == -1.0f)
 			{

@@ -3,7 +3,7 @@
 #include "..\Game.h"
 #include "AABB.h"
 
-int GameObject::_nextTag = 0;
+int GameObject::_nextUniqueId = 0;
 
 GameObject::GameObject(eObjectId id) :
 	_id(id),
@@ -14,7 +14,8 @@ GameObject::GameObject(eObjectId id) :
 	_boudingBox(0, 0, 0, 0),
 	_collisionChecker(nullptr),
 	_collisionBitmask(1),
-	_categoryBitmask(1)
+	_categoryBitmask(1),
+	_lastPacketNumber(0)
 {
 	_buffer = new Buffer(29);
 }
@@ -22,7 +23,8 @@ GameObject::GameObject(eObjectId id) :
 GameObject::GameObject(Buffer & buffer) :
 	_hasChanged(true),
 	_boudingBox(0, 0, 0, 0),
-	_collisionChecker(nullptr)
+	_collisionChecker(nullptr),
+	_lastPacketNumber(0)
 {
 	_buffer = new Buffer(29);
 	this->deserialize(buffer);
@@ -107,16 +109,6 @@ eObjectId GameObject::getId()
 	return _id;
 }
 
-void GameObject::setTag(int tag)
-{
-	_tag = tag;
-}
-
-int GameObject::getTag()
-{
-	return _tag;
-}
-
 void GameObject::onChanged()
 {
 	_hasChanged = true;
@@ -139,13 +131,13 @@ Buffer * GameObject::serialize()
 
 	_buffer->writeInt(eDataType::OBJECT);
 	_buffer->writeInt(this->getId());
-	_buffer->writeInt(this->getTag());
+	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeInt(this->getStatus());
 	_buffer->writeByte(this->getDirection());
 	_buffer->writeFloat(this->getPosition().x);
 	_buffer->writeFloat(this->getPosition().y);
 
-	_buffer->writeFloat(Game::instance->getGameTime()->getTotalTime());
+	_buffer->writeInt(_lastPacketNumber);
 
 	return _buffer;
 }
@@ -160,16 +152,20 @@ void GameObject::deserialize(Buffer & data)
 
 	this->setType(type);
 	this->setId((eObjectId)data.readInt());
-	this->setTag(data.readInt());
+	this->setUniqueId(data.readInt());
 	this->setStatus((eStatus)data.readInt());
 	this->setDirection((eDirection)data.readByte());
 	float x = data.readFloat();
 	float y = data.readFloat();
 	this->setPosition(x, y);
 
-	float time = data.readFloat();
+	_lastPacketNumber = data.readInt();
 
 	data.setBeginRead(0);
+}
+
+void GameObject::handleData(Serializable * data)
+{
 }
 
 const Rect& GameObject::getBoundingBox() const
@@ -224,9 +220,9 @@ void GameObject::setBoundingBox(const Rect & box)
 	_boudingBox = box;
 }
 
-int GameObject::getNextTag()
+int GameObject::getNextUniqueId()
 {
-	return _nextTag++;
+	return _nextUniqueId++;
 }
 
 void GameObject::gotHit(Damage * damage)

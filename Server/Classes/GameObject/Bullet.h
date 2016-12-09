@@ -30,6 +30,7 @@ private:
 
 	void checkPosition();
 	void updateBoudingBox();
+	void explode();
 
 	AABB* _collisionChecker;
 

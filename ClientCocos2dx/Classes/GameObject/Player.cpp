@@ -69,25 +69,25 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 	{
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 	{
-		//this->setDirection(eDirection::UP);
+		this->setDirection(eDirection::UP);
 		input = eKeyInput::KEY_UP;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 	{
-		//this->setDirection(eDirection::DOWN);
+		this->setDirection(eDirection::DOWN);
 		input = eKeyInput::KEY_DOWN;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 	{
-		//this->setDirection(eDirection::LEFT);
+		this->setDirection(eDirection::LEFT);
 		input = eKeyInput::KEY_LEFT;
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 	{
-		//this->setDirection(eDirection::RIGHT);
+		this->setDirection(eDirection::RIGHT);
 		input = eKeyInput::KEY_RIGHT;
 		break;
 	}
@@ -105,13 +105,15 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		if (input != eKeyInput::KEY_SHOOT)
 		{
 			_keyDirectionCounter++;
-			//_velocity = TANK_NORMAL_VELOCITY;
-			//_status = (eStatus)(_status | eStatus::RUNNING);
+			_velocity = TANK_NORMAL_VELOCITY;
+			this->addStatus(eStatus::RUNNING);
+
+			this->onChanged();
 		}
 
 		auto command = new CommandPacket();
 		command->input = input;
-		command->uniqueId = this->getTag();
+		command->setUniqueId(this->getTag());
 		command->begin = true;
 
 		ServerConnector::getInstance()->send(command);
@@ -158,17 +160,18 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 
 	if (_velocity != 0.0f && _keyDirectionCounter <= 0)
 	{
-		//_velocity = 0.0f;
-		//_status = (eStatus)(_status & (~eStatus::RUNNING));
+		_velocity = 0.0f;
+		this->removeStatus(eStatus::RUNNING);
 		_sprite->stopAllActions();
 
+		this->onChanged();
 	}
 
 	if (input != eKeyInput::KEY_NONE)
 	{
 		auto command = new CommandPacket();
 		command->input = input;
-		command->uniqueId = this->getTag();
+		command->setUniqueId(this->getTag());
 		command->begin = false;
 
 		ServerConnector::getInstance()->send(command);

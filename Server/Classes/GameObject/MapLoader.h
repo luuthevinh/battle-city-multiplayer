@@ -15,7 +15,7 @@ public:
 
 	bool initWithTMX(const char* path);
 
-	std::vector<GameObject*> getObjectsAtLayer(const char* name);
+	std::vector<GameObject*> getObjectsInLayer(const char* name);
 
 	bool hasLayer(const char* name);
 	tmx_layer* getLayer(const char* name);

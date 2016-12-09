@@ -4,7 +4,8 @@
 #include <stdio.h>
 
 Tank::Tank(eObjectId id) : GameObject(id),
-	_velocity(0)
+	_velocity(0),
+	_tankLevel(eTankLevel::BASIC_TANK)
 {
 	this->init();
 }
@@ -248,6 +249,25 @@ void Tank::updateDirection(eDirection direction)
 	_direction = direction;
 }
 
+int Tank::getMaxBullet()
+{
+	switch (_tankLevel)
+	{
+	case eTankLevel::BASIC_TANK:
+		return 1;
+	case eTankLevel::FAST_TANK:
+		return 2;
+	case eTankLevel::POWER_TANK:
+		return 3;
+	case eTankLevel::ARMOR_TANK:
+		return 2;
+	default:
+		break;
+	}
+
+	return 1;
+}
+
 void Tank::setVelocity(float velocity)
 {
 	_velocity = velocity;
@@ -328,5 +348,24 @@ void Tank::setDirection(eDirection direction)
 	if (_inputTurns.empty())
 	{
 		_inputTurns.push_back(direction);
+	}
+}
+
+void Tank::setNumberOfBullets(int number)
+{
+	_bulletCounter = number;
+}
+
+int Tank::getNumberOfBullets()
+{
+	return _bulletCounter;
+}
+
+void Tank::handleData(Serializable * data)
+{
+	if (data->getType() == eDataType::OBJECT)
+	{
+		this->deserialize(*(data->serialize()));
+		this->onChanged();
 	}
 }

@@ -23,7 +23,7 @@ Buffer* CommandPacket::serialize()
 	_buffer->setBeginRead(0);
 
 	_buffer->writeInt(eDataType::COMMAND);
-	_buffer->writeInt(uniqueId);
+	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeInt(input);
 	_buffer->writeBool(begin);
 
@@ -39,7 +39,7 @@ void CommandPacket::deserialize(Buffer &data)
 		return;
 
 	this->setType(type);
-	uniqueId = data.readInt();
+	this->setUniqueId(data.readInt());
 	input = (eKeyInput)data.readInt();
 	begin = data.readBool();
 
@@ -69,7 +69,7 @@ Buffer* ReplyPacket::serialize()
 	_buffer->setBeginRead(0);
 
 	_buffer->writeInt(eDataType::REPLY_ID);
-	_buffer->writeInt(uniqueId);
+	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeFloat(beginTime);
 
 	return _buffer;
@@ -84,7 +84,7 @@ void ReplyPacket::deserialize(Buffer & data)
 		return;
 
 	this->_type = type;
-	this->uniqueId = data.readInt();
+	this->setUniqueId(data.readInt());
 	this->beginTime = data.readFloat();
 
 	data.setBeginRead(0);
@@ -108,7 +108,7 @@ Buffer * IntegerPacket::serialize()
 
 	_buffer->writeInt(eDataType::PACKET);
 	_buffer->writeInt(integerType);
-	_buffer->writeInt(uniqueId);
+	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeInt(value);
 
 	return _buffer;
@@ -124,7 +124,7 @@ void IntegerPacket::deserialize(Buffer & data)
 
 	_type = type;
 	this->integerType = (IntegerPacket::Type)data.readInt();
-	this->uniqueId = data.readInt();
+	this->setUniqueId(data.readInt());
 	this->value = data.readInt();
 
 	data.setBeginRead(0);

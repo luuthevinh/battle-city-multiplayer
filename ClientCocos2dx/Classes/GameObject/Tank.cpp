@@ -121,6 +121,8 @@ void Tank::updatePosition(float dt)
 	default:
 		break;
 	}
+
+	this->onChanged();
 }
 
 void Tank::predict(float dt)

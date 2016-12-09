@@ -35,9 +35,6 @@ public:
 	virtual eObjectId getId();
 	virtual void setId(eObjectId id);
 
-	virtual void setTag(int tag);
-	virtual int getTag();
-
 	virtual void onChanged();
 	virtual void setChanged(bool value);
 	virtual bool hasChanged();
@@ -45,6 +42,8 @@ public:
 	// Inherited via Serializable
 	virtual Buffer * serialize() override;
 	virtual void deserialize(Buffer & data) override;
+
+	virtual void handleData(Serializable* data);
 
 	virtual Vector2 getVelocity() const;
 
@@ -63,9 +62,12 @@ public:
 	virtual const Rect& getBoundingBox() const;
 	virtual void setBoundingBox(const Rect &box);
 
-	static int getNextTag();
+	static int getNextUniqueId();
 
 	virtual void gotHit(Damage* damage);
+
+	virtual int getPacketNumber() { return _lastPacketNumber; }
+	virtual void setPacketNumber(int number) { _lastPacketNumber = number; }
 
 protected:
 	Vector2 _position;
@@ -76,15 +78,15 @@ protected:
 
 	Rect _boudingBox;
 
-	int _tag;
-
 	bool _hasChanged;
 
 	AABB* _collisionChecker;
 	int _categoryBitmask;
 	int _collisionBitmask;
 
-	static int _nextTag;
+	static int _nextUniqueId;
+
+	int _lastPacketNumber;
 };
 
 #endif // !__GAMEOBJECT_H__

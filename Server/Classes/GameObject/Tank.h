@@ -27,9 +27,17 @@ public:
 	
 	virtual void setDirection(eDirection direction) override;
 	
+	virtual void setNumberOfBullets(int number);
+	virtual int getNumberOfBullets();
+
+	virtual void handleData(Serializable* data) override;
+
 protected:
 	float _velocity;
 	float _remainMoveForTurn;
+	int _bulletCounter;
+
+	eTankLevel _tankLevel;
 
 	std::vector<eDirection> _inputTurns;
 
@@ -54,6 +62,7 @@ protected:
 
 	void updateDirection(eDirection direction);
 
+	int getMaxBullet();
 };
 
 #endif // !__TANK_H__

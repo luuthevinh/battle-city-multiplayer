@@ -70,7 +70,7 @@ void TankCursor::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		auto packet = new IntegerPacket();
 		packet->integerType = IntegerPacket::Type::PLAYER_CHARACTER_SELECTION;
 		packet->value = _currentIndex;
-		packet->uniqueId = ServerConnector::getInstance()->getUniqueId();
+		packet->setUniqueId(ServerConnector::getInstance()->getUniqueId());
 
 		ServerConnector::getInstance()->send(packet);
 

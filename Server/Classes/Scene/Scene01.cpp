@@ -16,7 +16,7 @@ Scene01::~Scene01()
 bool Scene01::init()
 {
 	auto loader = MapLoader::createWithTMX("Resources/map/map_01.tmx");
-	auto objects = loader->getObjectsAtLayer("wall");
+	auto objects = loader->getObjectsInLayer("wall");
 
 	for (auto obj : objects)
 	{
@@ -160,6 +160,7 @@ void Scene01::sendChangedObjects()
 		{
 			Server::instance->send(object);
 			object->setChanged(false);
+
 		}
 	}
 
@@ -176,6 +177,9 @@ void Scene01::sendChangedObjects()
 	{
 		if (player->hasChanged())
 		{
+			// test
+			player->setPacketNumber(player->getPacketNumber() + 1);
+
 			Server::instance->send(player);
 			player->setChanged(false);
 		}
@@ -184,38 +188,11 @@ void Scene01::sendChangedObjects()
 
 void Scene01::handleData(Serializable * object)
 {
-	auto type = object->getType();
-
-	switch (type)
+	// player
+	auto player = this->getPlayer(object->getUniqueId());
+	if (player != nullptr)
 	{
-	case OBJECT:
-	{
-		if (auto obj = dynamic_cast<GameObject*>(object))
-		{
-			// update player
-			auto player = this->getPlayer(obj->getTag());
-			if (player != nullptr)
-			{
-				player->deserialize(*(obj->serialize()));
-				player->onChanged();
-			}
-		}
-		break;
-	}
-	case PACKET:
-		break;
-	case REPLY_ID:
-		break;
-	case COMMAND:
-	{
-		if (auto command = dynamic_cast<CommandPacket*>(object))
-		{
-			this->getPlayer(command->uniqueId)->updateInput(command->input, command->begin);
-		}
-		break;
-	}
-	default:
-		break;
+		player->handleData(object);
 	}
 }
 
@@ -237,7 +214,7 @@ void Scene01::sendInitDataTo(SOCKET socket)
 	}
 
 	auto reppack = new ReplyPacket();
-	reppack->uniqueId = 0;
+	reppack->setUniqueId(0);
 	reppack->beginTime = -1.0f;
 
 	Server::instance->sendTo(socket, reppack);

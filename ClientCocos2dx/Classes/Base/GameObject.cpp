@@ -2,10 +2,14 @@
 #include "SpriteManager.h"
 #include "ServerConnector.h"
 
+#include "..\Server\Classes\Shared\DataPacket.h"
+
 GameObject::GameObject(eObjectId id) : 
 	_id(id),
 	_status(eStatus::NORMAL),
-	_direction(eDirection::UP)
+	_direction(eDirection::UP),
+	_hasChanged(true),
+	_packetNumber(0)
 {
 	_buffer = new Buffer(29);
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
@@ -17,6 +21,9 @@ GameObject::GameObject(Buffer& buffer)
 {
 	_buffer = new Buffer(29);
 	this->deserialize(buffer);
+
+	buffer.setBeginRead(buffer.getSize() - sizeof(int));
+	_packetNumber = buffer.readInt();
 
 	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
 }
@@ -79,12 +86,12 @@ Buffer * GameObject::serialize()
 
 	_buffer->writeInt(eDataType::OBJECT);
 	_buffer->writeInt(this->getId());
-	_buffer->writeInt(this->getTag());
+	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeInt(this->getStatus());
 	_buffer->writeByte(this->getDirection());
 	_buffer->writeFloat(this->getPosition().x);
 	_buffer->writeFloat(this->getPosition().y);
-	_buffer->writeFloat(ServerConnector::getInstance()->getTime());
+	_buffer->writeInt(_packetNumber);
 
 	return _buffer;
 }
@@ -106,9 +113,15 @@ void GameObject::deserialize(Buffer & data)
 	float y = data.readFloat();
 	this->setPosition(x, y);
 
-	_lifeTime = data.readFloat();
+	auto number = data.readInt();
 
 	data.setBeginRead(0);
+}
+
+void GameObject::setTag(int tag)
+{
+	Node::setTag(tag);
+	Serializable::setUniqueId(tag);
 }
 
 void GameObject::updateWithStatus(eStatus status)
@@ -131,25 +144,25 @@ void GameObject::reconcile(Buffer &data)
 		return;
 	}
 
-	data.setBeginRead(data.getSize() - 4);
-	float time = data.readFloat();
+	this->deserialize(data);
 
-	int index = _pendingBuffer.size() - 1;
-	for (index; index >= 0; index--)
+	data.setBeginRead(data.getSize() - 4);
+	auto time = data.readInt();
+
+	int index = 0;
+	for (index; index < _pendingBuffer.size(); index++)
 	{
 		_pendingBuffer[index]->setBeginRead(_pendingBuffer[index]->getSize() - 4);
-		auto t = _pendingBuffer[index]->readFloat();
+		auto t = _pendingBuffer[index]->readInt();
 
 		// thời gian nhận được sau pending thì cập nhật lại từ đây
-		if (time >= t)
+		if (time <= t)
 		{
-			this->deserialize(data);
-			break;
+			this->deserialize(*_pendingBuffer[index]);
 		}
 	}
 
-	// xóa tất cả thằng trc đó đi
-	for (auto i = 0; i <= index; i++)
+	while (!_pendingBuffer.empty())
 	{
 		delete _pendingBuffer.front();
 		_pendingBuffer.pop_front();
@@ -171,19 +184,12 @@ void GameObject::reconcilePendingBuffer()
 
 void GameObject::update(float dt)
 {
-	//if (_currentPendingBufferIndex < _pendingBuffer.size() - 1)
-	//{
-	//	this->reconcilePendingBuffer();
-	//}
-	//else
-	//{
-	//	this->predict(dt);
+	this->predict(dt);
 
-	//	if (ServerConnector::instance->isRunning())
-	//	{
-	//		this->addToPendingBuffer();
-	//	}
-	//}
-
-	// this->predict(dt);
+	if (ServerConnector::getInstance()->isRunning() && this->hasChanged())
+	{
+		_packetNumber++;
+		this->addToPendingBuffer();
+		this->onChanged(false);
+	}
 }

@@ -14,12 +14,17 @@ public:
 
 	virtual void deserialize(Buffer& data) = 0;
 
-	virtual eDataType getType() { return _type; };
-	virtual void setType(eDataType type) { _type = type; };
+	virtual inline eDataType getType() { return _type; }
+	virtual inline void setType(eDataType type) { _type = type; }
+
+	virtual inline void setUniqueId(int id) { _uniqueId = id; }
+	virtual inline int getUniqueId() { return _uniqueId; }
 
 protected:
 	eDataType _type;
 	Buffer* _buffer;
+	int _uniqueId;
+
 };
 
 
