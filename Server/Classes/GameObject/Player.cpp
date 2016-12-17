@@ -17,44 +17,6 @@ int Player::getIndex()
 	return _index;
 }
 
-void Player::shoot()
-{
-	if (_bulletCounter >= this->getMaxBullet())
-	{
-		return;
-	}
-
-	Vector2 shootPosition = this->getPosition();
-	float offset = 0;
-
-	switch (_direction)
-	{
-	case LEFT:
-		shootPosition.x -= offset;
-		break;
-	case UP:
-		shootPosition.y += offset;
-		break;
-	case RIGHT:
-		shootPosition.x += offset;
-		break;
-	case DOWN:
-		shootPosition.y -= offset;
-		break;
-	default:
-		break;
-	}
-
-	auto bullet = new Bullet(shootPosition, this->getDirection());
-	bullet->setOwner(this);
-
-	SceneManager::getInstance()->getCurrentScene()->addObject(bullet);
-
-	_bulletCounter++;
-
-	//printf("shoot: %.2f, %.2f\n", bullet->getPosition().x, bullet->getPosition().y);
-}
-
 void Player::updateInput(eKeyInput input, bool start)
 {
 	if (start)
@@ -62,20 +24,20 @@ void Player::updateInput(eKeyInput input, bool start)
 		switch (input)
 		{
 		case KEY_LEFT:
-			this->setDirection(eDirection::LEFT);
-			this->addStatus(eStatus::RUNNING);
+			//this->setDirection(eDirection::LEFT);
+			//this->addStatus(eStatus::RUNNING);
 			break;
 		case KEY_RIGHT:
-			this->setDirection(eDirection::RIGHT);
-			this->addStatus(eStatus::RUNNING);
+			//this->setDirection(eDirection::RIGHT);
+			//this->addStatus(eStatus::RUNNING);
 			break;
 		case KEY_UP:
-			this->setDirection(eDirection::UP);
-			this->addStatus(eStatus::RUNNING);
+			//this->setDirection(eDirection::UP);
+			//this->addStatus(eStatus::RUNNING);
 			break;
 		case KEY_DOWN:
-			this->setDirection(eDirection::DOWN);
-			this->addStatus(eStatus::RUNNING);
+			//this->setDirection(eDirection::DOWN);
+			//this->addStatus(eStatus::RUNNING);
 			break;
 		case KEY_SHOOT:
 			this->shoot();
@@ -109,7 +71,8 @@ void Player::handleData(Serializable * data)
 	{
 		if (auto command = dynamic_cast<CommandPacket*>(data))
 		{
-			this->updateInput(command->input, command->begin);
+			//this->updateInput(command->input, command->begin);
+			_commandQueue.push(command);
 		}
 		break;
 	}

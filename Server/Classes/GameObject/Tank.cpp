@@ -1,7 +1,7 @@
 ﻿#include "Tank.h"
+#include "Bullet.h"
 #include "..\Base\AABB.h"
-#include <cmath>
-#include <stdio.h>
+#include "..\Base\SceneManager.h"
 
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0),
@@ -76,14 +76,18 @@ void Tank::updatePosition(float dt)
 		}
 	}
 
+	if (!_commandQueue.empty())
+	{
+		this->updateWithCommand(_commandQueue.front(), dt);
+
+		delete _commandQueue.front();
+		_commandQueue.pop();
+	}
+
 	if (_velocity != 0)
 	{
 		this->onChanged();
 	}
-
-
-	this->move(_velocity * dt);
-
 }
 
 void Tank::updatePosition(float dt, float distance)
@@ -183,8 +187,6 @@ void Tank::move(float distance)
 		_remainMoveForTurn = 0.0f;
 		printf("end: %.2f\n", _remainMoveForTurn);
 	}
-
-	
 
 	switch (_direction)
 	{
@@ -368,4 +370,87 @@ void Tank::handleData(Serializable * data)
 		this->deserialize(*(data->serialize()));
 		this->onChanged();
 	}
+}
+
+void Tank::updateWithCommand(CommandPacket* commad, float dt)
+{
+	auto key = commad->input;
+	if (commad->begin)
+	{
+		switch (key)
+		{
+		case KEY_NONE:
+			break;
+		case KEY_LEFT:
+			this->move(eDirection::LEFT, dt);
+			break;
+		case KEY_RIGHT:
+			this->move(eDirection::RIGHT, dt);
+			break;
+		case KEY_UP:
+			this->move(eDirection::UP, dt);
+			break;
+		case KEY_DOWN:
+			this->move(eDirection::DOWN, dt);
+			break;
+		case KEY_SHOOT:
+			this->shoot();
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		this->removeStatus(eStatus::RUNNING);
+		_velocity = 0;
+	}
+}
+
+void Tank::move(eDirection direction, float dt)
+{
+	this->setDirection(direction);
+
+	this->addStatus(eStatus::RUNNING);
+	_velocity = TANK_NORMAL_VELOCITY;
+
+	this->move(_velocity * dt);
+}
+
+void Tank::shoot()
+{
+	if (_bulletCounter >= this->getMaxBullet())
+	{
+		return;
+	}
+
+	Vector2 shootPosition = this->getPosition();
+	float offset = 0;
+
+	switch (_direction)
+	{
+	case LEFT:
+		shootPosition.x -= offset;
+		break;
+	case UP:
+		shootPosition.y += offset;
+		break;
+	case RIGHT:
+		shootPosition.x += offset;
+		break;
+	case DOWN:
+		shootPosition.y -= offset;
+		break;
+	default:
+		break;
+	}
+
+	auto bullet = new Bullet(shootPosition, this->getDirection());
+	bullet->setOwner(this);
+
+	SceneManager::getInstance()->getCurrentScene()->addObject(bullet);
+
+	_bulletCounter++;
+
+	//printf("shoot: %.2f, %.2f\n", bullet->getPosition().x, bullet->getPosition().y);
 }

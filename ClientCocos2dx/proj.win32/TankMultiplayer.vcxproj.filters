@@ -84,6 +84,9 @@
     <ClCompile Include="..\Classes\GameObject\TankCursor.cpp">
       <Filter>src\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Server\Classes\Shared\WorldSnapshot.cpp">
+      <Filter>src\Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\GameObject\TankCursor.h">
       <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\WorldSnapshot.h">
+      <Filter>src\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

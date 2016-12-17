@@ -149,6 +149,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\..\Server\Classes\Shared\DataHandler.cpp" />
     <ClCompile Include="..\..\Server\Classes\Shared\DataPacket.cpp" />
     <ClCompile Include="..\..\Server\Classes\Shared\DataQueue.cpp" />
+    <ClCompile Include="..\..\Server\Classes\Shared\WorldSnapshot.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Base\ClientConverterFactory.cpp" />
     <ClCompile Include="..\Classes\Base\GameObject.cpp" />
@@ -173,6 +174,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\..\Server\Classes\Shared\DataQueue.h" />
     <ClInclude Include="..\..\Server\Classes\Shared\Serializable.h" />
     <ClInclude Include="..\..\Server\Classes\Shared\SharedDefinitions.h" />
+    <ClInclude Include="..\..\Server\Classes\Shared\WorldSnapshot.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Base\ClientConverterFactory.h" />
     <ClInclude Include="..\Classes\Base\Definitions.h" />

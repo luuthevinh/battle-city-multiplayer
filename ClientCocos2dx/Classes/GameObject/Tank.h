@@ -6,6 +6,8 @@
 #include "Base\GameObject.h"
 #include "Base\SpriteManager.h"
 
+#include "..\Server\Classes\Shared\DataPacket.h"
+
 class Tank : public GameObject
 {
 public:
@@ -30,6 +32,9 @@ public:
 
 	virtual void setId(eObjectId id) override;
 
+	virtual void shoot() {}
+	virtual void move(eDirection direction, float dt);
+
 protected:
 	float _velocity;
 
@@ -37,6 +42,10 @@ protected:
 
 	void runAnimateByDirection(eDirection direction);
 	void updateSpriteWithId();
+
+	virtual void updateWithCommand(CommandPacket* commad, float dt);
+
+	std::queue<CommandPacket*> _commandQueue;
 };
 
 #endif // !__TANK_H__

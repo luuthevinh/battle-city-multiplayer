@@ -3,6 +3,8 @@
 
 #include "..\Server\Classes\Shared\ConverterFactory.h"
 
+class Serializable;
+
 class ClientConverterFactory : public ConverterFactory
 {
 public:

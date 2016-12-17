@@ -1,9 +1,46 @@
 ﻿#include "GameObject.h"
-#include "..\Shared\Buffer.h"
-#include "..\Game.h"
 #include "AABB.h"
 
+#include "..\GameObject\Tank.h"
+#include "..\GameObject\Bullet.h"
+#include "..\Shared\Buffer.h"
+#include "..\Game.h"
+
 int GameObject::_nextUniqueId = 0;
+
+GameObject* GameObject::createWithBuffer(Buffer& buffer)
+{
+	buffer.setBeginRead(0);
+
+	eDataType type = (eDataType)buffer.readInt();
+	if (type != eDataType::OBJECT)
+		return nullptr;
+
+	GameObject* ret = nullptr;
+
+	eObjectId objectId = (eObjectId)buffer.readInt();
+	switch (objectId)
+	{
+		case YELLOW_TANK:
+		case GREEN_TANK:
+		case WHITE_TANK:
+		{
+			ret = new Tank(buffer);
+			break;
+		}
+		case BULLET:
+		{
+			ret = new Bullet(buffer);
+			break;
+		}
+		case EXPLOSION:
+			break;
+		default:
+			break;
+	}
+
+	return ret;
+}
 
 GameObject::GameObject(eObjectId id) :
 	_id(id),

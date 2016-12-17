@@ -96,9 +96,10 @@ void Game::handleData()
 	if (data == nullptr)
 		return;
 
+	// handle nhớ tự delete
 	SceneManager::getInstance()->getCurrentScene()->handleData(data);
 
-	delete data;
+	// delete data;
 }
 
 void Game::setConverterFactory(ConverterFactory * factory)

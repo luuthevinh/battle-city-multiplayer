@@ -12,7 +12,7 @@ Server::Server(u_short port, char * address)
 	_timeOut.tv_sec = 0;
 	_timeOut.tv_usec = 500;
 
-	_timeStep = 1.0f / 8; // gửi tới client mỗi 100ms
+	_timeStep = 1.0f / SEND_NUMBER_PER_SEC;
 	_lastTime = 0;
 
 	_running = true;
@@ -227,7 +227,44 @@ void Server::recieveData(SOCKET socket)
 	}
 }
 
-void Server::sendData(SOCKET socket)
+void Server::sendDataToAllWithTimeStep()
+{
+	float delta = _serverTime->getTotalTime() - _lastTime;
+	if (delta < _timeStep)
+		return;
+
+	_lastTime += _timeStep;
+
+	// take snapshot
+	auto snapshot = SceneManager::getInstance()->getCurrentScene()->getSnapshot();
+	if (snapshot != nullptr)
+	{
+		this->send(snapshot);
+		// update lại
+		snapshot->clearObjects();
+	}
+
+	// gửi cho tất cả client
+	for (int i = 0; i < _clientManager->getAllClients().size(); i++)
+	{
+		SOCKET currentSocket = _clientManager->getClientSocket(i);
+
+		// socket để gửi 
+		if (FD_ISSET(currentSocket, &_writeSet))
+		{
+			// kiểm tra xem list còn client ko
+			if (_clientManager->getAllClients().size() <= 0)
+				continue;
+
+			// send package to socket
+			this->sendDataToSocket(currentSocket);
+		}
+	}
+
+	//printf("send data at time: %.2f\n", _lastTime);
+}
+
+void Server::sendDataToSocket(SOCKET socket)
 {
 	if (socket == 0)
 		return;
@@ -236,11 +273,12 @@ void Server::sendData(SOCKET socket)
 	if (_dataHandler->getSendQueue(socket) == nullptr || _dataHandler->getSendQueue(socket)->getIndex() <= 0)
 		return;
 
+	printf("size queue socket %d: %d bytes\n", socket, _dataHandler->getSendQueue(socket)->getIndex());
+
 	DWORD sendBytes;
 	WSABUF dataBuffer;
 	dataBuffer.buf = _dataHandler->getSendQueue(socket)->getData();
 	dataBuffer.len = _dataHandler->getSendQueue(socket)->getIndex();
-	
 
 	if (WSASend(socket, &dataBuffer, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
 	{
@@ -261,34 +299,6 @@ void Server::sendData(SOCKET socket)
 		// send xong xóa khỏi queue
 		_dataHandler->getSendQueue(socket)->popFront(sendBytes);
 	}
-}
-
-void Server::sendDataToAllWithTimeStep()
-{
-	float delta = _serverTime->getTotalTime() - _lastTime;
-	if (delta < _timeStep)
-		return;
-
-	_lastTime += _timeStep;
-
-	// gửi cho tất cả client
-	for (int i = 0; i < _clientManager->getAllClients().size(); i++)
-	{
-		SOCKET currentSocket = _clientManager->getClientSocket(i);
-
-		// socket để gửi 
-		if (FD_ISSET(currentSocket, &_writeSet))
-		{
-			// kiểm tra xem list còn client ko
-			if (_clientManager->getAllClients().size() <= 0)
-				continue;
-
-			// send package to socket
-			this->sendData(currentSocket);
-		}
-	}
-
-	printf("send data at time: %.2f\n", _lastTime);
 }
 
 void Server::closeConnection(SOCKET socket)

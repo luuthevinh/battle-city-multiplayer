@@ -148,7 +148,6 @@ void WaitingScene::handleData()
 				return;
 			}
 
-			//((GameObject*)object)->reconcile(*data->serialize());
 			((GameObject*)object)->deserialize(*data->serialize());
 		}
 		break;

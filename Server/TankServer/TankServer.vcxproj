@@ -147,6 +147,7 @@
     <ClInclude Include="..\Classes\Shared\DataQueue.h" />
     <ClInclude Include="..\Classes\Shared\Serializable.h" />
     <ClInclude Include="..\Classes\Shared\SharedDefinitions.h" />
+    <ClInclude Include="..\Classes\Shared\WorldSnapshot.h" />
     <ClInclude Include="..\Classes\tmx\tmx.h" />
     <ClInclude Include="..\Classes\tmx\tmx_utils.h" />
   </ItemGroup>
@@ -174,6 +175,7 @@
     <ClCompile Include="..\Classes\Shared\DataHandler.cpp" />
     <ClCompile Include="..\Classes\Shared\DataPacket.cpp" />
     <ClCompile Include="..\Classes\Shared\DataQueue.cpp" />
+    <ClCompile Include="..\Classes\Shared\WorldSnapshot.cpp" />
     <ClCompile Include="..\Classes\Source.cpp" />
     <ClCompile Include="..\Classes\tmx\tmx.c" />
     <ClCompile Include="..\Classes\tmx\tmx_err.c" />

@@ -3,8 +3,10 @@
 
 #include <vector>
 #include <map>
-#include <set>
+#include <queue>
 #include "..\Base\GameObject.h"
+
+#include "..\Shared\DataPacket.h"
 
 class Tank : public GameObject
 {
@@ -31,6 +33,9 @@ public:
 	virtual int getNumberOfBullets();
 
 	virtual void handleData(Serializable* data) override;
+
+	virtual void move(eDirection direction, float dt);
+	virtual void shoot();
 
 protected:
 	float _velocity;
@@ -63,6 +68,10 @@ protected:
 	void updateDirection(eDirection direction);
 
 	int getMaxBullet();
+
+	void updateWithCommand(CommandPacket* commad, float dt);
+
+	std::queue<CommandPacket*> _commandQueue;
 };
 
 #endif // !__TANK_H__

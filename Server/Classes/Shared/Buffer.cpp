@@ -37,9 +37,22 @@ void Buffer::setIndex(int index)
 	_index = index; 
 }
 
+int Buffer::getReadIndex()
+{
+	return _readIndex;
+}
+
 void Buffer::setBeginRead(int index)
 {
 	_readIndex = index;
+}
+
+bool Buffer::isEndOfData()
+{
+	if (_readIndex == _size)
+		return true;
+
+	return false;
 }
 
 char* Buffer::getData() 
@@ -85,6 +98,15 @@ void Buffer::writeFloat(float value)
 	*((float*)(this->getData() + this->getIndex())) = value;
 
 	this->setIndex(this->getIndex() + sizeof(float));
+}
+
+void Buffer::writeData(char * data, unsigned int size)
+{
+	assert(this->getIndex() + size <= this->getSize());
+
+	std::memcpy(this->getData() + this->getIndex(), data, size);
+
+	this->setIndex(this->getIndex() + size);
 }
 
 int Buffer::readInt()
@@ -135,6 +157,19 @@ float Buffer::readFloat()
 	ret = *(float*)(this->getData() + _readIndex);
 
 	_readIndex += sizeof(float);
+
+	return ret;
+}
+
+char * Buffer::readData(unsigned int size)
+{
+	assert(_readIndex + size <= this->getSize());
+
+	char* ret = new char[size];
+
+	std::memcpy(ret, this->getData() + _readIndex, size);
+
+	_readIndex += size;
 
 	return ret;
 }

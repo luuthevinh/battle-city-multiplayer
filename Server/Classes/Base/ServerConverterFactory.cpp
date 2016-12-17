@@ -1,6 +1,5 @@
 ﻿#include "ServerConverterFactory.h"
-#include "..\GameObject\Tank.h"
-#include "..\GameObject\Bullet.h"
+#include "..\Base\GameObject.h"
 #include "..\Shared\DataPacket.h"
 
 ServerConverterFactory::ServerConverterFactory(DataHandler* handler) : ConverterFactory(handler)
@@ -34,41 +33,22 @@ Serializable * ServerConverterFactory::convertNext()
 
 	switch (type)
 	{
-	case OBJECT:
-	{
-		eObjectId objectId = (eObjectId)buffer->readInt();
-		switch (objectId)
+		case OBJECT:
 		{
-		case YELLOW_TANK:
-		case GREEN_TANK:
-		case WHITE_TANK:
-		{
-			ret = new Tank(*buffer);
+			ret = GameObject::createWithBuffer(*buffer);
 			break;
 		}
-		case BULLET:
+		case PACKET:
+			break;
+		case REPLY_ID:
+			break;
+		case COMMAND:
 		{
-			ret = new Bullet(*buffer);
+			ret = new CommandPacket(*buffer);
 			break;
 		}
-		case EXPLOSION:
-			break;
 		default:
 			break;
-		}
-		break;
-	}
-	case PACKET:
-		break;
-	case REPLY_ID:
-		break;
-	case COMMAND:
-	{
-		ret = new CommandPacket(*buffer);
-		break;
-	}
-	default:
-		break;
 	}
 
 	// ko dùng buffer này nữa

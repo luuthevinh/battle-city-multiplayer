@@ -24,7 +24,7 @@ public:
 	void destroy();
 
 	void recieveData(SOCKET socket);
-	void sendData(SOCKET socket);
+	void sendDataToSocket(SOCKET socket);
 	void closeConnection(SOCKET socket);
 	void addConnection(SOCKET socket);
 

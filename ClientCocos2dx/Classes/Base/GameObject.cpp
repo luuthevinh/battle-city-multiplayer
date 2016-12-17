@@ -1,10 +1,52 @@
 ﻿#include "GameObject.h"
 #include "SpriteManager.h"
 #include "ServerConnector.h"
+#include "GameObject\Tank.h"
+#include "GameObject\Bullet.h"
+#include "GameObject\Wall.h"
 
 #include "..\Server\Classes\Shared\DataPacket.h"
 
-GameObject::GameObject(eObjectId id) : 
+GameObject * GameObject::createWithBuffer(Buffer & buffer)
+{
+	buffer.setBeginRead(0);
+
+	eDataType type = (eDataType)buffer.readInt();
+	if (type != eDataType::OBJECT)
+		return nullptr;
+
+	GameObject* ret = nullptr;
+
+	eObjectId objectId = (eObjectId)buffer.readInt();
+	switch (objectId)
+	{
+		case YELLOW_TANK:
+		case GREEN_TANK:
+		case WHITE_TANK:
+		{
+			ret = Tank::createWithBuffer(buffer);
+
+			break;
+		}
+		case BULLET:
+		{
+			ret = Bullet::createWithBuffer(buffer);
+
+			break;
+		}
+		case BRICK_WALL:
+		{
+			ret = Wall::createWithBuffer(buffer);
+			break;
+		}
+		default:
+			break;
+	}
+
+	return ret;
+}
+
+GameObject::GameObject(eObjectId id) :
 	_id(id),
 	_status(eStatus::NORMAL),
 	_direction(eDirection::UP),
@@ -49,6 +91,11 @@ void GameObject::setStatus(eStatus status)
 
 	// update with status
 	this->updateWithStatus(_status);
+}
+
+bool GameObject::hasStatus(eStatus status)
+{
+	return (_status & status) == status;
 }
 
 eStatus GameObject::getStatus()

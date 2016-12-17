@@ -11,10 +11,13 @@ public:
 	~Buffer();
 
 	int getSize();
-	
+
 	int getIndex();
 	virtual void setIndex(int index);
+
+	virtual int getReadIndex();
 	virtual void setBeginRead(int index);
+	virtual bool isEndOfData();
 
 	char* getData();
 
@@ -23,14 +26,17 @@ public:
 	void writeByte(char value);
 	void writeBool(bool value);
 	void writeFloat(float value);
+	void writeData(char* data, unsigned int size);
 
 	// read next
 	int readInt();
 	char readByte();
 	bool readBool();
 	float readFloat();
+	char* readData(unsigned int size);
 
 	Buffer* clone();
+
 
 protected:
 	char* _data;

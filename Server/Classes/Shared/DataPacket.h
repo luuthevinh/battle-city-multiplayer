@@ -15,7 +15,7 @@ public:
 
 	virtual void deserialize(Buffer &data) override;
 
-	//int uniqueId;
+	int id;
 	eKeyInput input;
 	bool begin;
 
@@ -34,7 +34,6 @@ public:
 
 	virtual void deserialize(Buffer &data) override;
 
-	//int uniqueId;
 	float beginTime;
 
 };
@@ -58,7 +57,6 @@ public:
 
 	Type integerType;
 	int value;
-	//int uniqueId;
 };
 
 #endif // !__DATA_PACKET_H__

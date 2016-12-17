@@ -5,7 +5,6 @@
 #include "..\Base\GameObject.h"
 #include "..\Base\Scene.h"
 
-
 class Scene01 : public Scene
 {
 public:
@@ -23,13 +22,13 @@ public:
 
 	virtual void sendInitDataTo(SOCKET socket) override;
 
+	
+
 private:
 	void checkCollisionObjects(float dt);
 	void checkStatusObjects();
 	void sendChangedObjects();
-
-	int** _objectIndex;
-
+	void updateSnapshot(Serializable * object);
 };
 
 

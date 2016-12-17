@@ -2,7 +2,9 @@
 #include "GameObject\Tank.h"
 #include "GameObject\Bullet.h"
 #include "GameObject\Wall.h"
+
 #include "..\Server\Classes\Shared\DataPacket.h"
+#include "..\Server\Classes\Shared\WorldSnapshot.h"
 
 ClientConverterFactory::ClientConverterFactory(DataHandler * handler) : ConverterFactory(handler)
 {
@@ -36,31 +38,7 @@ Serializable * ClientConverterFactory::convertNext()
 	{
 	case OBJECT:
 	{
-		eObjectId objectId = (eObjectId)buffer->readInt();
-		switch (objectId)
-		{
-		case YELLOW_TANK:
-		case GREEN_TANK:
-		case WHITE_TANK:
-		{
-			ret = Tank::createWithBuffer(*buffer);
-
-			break;
-		}
-		case BULLET:
-		{
-			ret = Bullet::createWithBuffer(*buffer);
-		
-			break;
-		}
-		case BRICK_WALL:
-		{
-			ret = Wall::createWithBuffer(*buffer);
-			break;
-		}
-		default:
-			break;
-		}
+		ret = GameObject::createWithBuffer(*buffer);
 		break;
 	}
 	case PACKET:
@@ -73,6 +51,11 @@ Serializable * ClientConverterFactory::convertNext()
 	case COMMAND:
 	{
 		ret = new CommandPacket(*buffer);
+		break;
+	}
+	case SNAPSHOT: 
+	{
+		ret = new WorldSnapshot(*buffer);
 		break;
 	}
 	default:

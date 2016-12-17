@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "Bullet.h"
 #include "Base\SpriteManager.h"
 #include "Base\ServerConnector.h"
@@ -116,9 +116,15 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		command->setUniqueId(this->getTag());
 		command->begin = true;
 
-		ServerConnector::getInstance()->send(command);
+		if (input == eKeyInput::KEY_SHOOT)
+		{
+			ServerConnector::getInstance()->send(command);
+		}
+		else
+		{
+			_commandQueue.push(command);
+		}
 
-		delete command;
 
 		//CCLOG("shoot: %.2f, %.2f", this->getPositionX(), this->getPositionY());
 	}
@@ -174,8 +180,17 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 		command->setUniqueId(this->getTag());
 		command->begin = false;
 
-		ServerConnector::getInstance()->send(command);
+		_commandQueue.push(command);
+	}
+}
 
-		delete command;
+void Player::updateWithCommand(CommandPacket * commad, float dt)
+{
+	Tank::updateWithCommand(commad, dt);
+
+	if (!_commandQueue.empty())
+	{
+		// note: send nhiều quá nó bị tràn
+		ServerConnector::getInstance()->send(_commandQueue.front());
 	}
 }

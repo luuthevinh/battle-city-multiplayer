@@ -78,3 +78,8 @@ Player * Scene::getPlayer(int tag)
 void Scene::sendInitDataTo(SOCKET socket)
 {
 }
+
+WorldSnapshot * Scene::getSnapshot()
+{
+	return _snapshot;
+}

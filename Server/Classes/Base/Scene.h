@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "..\GameObject\Player.h"
 
+#include "..\Shared\WorldSnapshot.h"
+
 class Scene
 {
 public:
@@ -28,11 +30,15 @@ public:
 
 	virtual void sendInitDataTo(SOCKET socket);
 
+	virtual WorldSnapshot* getSnapshot();
+
 protected:
 	std::vector<GameObject*> _gameObjects;
 	std::vector<GameObject*> _staticObjects;
 
 	std::vector<Player*> _players;
+
+	WorldSnapshot* _snapshot;
 };
 
 #endif // !__SCENE_H__

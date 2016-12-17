@@ -2,12 +2,14 @@
 #include "GameObject\Player.h"
 #include "GameObject\Bullet.h"
 #include "ClientConverterFactory.h"
+#include "Scene\ServerPlayScene.h"
 
 //shared
 #include "..\..\Server\Classes\Shared\Buffer.h"
 #include "..\..\Server\Classes\Shared\DataHandler.h"
 #include "..\..\Server\Classes\Shared\Serializable.h"
 #include "..\..\Server\Classes\Shared\DataPacket.h"
+#include "..\..\Server\Classes\Shared\WorldSnapshot.h"
 
 ServerConnector* ServerConnector::_instance  = nullptr;
 
@@ -216,8 +218,7 @@ void ServerConnector::handleData(cocos2d::Layer* layer)
 				return;
 			}
 
-			//object->deserialize(*data->serialize());
-			object->reconcile(*data->serialize());
+			object->deserialize(*data->serialize());
 		}
 		break;
 	}
@@ -237,6 +238,16 @@ void ServerConnector::handleData(cocos2d::Layer* layer)
 			_isRunning = true;
 		}
 
+	}
+	case eDataType::SNAPSHOT:
+	{
+		auto playScene = (ServerPlayScene*)(layer);
+		if (playScene != nullptr)
+		{
+			WorldSnapshot* snapshot = dynamic_cast<WorldSnapshot*>(data);
+			playScene->updateSnapshot(snapshot);
+		}
+		break;
 	}
 	default:
 		break;

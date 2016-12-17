@@ -12,6 +12,8 @@ class AABB;
 class GameObject : public Serializable
 {
 public:
+	static GameObject* createWithBuffer(Buffer& buffer);
+
 	GameObject(eObjectId id);
 	GameObject(Buffer& buffer);
 	~GameObject();

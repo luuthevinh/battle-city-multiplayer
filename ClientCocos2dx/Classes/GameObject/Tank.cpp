@@ -101,6 +101,21 @@ void Tank::update(float dt)
 
 void Tank::updatePosition(float dt)
 {
+	if (!this->hasStatus(eStatus::RUNNING))
+	{
+		if (_velocity != 0)
+		{
+			_velocity = 0;
+		}
+	}
+	else
+	{
+		if (_velocity == 0)
+		{
+			_velocity = TANK_NORMAL_VELOCITY;
+		}
+	}
+
 	if (_velocity == 0)
 		return;
 
@@ -127,7 +142,18 @@ void Tank::updatePosition(float dt)
 
 void Tank::predict(float dt)
 {
-	this->updatePosition(dt);
+	if (!_commandQueue.empty())
+	{
+		this->updateWithCommand(_commandQueue.front(), dt);
+		
+		if (_commandQueue.size() == 1 && _commandQueue.front()->begin)
+		{
+			return;
+		}
+
+		delete _commandQueue.front();
+		_commandQueue.pop();
+	}
 }
 
 void Tank::setId(eObjectId id)
@@ -176,6 +202,67 @@ void Tank::updateSpriteWithId()
 	{
 		i->second->retain();
 	}
+}
+
+void Tank::updateWithCommand(CommandPacket * commad, float dt)
+{
+	auto key = commad->input;
+
+	switch (key)
+	{
+	case eKeyInput::KEY_LEFT:
+	{
+		this->move(eDirection::LEFT, dt);
+		break;
+	}
+	case eKeyInput::KEY_RIGHT:
+	{
+		this->move(eDirection::RIGHT, dt);
+		break;
+	}
+	case eKeyInput::KEY_DOWN:
+	{
+		this->move(eDirection::DOWN, dt);
+		break;
+	}
+	case eKeyInput::KEY_UP:
+	{
+		this->move(eDirection::UP, dt);
+		break;
+	}
+	case eKeyInput::KEY_SHOOT:
+	{
+		this->shoot();
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void Tank::move(eDirection direction, float dt)
+{
+	this->setDirection(direction);
+
+	switch (_direction)
+	{
+	case LEFT:
+		this->setPositionX(this->getPositionX() - _velocity * dt);
+		break;
+	case UP:
+		this->setPositionY(this->getPositionY() + _velocity * dt);
+		break;
+	case RIGHT:
+		this->setPositionX(this->getPositionX() + _velocity * dt);
+		break;
+	case DOWN:
+		this->setPositionY(this->getPositionY() - _velocity * dt);
+		break;
+	default:
+		break;
+	}
+
+	this->onChanged();
 }
 
 void Tank::setDirection(eDirection direction)

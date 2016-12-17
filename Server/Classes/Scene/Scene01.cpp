@@ -11,6 +11,7 @@ Scene01::Scene01()
 
 Scene01::~Scene01()
 {
+	delete _snapshot;
 }
 
 bool Scene01::init()
@@ -23,11 +24,7 @@ bool Scene01::init()
 		this->addStaticObject(obj);
 	}
 
-	//_objectIndex = new int*[32];
-	//for (size_t i = 0; i < 32; i++)
-	//{
-	//	_objectIndex[i] = new int[32];
-	//}
+	_snapshot = new WorldSnapshot();
 
 	return true;
 }
@@ -51,6 +48,8 @@ void Scene01::update(float dt)
 	{
 		player->update(dt);
 	}
+
+	_snapshot->setServerTime(_snapshot->getServerTime() + dt);
 
 	this->sendChangedObjects();
 
@@ -92,8 +91,6 @@ void Scene01::checkCollisionObjects(float dt)
 		{
 			player->checkCollision(*other, dt);
 		}
-
-		// player->checkWithIndexMap(_objectIndex);
 	}
 
 	for (auto object : _gameObjects)
@@ -158,9 +155,8 @@ void Scene01::sendChangedObjects()
 	{
 		if (object->hasChanged())
 		{
-			Server::instance->send(object);
+			this->updateSnapshot(object);
 			object->setChanged(false);
-
 		}
 	}
 
@@ -168,7 +164,7 @@ void Scene01::sendChangedObjects()
 	{
 		if (object->hasChanged())
 		{
-			Server::instance->send(object);
+			this->updateSnapshot(object);
 			object->setChanged(false);
 		}
 	}
@@ -177,13 +173,15 @@ void Scene01::sendChangedObjects()
 	{
 		if (player->hasChanged())
 		{
-			// test
-			player->setPacketNumber(player->getPacketNumber() + 1);
-
-			Server::instance->send(player);
+			this->updateSnapshot(player);
 			player->setChanged(false);
 		}
 	}
+}
+
+void Scene01::updateSnapshot(Serializable * object)
+{
+	_snapshot->addObject(object);
 }
 
 void Scene01::handleData(Serializable * object)

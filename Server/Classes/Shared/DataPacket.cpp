@@ -2,12 +2,14 @@
 
 CommandPacket::CommandPacket()
 {
-	_buffer = new Buffer(13);
+	_buffer = new Buffer(17);
+	id = 0;
 }
 
 CommandPacket::CommandPacket(Buffer& data)
 {
-	_buffer = new Buffer(13);
+	id = 0;
+	_buffer = new Buffer(17);
 	this->deserialize(data);
 }
 
@@ -23,6 +25,7 @@ Buffer* CommandPacket::serialize()
 	_buffer->setBeginRead(0);
 
 	_buffer->writeInt(eDataType::COMMAND);
+	_buffer->writeInt(id);
 	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeInt(input);
 	_buffer->writeBool(begin);
@@ -39,6 +42,8 @@ void CommandPacket::deserialize(Buffer &data)
 		return;
 
 	this->setType(type);
+
+	id = data.readInt();
 	this->setUniqueId(data.readInt());
 	input = (eKeyInput)data.readInt();
 	begin = data.readBool();

@@ -1,7 +1,10 @@
 #ifndef __SERVER_PLAY_SCENE_H__
 #define __SERVER_PLAY_SCENE_H__
 
+#include <vector>
 #include "cocos2d.h"
+
+class WorldSnapshot;
 
 USING_NS_CC;
 
@@ -18,8 +21,10 @@ public:
 	bool init() override;
 	void update(float dt);
 
-private:
+	void updateSnapshot(WorldSnapshot* snapshot);
 
+private:
+	std::vector<WorldSnapshot*> _snapshots;
 };
 
 #endif // !__SERVER_PLAY_SCENE_H__

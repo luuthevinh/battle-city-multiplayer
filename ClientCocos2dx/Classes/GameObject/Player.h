@@ -20,6 +20,7 @@ public:
 private:
 	int _keyDirectionCounter;
 
+	virtual void updateWithCommand(CommandPacket* commad, float dt) override;
 };
 
 #endif // !__PLAYER_H__

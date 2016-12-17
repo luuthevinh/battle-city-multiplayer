@@ -1,6 +1,11 @@
 #include "ServerPlayScene.h"
 #include "GameObject\Player.h"
 #include "Base\ServerConnector.h"
+#include "Base\GameObject.h"
+
+// shared
+#include "..\Server\Classes\Shared\WorldSnapshot.h"
+
 
 ServerPlayScene::ServerPlayScene()
 {
@@ -32,12 +37,6 @@ bool ServerPlayScene::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	//auto player = Player::create(eObjectId::YELLOW_TANK);
-	//player->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-	//player->setName("player");
-
-	//this->addChild(player);
-
 	// update
 	this->scheduleUpdate();
 
@@ -49,4 +48,26 @@ void ServerPlayScene::update(float dt)
 	ServerConnector::getInstance()->update(dt);
 
 	ServerConnector::getInstance()->handleData(this);
+}
+
+void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
+{
+	auto ids  = snapshot->getDataObjects();
+
+	for (auto it = ids.begin(); it != ids.end(); it++)
+	{
+		auto node = (GameObject*)this->getChildByTag(it->first);
+		if (node != nullptr)
+		{
+			node->deserialize(*(it->second));
+		}
+		else
+		{
+			auto gameObject = GameObject::createWithBuffer(*(it->second));
+			if (gameObject)
+			{
+				this->addChild(gameObject);
+			}
+		}
+	}
 }

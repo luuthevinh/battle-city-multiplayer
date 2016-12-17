@@ -12,7 +12,6 @@ public:
 
 	int getIndex();
 
-	void shoot();
 	void updateInput(eKeyInput input, bool start);
 
 	virtual void handleData(Serializable* data) override;

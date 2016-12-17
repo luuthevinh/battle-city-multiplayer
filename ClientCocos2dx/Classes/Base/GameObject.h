@@ -12,6 +12,8 @@ USING_NS_CC;
 class GameObject : public Node, public Serializable
 {
 public:
+	static GameObject* createWithBuffer(Buffer& buffer);
+
 	GameObject(eObjectId id);
 	GameObject(Buffer& buffer);
 	~GameObject();
@@ -19,6 +21,7 @@ public:
 	virtual void addStatus(eStatus status);
 	virtual void removeStatus(eStatus status);
 	virtual void setStatus(eStatus status);
+	virtual bool hasStatus(eStatus status);
 	virtual eStatus getStatus();
 
 	virtual void setId(eObjectId id);
