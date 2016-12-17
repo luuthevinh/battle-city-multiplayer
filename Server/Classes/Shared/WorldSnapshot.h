@@ -8,6 +8,9 @@
 class WorldSnapshot : public Serializable
 {
 public:
+	static int getNextId();
+	static int id;
+
 	WorldSnapshot();
 	WorldSnapshot(Buffer & data);
 	~WorldSnapshot();
@@ -31,6 +34,8 @@ public:
 	void clearObjects();
 
 private:
+
+
 	float _serverTime;
 	float _clientTime;
 	int _totalSize;

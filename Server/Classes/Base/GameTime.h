@@ -13,12 +13,12 @@ public:
 	void update();
 
 	// Tổng thời gian trôi qua kể từ lần cuối gọi update
-	float getElapsedTime();	
+	float getElapsedTime() const;	
 
 	// Tổng thời gian trôi qua kể từ lúc gọi Init
-	float getTotalTime();
+	float getTotalTime() const;
 
-	clock_t getTicks();
+	clock_t getTicks() const;
 
 private:
 	float _elapsedTime;

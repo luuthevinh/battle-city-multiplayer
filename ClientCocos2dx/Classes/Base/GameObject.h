@@ -55,13 +55,11 @@ protected:
 
 	float _lifeTime;
 	std::deque<Buffer*> _pendingBuffer;		// trạng thái dự đoán chưa được server xác nhận
-	int _currentPendingBufferIndex;
 	
 	void addToPendingBuffer();
 	void reconcilePendingBuffer();
 
 	bool _hasChanged;
-	int _packetNumber;
 };
 
 

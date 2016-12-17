@@ -73,6 +73,7 @@ void Player::handleData(Serializable * data)
 		{
 			//this->updateInput(command->input, command->begin);
 			_commandQueue.push(command);
+			printf("push command(%d)\n", _commandQueue.size());
 		}
 		break;
 	}

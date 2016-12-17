@@ -239,6 +239,9 @@ void Server::sendDataToAllWithTimeStep()
 	auto snapshot = SceneManager::getInstance()->getCurrentScene()->getSnapshot();
 	if (snapshot != nullptr)
 	{
+		snapshot->setUniqueId(WorldSnapshot::getNextId());
+		snapshot->setServerTime(_game->getGameTime()->getTotalTime());
+
 		this->send(snapshot);
 		// update lại
 		snapshot->clearObjects();
@@ -273,7 +276,7 @@ void Server::sendDataToSocket(SOCKET socket)
 	if (_dataHandler->getSendQueue(socket) == nullptr || _dataHandler->getSendQueue(socket)->getIndex() <= 0)
 		return;
 
-	printf("size queue socket %d: %d bytes\n", socket, _dataHandler->getSendQueue(socket)->getIndex());
+	printf("size queue socket %d: %d bytes | time: %.2f\n", socket, _dataHandler->getSendQueue(socket)->getIndex(), _game->getGameTime()->getTotalTime());
 
 	DWORD sendBytes;
 	WSABUF dataBuffer;
@@ -349,4 +352,9 @@ void Server::send(Serializable * object)
 void Server::sendTo(SOCKET socket, Serializable * object)
 {
 	_dataHandler->sendTo(socket, object);
+}
+
+const GameTime & Server::getTime()
+{
+	return *_serverTime;
 }

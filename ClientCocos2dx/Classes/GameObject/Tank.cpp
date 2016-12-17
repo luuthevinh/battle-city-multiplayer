@@ -89,8 +89,6 @@ bool Tank::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	
-	_currentPendingBufferIndex = -1;
-
 	return true;
 }
 
@@ -261,6 +259,8 @@ void Tank::move(eDirection direction, float dt)
 	default:
 		break;
 	}
+
+	CCLOG("tank move %.2f/frame", _velocity * dt);
 
 	this->onChanged();
 }

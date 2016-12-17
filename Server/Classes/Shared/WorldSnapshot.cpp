@@ -1,4 +1,13 @@
 ﻿#include "WorldSnapshot.h"
+#include "..\Server.h"
+
+int WorldSnapshot::id = 0;
+
+int WorldSnapshot::getNextId()
+{
+	id++;
+	return id;
+}
 
 WorldSnapshot::WorldSnapshot() :
 	_serverTime(0),

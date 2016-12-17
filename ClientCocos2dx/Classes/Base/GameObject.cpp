@@ -50,8 +50,7 @@ GameObject::GameObject(eObjectId id) :
 	_id(id),
 	_status(eStatus::NORMAL),
 	_direction(eDirection::UP),
-	_hasChanged(true),
-	_packetNumber(0)
+	_hasChanged(true)
 {
 	_buffer = new Buffer(29);
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
@@ -65,7 +64,6 @@ GameObject::GameObject(Buffer& buffer)
 	this->deserialize(buffer);
 
 	buffer.setBeginRead(buffer.getSize() - sizeof(int));
-	_packetNumber = buffer.readInt();
 
 	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
 }
@@ -138,7 +136,7 @@ Buffer * GameObject::serialize()
 	_buffer->writeByte(this->getDirection());
 	_buffer->writeFloat(this->getPosition().x);
 	_buffer->writeFloat(this->getPosition().y);
-	_buffer->writeInt(_packetNumber);
+	_buffer->writeFloat(ServerConnector::getInstance()->getTime());
 
 	return _buffer;
 }
@@ -160,7 +158,7 @@ void GameObject::deserialize(Buffer & data)
 	float y = data.readFloat();
 	this->setPosition(x, y);
 
-	auto number = data.readInt();
+	auto number = data.readFloat();
 
 	data.setBeginRead(0);
 }
@@ -178,34 +176,34 @@ void GameObject::updateWithStatus(eStatus status)
 void GameObject::addToPendingBuffer()
 {
 	auto currentBuffer = this->serialize()->clone();
-
 	_pendingBuffer.push_back(currentBuffer);
-	_currentPendingBufferIndex = _pendingBuffer.size() - 1;
+
+	CCLOG("add to pending buffer: client time: %.2f", ServerConnector::getInstance()->getTime());
 }
 
 void GameObject::reconcile(Buffer &data)
 {
+	this->deserialize(data);
+
 	if (_pendingBuffer.size() <= 0)
 	{
-		this->deserialize(data);
 		return;
 	}
 
-	this->deserialize(data);
-
 	data.setBeginRead(data.getSize() - 4);
-	auto time = data.readInt();
+	auto time = ServerConnector::getInstance()->getTime();
 
 	int index = 0;
 	for (index; index < _pendingBuffer.size(); index++)
 	{
 		_pendingBuffer[index]->setBeginRead(_pendingBuffer[index]->getSize() - 4);
-		auto t = _pendingBuffer[index]->readInt();
+		auto t = _pendingBuffer[index]->readFloat();
 
 		// thời gian nhận được sau pending thì cập nhật lại từ đây
 		if (time <= t)
 		{
 			this->deserialize(*_pendingBuffer[index]);
+			CCLOG("pending[%d]: %.2f | time: %.2f", index, t, time);
 		}
 	}
 
@@ -214,8 +212,6 @@ void GameObject::reconcile(Buffer &data)
 		delete _pendingBuffer.front();
 		_pendingBuffer.pop_front();
 	}
-
-	_currentPendingBufferIndex = 0;
 }
 
 void GameObject::reconcilePendingBuffer()
@@ -232,11 +228,4 @@ void GameObject::reconcilePendingBuffer()
 void GameObject::update(float dt)
 {
 	this->predict(dt);
-
-	if (ServerConnector::getInstance()->isRunning() && this->hasChanged())
-	{
-		_packetNumber++;
-		this->addToPendingBuffer();
-		this->onChanged(false);
-	}
 }

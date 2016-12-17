@@ -33,6 +33,7 @@ public:
 	void send(Serializable* object);
 	void sendTo(SOCKET socket, Serializable* object);
 
+	const GameTime& getTime();
 private:
 	u_short _port;
 	char* _address;

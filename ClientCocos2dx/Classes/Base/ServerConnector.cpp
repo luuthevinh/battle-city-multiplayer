@@ -143,6 +143,7 @@ void ServerConnector::update(float dt)
 		}
 	}
 
+	// CCLOG("client time: %.2f, delta: %.2f", _timer, dt);
 	_timer += dt;
 }
 

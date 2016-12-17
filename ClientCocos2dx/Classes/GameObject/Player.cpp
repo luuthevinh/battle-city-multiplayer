@@ -59,6 +59,12 @@ bool Player::init()
 void Player::update(float dt)
 {
 	Tank::update(dt);
+
+	if (!_commandQueue.empty())
+	{
+		// note: send nhiều quá nó bị tràn
+		ServerConnector::getInstance()->send(_commandQueue.front());
+	}
 }
 
 void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
@@ -180,7 +186,8 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 		command->setUniqueId(this->getTag());
 		command->begin = false;
 
-		_commandQueue.push(command);
+		_commandQueue.emplace(command);
+
 	}
 }
 
@@ -188,9 +195,8 @@ void Player::updateWithCommand(CommandPacket * commad, float dt)
 {
 	Tank::updateWithCommand(commad, dt);
 
-	if (!_commandQueue.empty())
+	//if (!_commandQueue.empty())
 	{
-		// note: send nhiều quá nó bị tràn
-		ServerConnector::getInstance()->send(_commandQueue.front());
+		this->addToPendingBuffer();
 	}
 }

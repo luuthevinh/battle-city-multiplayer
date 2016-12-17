@@ -188,6 +188,8 @@ void Tank::move(float distance)
 		printf("end: %.2f\n", _remainMoveForTurn);
 	}
 
+	// printf("tank move %.2f/frame\n", distance);
+
 	switch (_direction)
 	{
 	case LEFT:

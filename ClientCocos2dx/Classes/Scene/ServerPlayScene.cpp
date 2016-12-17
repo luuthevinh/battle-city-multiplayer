@@ -1,4 +1,4 @@
-#include "ServerPlayScene.h"
+﻿#include "ServerPlayScene.h"
 #include "GameObject\Player.h"
 #include "Base\ServerConnector.h"
 #include "Base\GameObject.h"
@@ -52,6 +52,11 @@ void ServerPlayScene::update(float dt)
 
 void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 {
+	WorldSnapshot::id = snapshot->getUniqueId();
+
+	// cập nhật luôn vầy nghĩa là ko có lag trên đường truyền
+	ServerConnector::getInstance()->setTime(snapshot->getServerTime());
+
 	auto ids  = snapshot->getDataObjects();
 
 	for (auto it = ids.begin(); it != ids.end(); it++)
@@ -59,7 +64,8 @@ void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 		auto node = (GameObject*)this->getChildByTag(it->first);
 		if (node != nullptr)
 		{
-			node->deserialize(*(it->second));
+			//node->deserialize(*(it->second));
+			node->reconcile(*(it->second));
 		}
 		else
 		{
