@@ -21,6 +21,8 @@ public:
 
 	virtual void updateWithStatus(eStatus status) override;
 	virtual void predict(float dt) override;
+
+	virtual void deserialize(Buffer & data) override;
 private:
 	eDirection _direction;
 	float _speed;

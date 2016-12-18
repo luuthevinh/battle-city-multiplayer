@@ -28,12 +28,12 @@ public:
 
 	void updateWithStatus(eStatus status) override;
 
-	virtual void predict(float dt) override;
-
 	virtual void setId(eObjectId id) override;
 
 	virtual void shoot() {}
 	virtual void move(eDirection direction, float dt);
+
+	void deserialize(Buffer & data) override;
 
 protected:
 	float _velocity;
@@ -46,6 +46,7 @@ protected:
 	virtual void updateWithCommand(CommandPacket* commad, float dt);
 
 	std::queue<CommandPacket*> _commandQueue;
+
 };
 
 #endif // !__TANK_H__

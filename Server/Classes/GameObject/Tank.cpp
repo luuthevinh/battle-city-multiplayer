@@ -80,6 +80,11 @@ void Tank::updatePosition(float dt)
 	{
 		this->updateWithCommand(_commandQueue.front(), dt);
 
+		if (_commandQueue.size() == 1 && _commandQueue.front()->begin &&  _commandQueue.front()->input != eKeyInput::KEY_SHOOT)
+		{
+			return;
+		}
+
 		delete _commandQueue.front();
 		_commandQueue.pop();
 	}
@@ -406,6 +411,7 @@ void Tank::updateWithCommand(CommandPacket* commad, float dt)
 	{
 		this->removeStatus(eStatus::RUNNING);
 		_velocity = 0;
+		this->onChanged();
 	}
 }
 
@@ -421,10 +427,10 @@ void Tank::move(eDirection direction, float dt)
 
 void Tank::shoot()
 {
-	if (_bulletCounter >= this->getMaxBullet())
-	{
-		return;
-	}
+	//if (_bulletCounter >= this->getMaxBullet())
+	//{
+	//	return;
+	//}
 
 	Vector2 shootPosition = this->getPosition();
 	float offset = 0;

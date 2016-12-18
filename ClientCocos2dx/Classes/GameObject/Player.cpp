@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include "Base\SpriteManager.h"
 #include "Base\ServerConnector.h"
+#include "Base\Utils.h"
 
 // shared
 #include "..\Server\Classes\Shared\DataPacket.h"
@@ -58,13 +59,21 @@ bool Player::init()
 
 void Player::update(float dt)
 {
-	Tank::update(dt);
+	this->predict(dt);
 
 	if (!_commandQueue.empty())
 	{
-		// note: send nhiều quá nó bị tràn
 		ServerConnector::getInstance()->send(_commandQueue.front());
 	}
+
+	//if (_nextPosition != Vec2::ZERO)
+	//{
+	//	if(_direction == eDirection::UP || _direction == eDirection::DOWN)
+	//		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), TANK_NORMAL_VELOCITY * dt));
+
+	//	if (_direction == eDirection::LEFT || _direction == eDirection::RIGHT)
+	//		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), TANK_NORMAL_VELOCITY * dt));
+	//}
 }
 
 void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
@@ -191,12 +200,96 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 	}
 }
 
+void Player::reconcile(Buffer & data)
+{
+	GameObject::reconcile(data);
+
+	data.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+	float x = data.readFloat();
+	float y = data.readFloat();
+	Vec2 actualPosition = Vec2(x, y);
+
+	this->setPosition(actualPosition);
+
+	//this->updateLastBuffer(data);
+	//this->deserialize(data);
+
+	//if (_pendingBuffer.size() <= 0)
+	//{
+	//	return;
+	//}
+
+	//if (_previousBuffer != nullptr)
+	//{ 
+	//	this->interpolate();
+	//}
+
+	//if (_previousBuffer != nullptr)
+	//{ 
+	//	this->interpolate();
+
+	//	data.setBeginRead(data.getSize() - sizeof(int) * 3);
+	//	float x = data.readFloat();
+	//	float y = data.readFloat();
+	//	Vec2 actualPosition = Vec2(x, y);
+	//	Vec2 actualDistance = actualPosition - _lastPosition;
+
+	//	if (actualDistance == _deltaDistance)
+	//	{
+	//		_movedDistancePredition = Vec2::ZERO;
+	//	}
+	//	else
+	//	{
+	//		_deltaDistance = actualDistance;
+	//	}
+	//	
+	//	this->setPosition(actualPosition);
+	//}
+
+	//auto time = ServerConnector::getInstance()->getTime();
+
+	//int index = 0;
+	//for (index; index < _pendingBuffer.size(); index++)
+	//{
+	//	_pendingBuffer[index]->setBeginRead(_pendingBuffer[index]->getSize() - 4);
+	//	auto t = _pendingBuffer[index]->readFloat();
+
+	//	// thời gian nhận được sau pending thì cập nhật lại từ đây
+	//	if (time <= t)
+	//	{
+	//		this->deserialize(*_pendingBuffer[index]);
+	//		CCLOG("pending[%d]: %.2f | time: %.2f", index, t, time);
+	//	}
+	//}
+
+	//while (!_pendingBuffer.empty())
+	//{
+	//	delete _pendingBuffer.front();
+	//	_pendingBuffer.pop_front();
+	//}
+}
+
 void Player::updateWithCommand(CommandPacket * commad, float dt)
 {
 	Tank::updateWithCommand(commad, dt);
 
-	//if (!_commandQueue.empty())
+	//this->addToPendingBuffer();
+}
+
+void Player::predict(float dt)
+{
+	if (!_commandQueue.empty())
 	{
-		this->addToPendingBuffer();
+		this->updateWithCommand(_commandQueue.front(), dt);
+
+		if (_commandQueue.size() == 1 && _commandQueue.front()->begin)
+		{
+			return;
+		}
+
+		delete _commandQueue.front();
+		_commandQueue.pop();
+
+		//_movedDistancePredition += this->getPosition() - _lastPosition;
 	}
 }

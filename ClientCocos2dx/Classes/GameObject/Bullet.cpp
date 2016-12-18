@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "Base\SpriteManager.h"
 #include "GameObject\Explosion.h"
+#include "Base\Utils.h"
 
 Bullet::Bullet() : GameObject(eObjectId::BULLET),
 	_direction(eDirection::UP)
@@ -41,6 +42,27 @@ Bullet * Bullet::createWithBuffer(Buffer & buffer)
 	return nullptr;
 }
 
+void Bullet::deserialize(Buffer & data)
+{
+	data.setBeginRead(0);
+
+	eDataType type = (eDataType)data.readInt();
+	if (type != eDataType::OBJECT)
+		return;
+
+	this->setType(type);
+	this->setId((eObjectId)data.readInt());
+	this->setTag(data.readInt());
+	this->setStatus((eStatus)data.readInt());
+	this->setDirection((eDirection)data.readByte());
+	float x = data.readFloat();
+	float y = data.readFloat();
+
+	auto number = data.readFloat();
+
+	data.setBeginRead(0);
+}
+
 bool Bullet::init()
 {
 	this->scheduleUpdate();
@@ -48,8 +70,7 @@ bool Bullet::init()
 	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BULLET));
 	this->addChild(_sprite);
 
-	_speed = 200.0f;
-
+	_speed = BULLET_SPEED_01;
 
 	return true;
 }
@@ -57,6 +78,16 @@ bool Bullet::init()
 void Bullet::update(float dt)
 {
 	GameObject::update(dt);
+
+	if (_nextPosition != Vec2::ZERO)
+	{
+		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), _speed * dt));
+		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), _speed * dt));
+	}
+	else
+	{
+		this->predict(dt);
+	}
 
 	// update sprite rotate
 	switch (_direction)

@@ -7,14 +7,14 @@ Bullet::Bullet(const Vector2 & position, eDirection direction) : GameObject(eObj
 	_position = position;
 	_direction = direction;
 	_status = eStatus::NORMAL;
-	_speed = 200.0f;
+	_speed = BULLET_SPEED_01;
 
 	this->init();
 }
 
 Bullet::Bullet(Buffer & buffer) : GameObject(buffer)
 {
-	_speed = 200.0f;
+	_speed = BULLET_SPEED_01;
 
 	this->init();
 }

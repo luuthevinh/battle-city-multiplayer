@@ -18,6 +18,7 @@ ServerPlayScene::~ServerPlayScene()
 Scene * ServerPlayScene::createSceneWithLayer(Layer * layer)
 {
 	auto scene = Scene::createWithPhysics();
+	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	scene->getPhysicsWorld()->setGravity(Vec2::ZERO);
 
 	scene->addChild(layer);

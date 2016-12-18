@@ -1,6 +1,7 @@
 ﻿#include "Tank.h"
 #include "Explosion.h"
 #include "Base\ServerConnector.h"
+#include "Base\Utils.h"
 
 // shared
 #include "..\Server\Classes\Shared\Buffer.h"
@@ -55,6 +56,28 @@ Tank * Tank::createWithBuffer(Buffer &data)
 	}
 }
 
+void Tank::deserialize(Buffer & data)
+{
+	data.setBeginRead(0);
+
+	eDataType type = (eDataType)data.readInt();
+	if (type != eDataType::OBJECT)
+		return;
+
+	this->setType(type);
+	this->setId((eObjectId)data.readInt());
+	this->setTag(data.readInt());
+	this->setStatus((eStatus)data.readInt());
+	this->setDirection((eDirection)data.readByte());
+	float x = data.readFloat();
+	float y = data.readFloat();
+	//this->setPosition(x, y);
+
+	auto number = data.readFloat();
+
+	data.setBeginRead(0);
+}
+
 bool Tank::init()
 {
 	// update object
@@ -78,9 +101,7 @@ bool Tank::init()
 	auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
 	this->setPhysicsBody(body);
 
-	body->setContactTestBitmask(1);				// gọi callback với tất cả category
-	//body->setRotationEnable(false);
-
+	body->setContactTestBitmask(0x1);				// gọi callback với tất cả category
 	body->getShapes().at(0)->setSensor(true);	// vẫn gọi callback nhưng ko có tương tác vật lý
 
 	// listener
@@ -95,6 +116,12 @@ bool Tank::init()
 void Tank::update(float dt)
 {
 	GameObject::update(dt);
+
+	if(_nextPosition != Vec2::ZERO)
+	{
+		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), TANK_NORMAL_VELOCITY * dt));
+		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), TANK_NORMAL_VELOCITY * dt));
+	}
 }
 
 void Tank::updatePosition(float dt)
@@ -136,22 +163,6 @@ void Tank::updatePosition(float dt)
 	}
 
 	this->onChanged();
-}
-
-void Tank::predict(float dt)
-{
-	if (!_commandQueue.empty())
-	{
-		this->updateWithCommand(_commandQueue.front(), dt);
-		
-		if (_commandQueue.size() == 1 && _commandQueue.front()->begin)
-		{
-			return;
-		}
-
-		delete _commandQueue.front();
-		_commandQueue.pop();
-	}
 }
 
 void Tank::setId(eObjectId id)
@@ -206,41 +217,54 @@ void Tank::updateWithCommand(CommandPacket * commad, float dt)
 {
 	auto key = commad->input;
 
-	switch (key)
+	if (commad->begin)
 	{
-	case eKeyInput::KEY_LEFT:
-	{
-		this->move(eDirection::LEFT, dt);
-		break;
+		switch (key)
+		{
+		case eKeyInput::KEY_LEFT:
+		{
+			this->move(eDirection::LEFT, dt);
+			break;
+		}
+		case eKeyInput::KEY_RIGHT:
+		{
+			this->move(eDirection::RIGHT, dt);
+			break;
+		}
+		case eKeyInput::KEY_DOWN:
+		{
+			this->move(eDirection::DOWN, dt);
+			break;
+		}
+		case eKeyInput::KEY_UP:
+		{
+			this->move(eDirection::UP, dt);
+			break;
+		}
+		case eKeyInput::KEY_SHOOT:
+		{
+			this->shoot();
+			break;
+		}
+		default:
+			break;
+		}
 	}
-	case eKeyInput::KEY_RIGHT:
+	else
 	{
-		this->move(eDirection::RIGHT, dt);
-		break;
-	}
-	case eKeyInput::KEY_DOWN:
-	{
-		this->move(eDirection::DOWN, dt);
-		break;
-	}
-	case eKeyInput::KEY_UP:
-	{
-		this->move(eDirection::UP, dt);
-		break;
-	}
-	case eKeyInput::KEY_SHOOT:
-	{
-		this->shoot();
-		break;
-	}
-	default:
-		break;
+		if (commad->input != eKeyInput::KEY_SHOOT)
+		{
+			this->removeStatus(eStatus::RUNNING);
+		}
 	}
 }
 
 void Tank::move(eDirection direction, float dt)
 {
 	this->setDirection(direction);
+
+	if (!this->hasStatus(eStatus::RUNNING))
+		return;
 
 	switch (_direction)
 	{

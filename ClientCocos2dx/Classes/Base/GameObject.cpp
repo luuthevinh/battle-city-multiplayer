@@ -4,8 +4,19 @@
 #include "GameObject\Tank.h"
 #include "GameObject\Bullet.h"
 #include "GameObject\Wall.h"
+#include "Base\Utils.h"
 
 #include "..\Server\Classes\Shared\DataPacket.h"
+#include "..\Server\Classes\Shared\SharedDefinitions.h"
+
+int GameObject::INDEX_DATA_TYPE_BUFFER = 0;
+int GameObject::INDEX_OBJECT_ID_BUFFER = 4;
+int GameObject::INDEX_UNIQUE_ID_BUFFER = 8;
+int GameObject::INDEX_STATUS_BUFFER = 12;
+int GameObject::INDEX_DIRECTION_BUFFER = 16;
+int GameObject::INDEX_POSITION_X_BUFFER = 17;
+int GameObject::INDEX_POSITION_Y_BUFFER = 21;
+int GameObject::INDEX_TIME_BUFFER = 25;
 
 GameObject * GameObject::createWithBuffer(Buffer & buffer)
 {
@@ -31,6 +42,10 @@ GameObject * GameObject::createWithBuffer(Buffer & buffer)
 		case BULLET:
 		{
 			ret = Bullet::createWithBuffer(buffer);
+			buffer.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+			float x = buffer.readFloat();
+			float y = buffer.readFloat();
+			ret->setPosition(x, y);
 
 			break;
 		}
@@ -50,17 +65,21 @@ GameObject::GameObject(eObjectId id) :
 	_id(id),
 	_status(eStatus::NORMAL),
 	_direction(eDirection::UP),
-	_hasChanged(true)
+	_hasChanged(true),
+	_previousBuffer(nullptr),
+	_lastBuffer(nullptr)
 {
-	_buffer = new Buffer(29);
+	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
 
 	_lifeTime = 0.0f;
 }
 
-GameObject::GameObject(Buffer& buffer)
+GameObject::GameObject(Buffer& buffer) : 
+	_previousBuffer(nullptr),
+	_lastBuffer(nullptr)
 {
-	_buffer = new Buffer(29);
+	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
 	this->deserialize(buffer);
 
 	buffer.setBeginRead(buffer.getSize() - sizeof(int));
@@ -184,48 +203,43 @@ void GameObject::addToPendingBuffer()
 void GameObject::reconcile(Buffer &data)
 {
 	this->deserialize(data);
+	this->updateLastBuffer(data);
 
-	if (_pendingBuffer.size() <= 0)
-	{
-		return;
-	}
-
-	data.setBeginRead(data.getSize() - 4);
-	auto time = ServerConnector::getInstance()->getTime();
-
-	int index = 0;
-	for (index; index < _pendingBuffer.size(); index++)
-	{
-		_pendingBuffer[index]->setBeginRead(_pendingBuffer[index]->getSize() - 4);
-		auto t = _pendingBuffer[index]->readFloat();
-
-		// thời gian nhận được sau pending thì cập nhật lại từ đây
-		if (time <= t)
-		{
-			this->deserialize(*_pendingBuffer[index]);
-			CCLOG("pending[%d]: %.2f | time: %.2f", index, t, time);
-		}
-	}
-
-	while (!_pendingBuffer.empty())
-	{
-		delete _pendingBuffer.front();
-		_pendingBuffer.pop_front();
-	}
-}
-
-void GameObject::reconcilePendingBuffer()
-{
-	if (_pendingBuffer.size() <= 0)
+	if (_previousBuffer == nullptr)
 		return;
 
-	this->deserialize(*_pendingBuffer.front());
-
-	delete _pendingBuffer.front();
-	_pendingBuffer.pop_front();
+	this->interpolate();
 }
 
 void GameObject::update(float dt)
 {
-	this->predict(dt);
+}
+
+void GameObject::interpolate()
+{
+	if (_lastBuffer == nullptr || _previousBuffer == nullptr)
+		return;
+
+	_lastBuffer->setBeginRead(17);
+	float x = _lastBuffer->readFloat();
+	float y = _lastBuffer->readFloat();
+	Vec2 lastPos = Vec2(x, y);
+
+	_previousBuffer->setBeginRead(17);
+	x = _previousBuffer->readFloat();
+	y = _previousBuffer->readFloat();
+	Vec2 prevPos = Vec2(x, y);
+
+	_lastPosition = lastPos;
+	_deltaDistance = (lastPos - prevPos);
+	_nextPosition = prevPos + _deltaDistance;
+}
+
+void GameObject::updateLastBuffer(Buffer & buffer)
+{
+	if (_previousBuffer != nullptr)
+		delete _previousBuffer;
+
+	_previousBuffer = _lastBuffer;
+	_lastBuffer = buffer.clone();
 }

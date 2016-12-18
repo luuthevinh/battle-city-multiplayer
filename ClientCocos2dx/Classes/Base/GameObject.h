@@ -12,6 +12,15 @@ USING_NS_CC;
 class GameObject : public Node, public Serializable
 {
 public:
+	static int INDEX_DATA_TYPE_BUFFER;
+	static int INDEX_OBJECT_ID_BUFFER;
+	static int INDEX_UNIQUE_ID_BUFFER;
+	static int INDEX_STATUS_BUFFER;
+	static int INDEX_DIRECTION_BUFFER;
+	static int INDEX_POSITION_X_BUFFER;
+	static int INDEX_POSITION_Y_BUFFER;
+	static int INDEX_TIME_BUFFER;
+
 	static GameObject* createWithBuffer(Buffer& buffer);
 
 	GameObject(eObjectId id);
@@ -57,9 +66,18 @@ protected:
 	std::deque<Buffer*> _pendingBuffer;		// trạng thái dự đoán chưa được server xác nhận
 	
 	void addToPendingBuffer();
-	void reconcilePendingBuffer();
 
 	bool _hasChanged;
+
+	Buffer* _lastBuffer;
+	Buffer* _previousBuffer;
+
+	Vec2 _lastPosition;
+	Vec2 _nextPosition;
+	Vec2 _deltaDistance;
+
+	void interpolate();
+	void updateLastBuffer(Buffer& buffer);
 };
 
 

@@ -44,8 +44,11 @@ bool Wall::init()
 	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_05.png");
 	this->addChild(_sprite);
 
-	//auto body = PhysicsBody::createBox(_sprite->getContentSize(), PhysicsMaterial(0, 0, 0));
-	//this->setPhysicsBody(body);
+	auto body = PhysicsBody::createBox(_sprite->getContentSize(), PhysicsMaterial(0, 0, 0));
+	this->setPhysicsBody(body);
+
+	body->getShapes().at(0)->setSensor(true);
+	body->setContactTestBitmask(0x1);
 
 	this->updateDirection();
 

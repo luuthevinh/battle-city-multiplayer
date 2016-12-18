@@ -17,8 +17,12 @@ public:
 	void onKeyPressed(EventKeyboard::KeyCode keycode, Event* e);
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* e);
 
+	virtual void reconcile(Buffer &data) override;
+	void predict(float dt);
+
 private:
 	int _keyDirectionCounter;
+	Vec2 _movedDistancePredition;
 
 	virtual void updateWithCommand(CommandPacket* commad, float dt) override;
 };
