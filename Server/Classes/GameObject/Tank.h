@@ -37,6 +37,8 @@ public:
 	virtual void move(eDirection direction, float dt);
 	virtual void shoot();
 
+	virtual void onContactBegin(GameObject& object);
+
 protected:
 	float _velocity;
 	float _remainMoveForTurn;

@@ -117,6 +117,18 @@
     <ClInclude Include="..\Classes\Shared\WorldSnapshot.h">
       <Filter>Source Files\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Shared\MapNode.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\Map.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\TankBot.h">
+      <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\Utils.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\GameObject.cpp">
@@ -204,6 +216,18 @@
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Shared\WorldSnapshot.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\MapNode.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\Map.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\TankBot.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\Utils.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
   </ItemGroup>

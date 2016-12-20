@@ -149,13 +149,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\..\Server\Classes\Shared\DataHandler.cpp" />
     <ClCompile Include="..\..\Server\Classes\Shared\DataPacket.cpp" />
     <ClCompile Include="..\..\Server\Classes\Shared\DataQueue.cpp" />
+    <ClCompile Include="..\..\Server\Classes\Shared\Utils.cpp" />
     <ClCompile Include="..\..\Server\Classes\Shared\WorldSnapshot.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Base\ClientConverterFactory.cpp" />
     <ClCompile Include="..\Classes\Base\GameObject.cpp" />
     <ClCompile Include="..\Classes\Base\ServerConnector.cpp" />
     <ClCompile Include="..\Classes\Base\SpriteManager.cpp" />
-    <ClCompile Include="..\Classes\Base\Utils.cpp" />
     <ClCompile Include="..\Classes\GameObject\Bullet.cpp" />
     <ClCompile Include="..\Classes\GameObject\Explosion.cpp" />
     <ClCompile Include="..\Classes\GameObject\Player.cpp" />
@@ -175,6 +175,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\..\Server\Classes\Shared\DataQueue.h" />
     <ClInclude Include="..\..\Server\Classes\Shared\Serializable.h" />
     <ClInclude Include="..\..\Server\Classes\Shared\SharedDefinitions.h" />
+    <ClInclude Include="..\..\Server\Classes\Shared\Utils.h" />
     <ClInclude Include="..\..\Server\Classes\Shared\WorldSnapshot.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Base\ClientConverterFactory.h" />
@@ -182,7 +183,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Base\GameObject.h" />
     <ClInclude Include="..\Classes\Base\ServerConnector.h" />
     <ClInclude Include="..\Classes\Base\SpriteManager.h" />
-    <ClInclude Include="..\Classes\Base\Utils.h" />
     <ClInclude Include="..\Classes\GameObject\Bullet.h" />
     <ClInclude Include="..\Classes\GameObject\Explosion.h" />
     <ClInclude Include="..\Classes\GameObject\Player.h" />

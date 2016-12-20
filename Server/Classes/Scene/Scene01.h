@@ -5,6 +5,8 @@
 #include "..\Base\GameObject.h"
 #include "..\Base\Scene.h"
 
+#include "..\Shared\Map.h"
+
 class Scene01 : public Scene
 {
 public:
@@ -22,13 +24,15 @@ public:
 
 	virtual void sendInitDataTo(SOCKET socket) override;
 
-	
+	virtual int addPlayer(int socketIndex) override;
 
 private:
 	void checkCollisionObjects(float dt);
 	void checkStatusObjects();
 	void sendChangedObjects();
 	void updateSnapshot(Serializable * object);
+
+	tank::AStarMap* _aStarMap;
 };
 
 

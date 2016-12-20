@@ -135,29 +135,29 @@ void Tank::turnWithInputQueue(float dt)
 	
 	int unit = 16;
 	float integral = 0.0f;
-	float fractional = 0.0f;	// phần lẻ sau dấu phẩy của vị trí ban đầu
-	fractional = modf(position.x, &integral);				
-	float remainX = unit - (((int)integral % unit) + fractional);
+	float fractionalX = 0.0f;	// phần lẻ sau dấu phẩy của vị trí ban đầu
+	fractionalX = modf(position.x, &integral);
+	float remainX = unit - (((int)integral % unit) + fractionalX);
 
 	float integralY = 0.0f;
 	float fractionalY = 0.0f;
 	fractionalY = modf(position.y, &integralY);
 	float remainY = unit - (((int)integralY % unit) + fractionalY);
 
-	_remainMoveForTurn = fractional > fractionalY ? remainX : remainY;
+	if (fractionalX > fractionalY)
+	{
+		_remainMoveForTurn = remainX;
+	}
+	else
+	{
+		_remainMoveForTurn = remainY;
+	}
 
-	//if (_remainMoveForTurn > unit / 2)
-	//{
-	//	_remainMoveForTurn = 0.0f;
-	//	this->updateDirection(direction);
-	//	return;
-	//}
-	
 	_inputTurns.clear();
 	_inputTurns.push_back(direction);
 	_inputTurns.push_back(_direction);
 
-	printf("begin remain: %.2f, current dir: %d, dir: %d\n", _remainMoveForTurn, _direction, direction);
+	// printf("begin remain: %.2f, current dir: %d, dir: %d\n", _remainMoveForTurn, _direction, direction);
 
 	return;
 }
@@ -193,25 +193,19 @@ void Tank::move(float distance)
 		printf("end: %.2f\n", _remainMoveForTurn);
 	}
 
-	// printf("tank move %.2f/frame\n", distance);
-
 	switch (_direction)
 	{
 	case LEFT:
 		this->setPosition(this->getPosition().x - distance, this->getPosition().y);
-		//_collidingSide = (eDirection)(_collidingSide & ~RIGHT);
 		break;
 	case UP:
 		this->setPosition(this->getPosition().x, this->getPosition().y + distance);
-		//_collidingSide = (eDirection)(_collidingSide & ~DOWN);
 		break;
 	case RIGHT:
 		this->setPosition(this->getPosition().x + distance, this->getPosition().y);
-		//_collidingSide = (eDirection)(_collidingSide & ~LEFT);
 		break;
 	case DOWN:
 		this->setPosition(this->getPosition().x, this->getPosition().y - distance);
-		//_collidingSide = (eDirection)(_collidingSide & ~UP);
 		break;
 	default:
 		break;
@@ -333,6 +327,7 @@ void Tank::checkCollision(GameObject & other, float dt)
 	{
 		float distance = (_velocity * dt) * time;
 		this->updatePosition(dt, distance);
+		this->onContactBegin(other);
 
 		// ko cho chạy nữa
 		if (_inputTurns.size() == 0)
@@ -427,10 +422,10 @@ void Tank::move(eDirection direction, float dt)
 
 void Tank::shoot()
 {
-	//if (_bulletCounter >= this->getMaxBullet())
-	//{
-	//	return;
-	//}
+	if (_bulletCounter >= this->getMaxBullet())
+	{
+		return;
+	}
 
 	Vector2 shootPosition = this->getPosition();
 	float offset = 0;
@@ -461,4 +456,8 @@ void Tank::shoot()
 	_bulletCounter++;
 
 	//printf("shoot: %.2f, %.2f\n", bullet->getPosition().x, bullet->getPosition().y);
+}
+
+void Tank::onContactBegin(GameObject& object)
+{
 }

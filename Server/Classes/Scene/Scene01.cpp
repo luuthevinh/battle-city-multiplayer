@@ -4,6 +4,8 @@
 
 #include "..\Shared\DataPacket.h"
 #include "..\GameObject\MapLoader.h"
+#include "..\GameObject\TankBot.h"
+#include "..\Shared\Map.h"
 
 Scene01::Scene01()
 {
@@ -12,12 +14,31 @@ Scene01::Scene01()
 Scene01::~Scene01()
 {
 	delete _snapshot;
+	delete _aStarMap;
 }
 
 bool Scene01::init()
 {
 	auto loader = MapLoader::createWithTMX("Resources/map/map_01.tmx");
 	auto objects = loader->getObjectsInLayer("wall");
+
+	int rows = loader->getRows();
+	int cols = loader->getColumns();
+
+	_aStarMap = new tank::AStarMap(rows, cols);
+
+	auto layer = loader->getLayer("wall");
+	for (size_t i = 0; i < rows; i++)
+	{
+		for (size_t j = 0; j < cols; j++)
+		{
+			tank::Point index;
+			index.x = j;
+			index.y = i;
+
+			_aStarMap->setValue(index, layer->content.gids[i * cols + j]);
+		}
+	}
 
 	for (auto obj : objects)
 	{
@@ -218,4 +239,15 @@ void Scene01::sendInitDataTo(SOCKET socket)
 	Server::instance->sendTo(socket, reppack);
 
 	delete reppack;
+}
+
+int Scene01::addPlayer(int socketIndex)
+{
+
+	auto tankbot = new TankBot();
+	tankbot->setMap(_aStarMap);
+	tankbot->init();
+	this->addObject(tankbot);
+
+	return Scene::addPlayer(socketIndex);;
 }

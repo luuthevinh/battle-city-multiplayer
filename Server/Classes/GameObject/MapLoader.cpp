@@ -120,3 +120,13 @@ tmx_layer * MapLoader::getLayer(const char * name)
 
 	return nullptr;
 }
+
+int MapLoader::getRows()
+{
+	return _tmxMap->height;
+}
+
+int MapLoader::getColumns()
+{
+	return _tmxMap->width;
+}

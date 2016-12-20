@@ -87,8 +87,8 @@
     <ClCompile Include="..\..\Server\Classes\Shared\WorldSnapshot.cpp">
       <Filter>src\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Base\Utils.cpp">
-      <Filter>src\Base</Filter>
+    <ClCompile Include="..\..\Server\Classes\Shared\Utils.cpp">
+      <Filter>src\Shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,8 +164,8 @@
     <ClInclude Include="..\..\Server\Classes\Shared\WorldSnapshot.h">
       <Filter>src\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Base\Utils.h">
-      <Filter>src\Base</Filter>
+    <ClInclude Include="..\..\Server\Classes\Shared\Utils.h">
+      <Filter>src\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

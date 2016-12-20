@@ -20,6 +20,9 @@ public:
 	bool hasLayer(const char* name);
 	tmx_layer* getLayer(const char* name);
 
+	int getRows();
+	int getColumns();
+
 private:
 	tmx_map* _tmxMap;
 };
