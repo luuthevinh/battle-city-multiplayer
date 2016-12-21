@@ -22,9 +22,10 @@ public:
 
 private:
 	int _keyDirectionCounter;
-	Vec2 _movedDistancePredition;
+	Vec2 _lastUpdatedPosition;
 
 	virtual void updateWithCommand(CommandPacket* commad, float dt) override;
+	void syncPositionWithLastUpdate(float dt);
 };
 
 #endif // !__PLAYER_H__

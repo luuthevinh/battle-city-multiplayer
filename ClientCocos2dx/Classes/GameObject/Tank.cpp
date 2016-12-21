@@ -98,11 +98,11 @@ bool Tank::init()
 
 	this->runAnimateByDirection(eDirection::UP);
 
-	//auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
-	//this->setPhysicsBody(body);
+	auto body = PhysicsBody::createBox(Size(30, 30), PhysicsMaterial(0, 0, 0));
+	this->setPhysicsBody(body);
 
-	//body->setContactTestBitmask(0x1);				// gọi callback với tất cả category
-	//body->getShapes().at(0)->setSensor(true);	// vẫn gọi callback nhưng ko có tương tác vật lý
+	body->setContactTestBitmask(0x1);				// gọi callback với tất cả category
+	body->getShapes().at(0)->setSensor(true);	// vẫn gọi callback nhưng ko có tương tác vật lý
 
 	// listener
 	auto contactListener = EventListenerPhysicsContact::create();

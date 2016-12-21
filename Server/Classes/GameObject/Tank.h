@@ -42,6 +42,7 @@ public:
 protected:
 	float _velocity;
 	float _remainMoveForTurn;
+
 	int _bulletCounter;
 
 	eTankLevel _tankLevel;

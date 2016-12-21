@@ -3,6 +3,8 @@
 #include "..\Base\AABB.h"
 #include "..\Base\SceneManager.h"
 
+#include "..\Shared\Utils.h"
+
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0),
 	_tankLevel(eTankLevel::BASIC_TANK)
@@ -114,7 +116,7 @@ void Tank::updateBoundingBoxPosition()
 
 void Tank::turnWithInputQueue(float dt)
 {
-	if (_inputTurns.size() <= 0)
+	if (_inputTurns.size() <= 0 || _remainMoveForTurn > 0)
 		return;
 
 	eDirection direction = _inputTurns.back();
@@ -144,7 +146,7 @@ void Tank::turnWithInputQueue(float dt)
 	fractionalY = modf(position.y, &integralY);
 	float remainY = unit - (((int)integralY % unit) + fractionalY);
 
-	if (fractionalX > fractionalY)
+	if (fractionalX < fractionalY)
 	{
 		_remainMoveForTurn = remainX;
 	}
@@ -192,7 +194,7 @@ void Tank::move(float distance)
 		_remainMoveForTurn = 0.0f;
 		printf("end: %.2f\n", _remainMoveForTurn);
 	}
-
+	
 	switch (_direction)
 	{
 	case LEFT:

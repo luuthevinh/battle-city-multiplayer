@@ -3,8 +3,10 @@
 #include "Base\SpriteManager.h"
 #include "Base\ServerConnector.h"
 
+
 // shared
 #include "..\Server\Classes\Shared\DataPacket.h"
+#include "..\Server\Classes\Shared\Utils.h"
 
 Player::Player(eObjectId id) : Tank(id)
 {
@@ -46,13 +48,6 @@ bool Player::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	//auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
-	//body->setContactTestBitmask(1);
-
-	//body->setDynamic(false);
-	//this->setPhysicsBody(body);
-
-
 	return true;
 }
 
@@ -65,14 +60,7 @@ void Player::update(float dt)
 		ServerConnector::getInstance()->send(_commandQueue.front());
 	}
 
-	//if (_nextPosition != Vec2::ZERO)
-	//{
-	//	if(_direction == eDirection::UP || _direction == eDirection::DOWN)
-	//		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), TANK_NORMAL_VELOCITY * dt));
-
-	//	if (_direction == eDirection::LEFT || _direction == eDirection::RIGHT)
-	//		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), TANK_NORMAL_VELOCITY * dt));
-	//}
+	this->syncPositionWithLastUpdate(dt);
 }
 
 void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
@@ -201,48 +189,21 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)
 
 void Player::reconcile(Buffer & data)
 {
-	GameObject::reconcile(data);
+	// GameObject::reconcile(data);
 
 	data.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
 	float x = data.readFloat();
 	float y = data.readFloat();
-	Vec2 actualPosition = Vec2(x, y);
 
-	this->setPosition(actualPosition);
+	_lastUpdatedPosition = Vec2(x, y);
+	//this->setPosition(actualPosition);
 
 	//this->updateLastBuffer(data);
-	//this->deserialize(data);
+	this->deserialize(data);
 
 	//if (_pendingBuffer.size() <= 0)
 	//{
 	//	return;
-	//}
-
-	//if (_previousBuffer != nullptr)
-	//{ 
-	//	this->interpolate();
-	//}
-
-	//if (_previousBuffer != nullptr)
-	//{ 
-	//	this->interpolate();
-
-	//	data.setBeginRead(data.getSize() - sizeof(int) * 3);
-	//	float x = data.readFloat();
-	//	float y = data.readFloat();
-	//	Vec2 actualPosition = Vec2(x, y);
-	//	Vec2 actualDistance = actualPosition - _lastPosition;
-
-	//	if (actualDistance == _deltaDistance)
-	//	{
-	//		_movedDistancePredition = Vec2::ZERO;
-	//	}
-	//	else
-	//	{
-	//		_deltaDistance = actualDistance;
-	//	}
-	//	
-	//	this->setPosition(actualPosition);
 	//}
 
 	//auto time = ServerConnector::getInstance()->getTime();
@@ -273,6 +234,37 @@ void Player::updateWithCommand(CommandPacket * commad, float dt)
 	Tank::updateWithCommand(commad, dt);
 
 	//this->addToPendingBuffer();
+
+	switch (_direction)
+	{
+	case NONE:
+		break;
+	case LEFT:
+		_lastUpdatedPosition.x -= TANK_NORMAL_VELOCITY * dt;
+		break;
+	case UP:
+		_lastUpdatedPosition.y += TANK_NORMAL_VELOCITY * dt;
+		break;
+	case RIGHT:
+		_lastUpdatedPosition.x += TANK_NORMAL_VELOCITY * dt;
+		break;
+	case DOWN:
+		_lastUpdatedPosition.y -= TANK_NORMAL_VELOCITY * dt;
+		break;
+	default:
+		break;
+	}
+}
+
+void Player::syncPositionWithLastUpdate(float dt)
+{
+	if (_lastUpdatedPosition != this->getPosition())
+	{
+		float x = tank::lerp(_lastUpdatedPosition.x, this->getPosition().x, TANK_NORMAL_VELOCITY * dt);
+		float y = tank::lerp(_lastUpdatedPosition.y, this->getPosition().y, TANK_NORMAL_VELOCITY * dt);
+
+		this->setPosition(x, y);
+	}
 }
 
 void Player::predict(float dt)
@@ -288,7 +280,5 @@ void Player::predict(float dt)
 
 		delete _commandQueue.front();
 		_commandQueue.pop();
-
-		//_movedDistancePredition += this->getPosition() - _lastPosition;
 	}
 }
