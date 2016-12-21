@@ -1,10 +1,10 @@
 ﻿#include "Tank.h"
 #include "Explosion.h"
 #include "Base\ServerConnector.h"
-#include "Base\Utils.h"
 
 // shared
 #include "..\Server\Classes\Shared\Buffer.h"
+#include "..\Server\Classes\Shared\Utils.h"
 
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0)
@@ -98,11 +98,11 @@ bool Tank::init()
 
 	this->runAnimateByDirection(eDirection::UP);
 
-	auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
-	this->setPhysicsBody(body);
+	//auto body = PhysicsBody::createBox(Size(26, 26), PhysicsMaterial(0, 0, 0));
+	//this->setPhysicsBody(body);
 
-	body->setContactTestBitmask(0x1);				// gọi callback với tất cả category
-	body->getShapes().at(0)->setSensor(true);	// vẫn gọi callback nhưng ko có tương tác vật lý
+	//body->setContactTestBitmask(0x1);				// gọi callback với tất cả category
+	//body->getShapes().at(0)->setSensor(true);	// vẫn gọi callback nhưng ko có tương tác vật lý
 
 	// listener
 	auto contactListener = EventListenerPhysicsContact::create();

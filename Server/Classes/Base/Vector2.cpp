@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include <math.h>
 
 Vector2::Vector2()
 {
@@ -79,5 +80,10 @@ bool Vector2::operator<(const Vector2 & v) const
 		return y < v.y;
 	}
 	return x < v.x;
+}
+
+float Vector2::lenght() const
+{
+	return sqrt(x*x + y*y);
 }
 

@@ -90,9 +90,6 @@
     <ClInclude Include="..\Classes\Base\SceneManager.h">
       <Filter>Source Files\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Scene\Scene01.h">
-      <Filter>Source Files\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Base\AABB.h">
       <Filter>Source Files\Base</Filter>
     </ClInclude>
@@ -120,14 +117,17 @@
     <ClInclude Include="..\Classes\Shared\MapNode.h">
       <Filter>Source Files\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Shared\Map.h">
-      <Filter>Source Files\Shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\GameObject\TankBot.h">
       <Filter>Source Files\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Shared\Utils.h">
       <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Shared\AStarMap.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\PlayScene.h">
+      <Filter>Source Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +182,6 @@
     <ClCompile Include="..\Classes\Base\SceneManager.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Scene\Scene01.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Base\Scene.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
@@ -221,14 +218,17 @@
     <ClCompile Include="..\Classes\Shared\MapNode.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Shared\Map.cpp">
-      <Filter>Source Files\Shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\GameObject\TankBot.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Shared\Utils.cpp">
       <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Shared\AStarMap.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\PlayScene.cpp">
+      <Filter>Source Files\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

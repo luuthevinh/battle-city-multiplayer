@@ -1,4 +1,5 @@
 #include "Wall.h"
+#include "..\Scene\PlayScene.h"
 
 Wall::Wall(eObjectId id) : GameObject(id)
 {
@@ -53,26 +54,11 @@ void Wall::gotHit(Damage* damage)
 	if (_health <= 0)
 	{
 		this->setStatus(eStatus::DIE);
+
+		this->updateMap();
+
 		return;
 	}
-
-	//switch (damage->getDirection())
-	//{
-	//case LEFT:
-	//	_direction = eDirection::RIGHT;
-	//	break;
-	//case UP:
-	//	_direction = eDirection::DOWN;
-	//	break;
-	//case RIGHT:
-	//	_direction = eDirection::LEFT;
-	//	break;
-	//case DOWN:
-	//	_direction = eDirection::UP;
-	//	break;
-	//default:
-	//	break;
-	//}
 
 	_direction = damage->getDirection();
 
@@ -109,4 +95,13 @@ void Wall::updateBoundingBox()
 
 	_boudingBox.position.x = this->getPosition().x - _boudingBox.width / 2;
 	_boudingBox.position.y = this->getPosition().y - _boudingBox.height / 2;
+}
+
+void Wall::updateMap()
+{
+	auto scene = (PlayScene*)_parentScene;
+	if (scene == nullptr)
+		return;
+
+	scene->updateMap(this->getPosition(), eTiledObjectId::NONE_TILE);
 }

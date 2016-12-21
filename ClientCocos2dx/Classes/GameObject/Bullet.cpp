@@ -1,7 +1,8 @@
 #include "Bullet.h"
 #include "Base\SpriteManager.h"
 #include "GameObject\Explosion.h"
-#include "Base\Utils.h"
+
+#include "..\Server\Classes\Shared\Utils.h"
 
 Bullet::Bullet() : GameObject(eObjectId::BULLET),
 	_direction(eDirection::UP)

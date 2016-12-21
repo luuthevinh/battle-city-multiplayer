@@ -13,11 +13,15 @@ public:
 	~AStarMap();
 
 	void setValue(const Point& index, int value);
+	void refresh();
 
 	std::vector<MapNode*> findPath(MapNode* start, MapNode* target);
 	std::vector<MapNode*> findPath(const Point& start, const Point& end);
 	
 	MapNode* getNode(int x, int y);
+	MapNode* getRandomNodeHasValue(int value);
+
+	const Point& positionToIndex(const Point& position);
 
 private:
 	std::vector<MapNode*> _nodes;
@@ -29,6 +33,9 @@ private:
 	MapNode* minCostNode(std::vector<MapNode*>& nodes);
 	
 	bool canMove(MapNode* node);
+	bool canMoveRight(MapNode* node);
+	bool canMoveBottom(MapNode* node);
+	bool canMoveRightBottom(MapNode* node);
 };
 
 NAMESPACE_TANK_END

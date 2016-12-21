@@ -2,7 +2,9 @@
 #define __TANK_BOT_H__
 
 #include "Tank.h"
-#include "..\Shared\Map.h"
+#include "..\Shared\AStarMap.h"
+
+USING_NS_TANK
 
 class TankBot : public Tank
 {
@@ -16,14 +18,20 @@ public:
 	void setMap(tank::AStarMap* map);
 
 	virtual void onContactBegin(GameObject& object);
-
+	virtual void checkCollision(GameObject& other, float dt) override;
 private:
 	// ref
 	tank::AStarMap* _aStarMap;
 
 	std::queue<Vector2> _nextPostions;
 	
-	void findWay();
+	void findNewWay();
+	void moveNext(float dt);
+	void addCommand(eKeyInput input, bool begin = true);
+
+	Vector2 _oldPositon;
+
+	Point getRandomNextPostion();
 };
 
 

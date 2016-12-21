@@ -23,7 +23,9 @@ int Scene::addObject(GameObject * object)
 int Scene::addStaticObject(GameObject * object)
 {
 	_staticObjects.push_back(object);
+
 	object->setUniqueId(GameObject::getNextUniqueId());
+	object->setParentScene(this);
 
 	return object->getUniqueId();
 }

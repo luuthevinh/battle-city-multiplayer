@@ -276,7 +276,7 @@ void Server::sendDataToSocket(SOCKET socket)
 	if (_dataHandler->getSendQueue(socket) == nullptr || _dataHandler->getSendQueue(socket)->getIndex() <= 0)
 		return;
 
-	printf("size queue socket %d: %d bytes | time: %.2f\n", socket, _dataHandler->getSendQueue(socket)->getIndex(), _game->getGameTime()->getTotalTime());
+	//printf("size queue socket %d: %d bytes | time: %.2f\n", socket, _dataHandler->getSendQueue(socket)->getIndex(), _game->getGameTime()->getTotalTime());
 
 	DWORD sendBytes;
 	WSABUF dataBuffer;

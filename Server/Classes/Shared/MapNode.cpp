@@ -15,6 +15,14 @@ MapNode::~MapNode()
 {
 }
 
+void MapNode::clear()
+{
+	_distanceFromStart = 0;
+	_distanceFromTarget = 0;
+	_fCost = 0;
+	_parent = nullptr;
+}
+
 float MapNode::getDistanceFromStart() const
 {
 	return _distanceFromStart;
@@ -57,9 +65,19 @@ void MapNode::setParent(MapNode * node)
 	_parent = node;
 }
 
-Point MapNode::getIndex() const
+const Point & MapNode::getIndex() const
 {
 	return _index;
+}
+
+const Point & MapNode::getIndexInPosition() const
+{
+	Point position;
+
+	position.x = (_index.x + 1) * TILE_WIDTH;
+	position.y = WINDOW_HEIGHT - (_index.y + 1) * TILE_WIDTH;
+
+	return position;
 }
 
 void MapNode::setValue(int value)

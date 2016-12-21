@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 #include "Base\SceneManager.h"
-#include "Scene\Scene01.h"
+#include "Scene\PlayScene.h"
 #include "Base\ServerConverterFactory.h"
 #include "Server.h"
 
@@ -41,7 +41,7 @@ bool Game::init()
 	instance = this;
 
 	// add scene mới
-	SceneManager::getInstance()->addScene(new Scene01());
+	SceneManager::getInstance()->addScene(new PlayScene());
 
 	return true;
 }

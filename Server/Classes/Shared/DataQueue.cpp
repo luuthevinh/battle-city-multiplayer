@@ -1,4 +1,4 @@
-#include "DataQueue.h"
+﻿#include "DataQueue.h"
 
 using namespace std;
 
@@ -27,10 +27,15 @@ char* DataQueue::popFront(int size)
 	char* data = new char[size];
 	memcpy(data, _data, size);
 
-	// pop
-	memcpy(_data, _data + size, _size);
-	_index -= size;
+	// còn dữ liệu đằng sau mới copy lên, 
+	// ko thì chỉ cần chuyển con trỏ về đầu đc rồi
+	if (size < _index)
+	{
+		// pop
+		memcpy(_data, _data + size, _size);
+	}
 
+	_index -= size;
 	return data;
 }
 

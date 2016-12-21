@@ -1,17 +1,17 @@
-#ifndef __SCENE_01_H__
-#define __SCENE_01_H__
+#ifndef __PLAY_SCENE_H__
+#define __PLAY_SCENE_H__
 
 #include <vector>
 #include "..\Base\GameObject.h"
 #include "..\Base\Scene.h"
 
-#include "..\Shared\Map.h"
+#include "..\Shared\AStarMap.h"
 
-class Scene01 : public Scene
+class PlayScene : public Scene
 {
 public:
-	Scene01();
-	~Scene01();
+	PlayScene();
+	~PlayScene();
 
 	// Inherited via Scene
 	virtual bool init() override;
@@ -25,6 +25,10 @@ public:
 	virtual void sendInitDataTo(SOCKET socket) override;
 
 	virtual int addPlayer(int socketIndex) override;
+	
+	virtual void updateMap(const tank::Point& index, int value);
+	virtual void updateMap(const Vector2& position, int value);
+	tank::AStarMap* getMap();
 
 private:
 	void checkCollisionObjects(float dt);
@@ -36,4 +40,4 @@ private:
 };
 
 
-#endif // !__SCENE_01_H__
+#endif // !__PLAY_SCENE_H__

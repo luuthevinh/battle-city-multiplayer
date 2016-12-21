@@ -2,7 +2,6 @@
 #include "Bullet.h"
 #include "Base\SpriteManager.h"
 #include "Base\ServerConnector.h"
-#include "Base\Utils.h"
 
 // shared
 #include "..\Server\Classes\Shared\DataPacket.h"

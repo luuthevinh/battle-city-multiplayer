@@ -5,6 +5,7 @@
 #include "..\GameObject\Bullet.h"
 #include "..\Shared\Buffer.h"
 #include "..\Game.h"
+#include "..\Base\Scene.h"
 
 int GameObject::_nextUniqueId = 0;
 
@@ -264,4 +265,14 @@ int GameObject::getNextUniqueId()
 
 void GameObject::gotHit(Damage * damage)
 {
+}
+
+void GameObject::setParentScene(Scene * scene)
+{
+	_parentScene = scene;
+}
+
+Scene * GameObject::getParentScene()
+{
+	return _parentScene;
 }

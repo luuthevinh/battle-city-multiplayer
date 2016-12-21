@@ -8,6 +8,7 @@
 #include "..\GameObject\Damage.h"
 
 class AABB;
+class Scene;
 
 class GameObject : public Serializable
 {
@@ -71,9 +72,13 @@ public:
 	virtual int getPacketNumber() { return _lastPacketNumber; }
 	virtual void setPacketNumber(int number) { _lastPacketNumber = number; }
 
+	virtual void setParentScene(Scene* scene);
+	virtual Scene* getParentScene();
+
 protected:
 	Vector2 _position;
 	eDirection _direction;
+	Scene* _parentScene;
 
 	eObjectId _id;
 	eStatus _status;

@@ -1,6 +1,8 @@
 #include "Utils.h"
 
-float tank::lerp(float goal, float current, float delta)
+NAMESPACE_TANK_BEGIN
+
+float lerp(float goal, float current, float delta)
 {
 	float distance = goal - current;
 
@@ -12,3 +14,5 @@ float tank::lerp(float goal, float current, float delta)
 
 	return goal;
 }
+
+NAMESPACE_TANK_END

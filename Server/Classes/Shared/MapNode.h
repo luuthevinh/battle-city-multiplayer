@@ -25,6 +25,8 @@ public:
 	MapNode(int x, int y);
 	~MapNode();
 
+	void clear();
+
 	float getDistanceFromStart() const;
 	void setDistanceFromStart(float value);
 	
@@ -38,7 +40,8 @@ public:
 	MapNode* getParent() const;
 	void setParent(MapNode* node);
 
-	Point getIndex() const;
+	const Point& getIndex() const;
+	const Point& getIndexInPosition() const;
 
 	void setValue(int value);
 	int getValue() const;
@@ -53,18 +56,12 @@ public:
 		return (_index.x == other.getIndex().x) && (_index.y == other.getIndex().y);
 	}
 
-	bool operator== (MapNode* other)
-	{
-		return (_index.x == other->getIndex().x) && (_index.y == other->getIndex().y);
-	}
-
 private:
 	Point _index;
 	int _value;
 
 	float _distanceFromStart;		// G
 	float _distanceFromTarget;		// H
-
 	float _fCost;					// F
 
 	MapNode* _parent;

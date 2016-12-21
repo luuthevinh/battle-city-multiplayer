@@ -1,23 +1,23 @@
-﻿#include "Scene01.h"
+﻿#include "PlayScene.h"
 #include "..\Server.h"
 #include "..\GameObject\Wall.h"
 
 #include "..\Shared\DataPacket.h"
 #include "..\GameObject\MapLoader.h"
 #include "..\GameObject\TankBot.h"
-#include "..\Shared\Map.h"
+#include "..\Shared\AStarMap.h"
 
-Scene01::Scene01()
+PlayScene::PlayScene()
 {
 }
 
-Scene01::~Scene01()
+PlayScene::~PlayScene()
 {
 	delete _snapshot;
 	delete _aStarMap;
 }
 
-bool Scene01::init()
+bool PlayScene::init()
 {
 	auto loader = MapLoader::createWithTMX("Resources/map/map_01.tmx");
 	auto objects = loader->getObjectsInLayer("wall");
@@ -50,7 +50,7 @@ bool Scene01::init()
 	return true;
 }
 
-void Scene01::update(float dt)
+void PlayScene::update(float dt)
 {
 	this->checkCollisionObjects(dt);
 
@@ -78,7 +78,7 @@ void Scene01::update(float dt)
 	this->checkStatusObjects();
 }
 
-void Scene01::destroy()
+void PlayScene::destroy()
 {
 	while (!_gameObjects.empty())
 	{
@@ -99,7 +99,7 @@ void Scene01::destroy()
 	}
 }
 
-void Scene01::checkCollisionObjects(float dt)
+void PlayScene::checkCollisionObjects(float dt)
 {
 	std::vector<GameObject*> mergeList;
 	mergeList.insert(mergeList.end(), _gameObjects.begin(), _gameObjects.end());
@@ -126,7 +126,7 @@ void Scene01::checkCollisionObjects(float dt)
 	}
 }
 
-void Scene01::checkStatusObjects()
+void PlayScene::checkStatusObjects()
 {
 	// xóa object có status là die
 	for (auto it = _gameObjects.begin(); it != _gameObjects.end(); )
@@ -169,7 +169,7 @@ void Scene01::checkStatusObjects()
 	}
 }
 
-void Scene01::sendChangedObjects()
+void PlayScene::sendChangedObjects()
 {
 	// gửi object có thay đổi
 	for (auto object : _gameObjects)
@@ -200,12 +200,12 @@ void Scene01::sendChangedObjects()
 	}
 }
 
-void Scene01::updateSnapshot(Serializable * object)
+void PlayScene::updateSnapshot(Serializable * object)
 {
 	_snapshot->addObject(object);
 }
 
-void Scene01::handleData(Serializable * object)
+void PlayScene::handleData(Serializable * object)
 {
 	// player
 	auto player = this->getPlayer(object->getUniqueId());
@@ -215,7 +215,7 @@ void Scene01::handleData(Serializable * object)
 	}
 }
 
-void Scene01::sendInitDataTo(SOCKET socket)
+void PlayScene::sendInitDataTo(SOCKET socket)
 {
 	for (auto object : _gameObjects)
 	{
@@ -241,13 +241,31 @@ void Scene01::sendInitDataTo(SOCKET socket)
 	delete reppack;
 }
 
-int Scene01::addPlayer(int socketIndex)
+int PlayScene::addPlayer(int socketIndex)
 {
-
 	auto tankbot = new TankBot();
 	tankbot->setMap(_aStarMap);
 	tankbot->init();
 	this->addObject(tankbot);
 
 	return Scene::addPlayer(socketIndex);;
+}
+
+void PlayScene::updateMap(const tank::Point& index, int value)
+{
+	if (_aStarMap == nullptr)
+		return;
+
+	_aStarMap->setValue(index, value);
+}
+
+void PlayScene::updateMap(const Vector2 & position, int value)
+{
+	auto index = _aStarMap->positionToIndex(tank::Point(position.x, position.y));
+	this->updateMap(index, value);
+}
+
+tank::AStarMap * PlayScene::getMap()
+{
+	return _aStarMap;
 }

@@ -28,6 +28,8 @@ public:
 
 	bool operator<(const Vector2& v) const;
 
+	float lenght() const;
+
 	float x;
 	float y;
 

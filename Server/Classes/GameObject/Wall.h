@@ -22,6 +22,7 @@ private:
 	int _health;
 
 	void updateBoundingBox();
+	void updateMap();
 };
 
 #endif // !__WALL_H__
