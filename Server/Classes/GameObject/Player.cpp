@@ -17,41 +17,6 @@ int Player::getIndex()
 	return _index;
 }
 
-void Player::updateInput(eKeyInput input, bool start)
-{
-	if (start)
-	{
-		switch (input)
-		{
-		case KEY_LEFT:
-			//this->setDirection(eDirection::LEFT);
-			//this->addStatus(eStatus::RUNNING);
-			break;
-		case KEY_RIGHT:
-			//this->setDirection(eDirection::RIGHT);
-			//this->addStatus(eStatus::RUNNING);
-			break;
-		case KEY_UP:
-			//this->setDirection(eDirection::UP);
-			//this->addStatus(eStatus::RUNNING);
-			break;
-		case KEY_DOWN:
-			//this->setDirection(eDirection::DOWN);
-			//this->addStatus(eStatus::RUNNING);
-			break;
-		case KEY_SHOOT:
-			this->shoot();
-			break;
-		default:
-			break;
-		}
-	}
-	else
-	{
-		this->removeStatus(eStatus::RUNNING);
-	}
-}
-
 void Player::handleData(Serializable * data)
 {
 	auto type = data->getType();
@@ -71,7 +36,6 @@ void Player::handleData(Serializable * data)
 	{
 		if (auto command = dynamic_cast<CommandPacket*>(data))
 		{
-			//this->updateInput(command->input, command->begin);
 			_commandQueue.push(command);
 			//printf("push command(%d)\n", _commandQueue.size());
 		}

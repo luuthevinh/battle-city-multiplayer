@@ -1,5 +1,10 @@
 #include "Wall.h"
 #include "Base\SpriteManager.h"
+#include "Brick.h"
+#include "Steel.h"
+#include "Water.h"
+#include "Grass.h"
+#include "Ice.h"
 
 Wall::Wall(eObjectId id) : GameObject(id)
 {
@@ -15,7 +20,8 @@ Wall::~Wall()
 
 Wall * Wall::createWithType(eObjectId id)
 {
-	Wall* wall = new Wall(id);
+	Wall* wall = Wall::getNewWallById(id);
+
 	if (wall && wall->init())
 	{
 		wall->autorelease();
@@ -28,9 +34,17 @@ Wall * Wall::createWithType(eObjectId id)
 
 Wall * Wall::createWithBuffer(Buffer & buffer)
 {
-	Wall* wall = new Wall(buffer);
+	buffer.setBeginRead(0);
+	eDataType type = (eDataType)buffer.readInt();
+	if (type != eDataType::OBJECT)
+		return nullptr;
+
+	eObjectId objectId = (eObjectId)buffer.readInt();
+
+	Wall* wall = Wall::getNewWallById(objectId);
 	if (wall && wall->init())
 	{
+		wall->initWithBuffer(buffer);
 		wall->autorelease();
 		return wall;
 	}
@@ -41,7 +55,7 @@ Wall * Wall::createWithBuffer(Buffer & buffer)
 
 bool Wall::init()
 {
-	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_05.png");
+	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(this->getId()) + "_00.png");
 	this->addChild(_sprite);
 
 	auto body = PhysicsBody::createBox(_sprite->getContentSize(), PhysicsMaterial(0, 0, 0));
@@ -50,7 +64,7 @@ bool Wall::init()
 	body->getShapes().at(0)->setSensor(true);
 	body->setContactTestBitmask(0x1);
 
-	this->updateDirection();
+	_direction = eDirection::NONE;
 
 	return true;
 }
@@ -77,30 +91,27 @@ void Wall::updateWithStatus(eStatus status)
 	}
 }
 
-void Wall::setDirection(eDirection direction)
+Wall * Wall::getNewWallById(eObjectId id)
 {
-	GameObject::setDirection(direction);
-
-	this->updateDirection();
-}
-
-void Wall::updateDirection()
-{
-	switch (_direction)
+	switch (id)
 	{
-	case LEFT:
-		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_08.png");
+	case BRICK_WALL:
+		return new Brick();
 		break;
-	case UP:
-		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_09.png");
+	case STEEL_WALL:
+		return new Steel();
 		break;
-	case RIGHT:
-		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_06.png");
+	case GRASS_WALL:
+		return new Grass();
 		break;
-	case DOWN:
-		_sprite->setSpriteFrame(SpriteManager::getInstance()->getObjectName(eObjectId::BRICK_WALL) + "_07.png");
+	case ICE_WALL:
+		return new Ice();
 		break;
+	case WATER_WALL:
+		return new Water();
 	default:
 		break;
 	}
+
+	return nullptr;
 }

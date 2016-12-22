@@ -54,7 +54,11 @@ public:
 
 	virtual bool hasChanged() { return _hasChanged; }
 	virtual void onChanged(bool value = true) { _hasChanged = value; }
+
+	static int getNextId();
 protected:
+	static int _nextId;
+
 	Sprite* _sprite;
 
 	eObjectId _id;
@@ -78,6 +82,8 @@ protected:
 
 	void interpolate();
 	void updateLastBuffer(Buffer& buffer);
+
+	void initWithBuffer(Buffer& buffer);
 };
 
 

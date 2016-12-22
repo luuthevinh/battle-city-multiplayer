@@ -65,6 +65,8 @@ private:
 	void recieveDataFromAll();
 	void sendDataToAllWithTimeStep();
 
+	void sendRoomInfoToAllClients();
+
 };
 
 #endif // !__SERVER_H__

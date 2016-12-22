@@ -260,7 +260,8 @@ void GameObject::setBoundingBox(const Rect & box)
 
 int GameObject::getNextUniqueId()
 {
-	return _nextUniqueId++;
+	_nextUniqueId += 1;
+	return _nextUniqueId;
 }
 
 void GameObject::gotHit(Damage * damage)

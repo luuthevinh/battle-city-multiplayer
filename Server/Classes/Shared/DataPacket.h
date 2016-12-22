@@ -2,6 +2,7 @@
 #define __DATA_PACKET_H__
 
 #include "Serializable.h"
+#include <map>
 
 class CommandPacket : public Serializable
 {
@@ -57,6 +58,23 @@ public:
 
 	Type integerType;
 	int value;
+};
+
+class RoomInfo : public Serializable
+
+{
+public:
+	RoomInfo();
+	RoomInfo(Buffer &data);
+
+	// Inherited via Serializable
+	virtual Buffer * serialize() override;
+	virtual void deserialize(Buffer & data) override;
+
+	std::map<eObjectId, int> playerCounters;
+
+private:
+	int _totalSize;
 };
 
 #endif // !__DATA_PACKET_H__

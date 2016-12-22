@@ -23,7 +23,9 @@ ServerConnector * ServerConnector::getInstance()
 	return _instance;
 }
 
-ServerConnector::ServerConnector()
+ServerConnector::ServerConnector() : 
+	_connecting(false),
+	_isRunning(false)
 {
 }
 
@@ -88,6 +90,11 @@ bool ServerConnector::connectServer()
 	_connecting = true;
 
 	return true;
+}
+
+bool ServerConnector::isConnected()
+{
+	return _connecting;
 }
 
 int counter = 0;
@@ -155,7 +162,7 @@ void ServerConnector::closeConnection()
 
 void ServerConnector::sendData(SOCKET socket)
 {
-	if (_dataHandler->getSendQueue(_socket) == nullptr || _dataHandler->getSendQueue(_socket)->getIndex() <= 0)
+	if (!_connecting || _dataHandler->getSendQueue(_socket) == nullptr || _dataHandler->getSendQueue(_socket)->getIndex() <= 0)
 		return;
 
 	DWORD sendBytes;
@@ -180,6 +187,9 @@ void ServerConnector::sendData(SOCKET socket)
 
 void ServerConnector::send(Serializable * object)
 {
+	if (!_connecting)
+		return;
+
 	_dataHandler->sendTo(_socket, object);
 }
 

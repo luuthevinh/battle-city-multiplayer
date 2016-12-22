@@ -58,6 +58,11 @@ Serializable * ClientConverterFactory::convertNext()
 		ret = new WorldSnapshot(*buffer);
 		break;
 	}
+	case ROOM_INFO:
+	{
+		ret = new RoomInfo(*buffer);
+		break;
+	}
 	default:
 		break;
 	}

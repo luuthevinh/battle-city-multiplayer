@@ -39,33 +39,90 @@ bool WaitingScene::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto connector = ServerConnector::getInstance();
-	connector->init(PORT, SERVER_ADD);
-
-	connector->connectServer();
-
-	_playLayer = ServerPlayScene::create();
-	_playLayer->retain();
+	//_playLayer = ServerPlayScene::create();
+	//_playLayer->retain();
 
 	this->scheduleUpdate();
 
-	auto message = Label::createWithTTF("LOADING...", "/fonts/pixel.ttf", 15.0f);
-	message->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 128);
-	message->setName("message");
-	this->addChild(message);
+	auto background = Sprite::createWithSpriteFrameName("waiting_scene_bg.png");
+	background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(background);
 
-	auto teamYellow = Label::createWithTTF("YELLOW TANK", "/fonts/pixel.ttf", 24.0f);
-	teamYellow->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
-	this->addChild(teamYellow);
+	_textField = ui::TextField::create("Enter your name...", "/fonts/pixel.ttf", 21.0f);
+	_textField->setAnchorPoint(Vec2(0.0f, 1.0f));
+	_textField->setTextAreaSize(Size(325, 36));
+	_textField->setPosition(Vec2(45, 512 - 58));
+	_textField->addEventListener(CC_CALLBACK_2(WaitingScene::nameTextFieldEvent, this));
+	this->addChild(_textField);
 
-	auto teamGreen = Label::createWithTTF("GREEN TANK", "/fonts/pixel.ttf", 24.0f);
-	teamGreen->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 32);
-	this->addChild(teamGreen);
+	_pointerInput = Sprite::createWithSpriteFrameName("arrowBtn.png");
+	_pointerInput->setPosition(_textField->getPositionX() - 16, _textField->getPositionY() - 16);
+	_pointerInput->setVisible(false);
+	_pointerInput->setScaleX(-1.0f);
+	this->addChild(_pointerInput);
 
-	_cursor = TankCursor::create();
-	_cursor->addPosition(0, Vec2(teamYellow->getPosition().x - 128, teamYellow->getPosition().y));
-	_cursor->addPosition(1, Vec2(teamGreen->getPosition().x - 128, teamGreen->getPosition().y));
-	this->addChild(_cursor);
+	// play btn
+	auto joinBtn = ui::Button::create("joinBtn.png", "joinBtn_selected.png");
+	joinBtn->setPosition(Vec2(429, 512 - 70));
+	joinBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::joinBtnTouchEvent, this));
+	this->addChild(joinBtn);
+
+	// play bt
+	auto playBtn = ui::Button::create("playBtn.png", "playBtn_selected.png");
+	playBtn->setPosition(Vec2(429, 512 - 141));
+	playBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::playBtnTouchEvent, this));
+	this->addChild(playBtn);
+
+	// back btn
+	auto backBtn = ui::Button::create("backBtn.png", "backBtn_selected.png");
+	backBtn->setPosition(Vec2(429, 512 - 182));
+	backBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::backBtnTouchEvent, this));
+	this->addChild(backBtn);
+
+	// number
+	_yellowTankNumber = Label::createWithTTF("0", "/fonts/pixel.ttf", 21.0f);
+	_yellowTankNumber->setPosition(92, 512 - 265);
+	this->addChild(_yellowTankNumber);
+
+	_greenTankNumber = Label::createWithTTF("0", "/fonts/pixel.ttf", 21.0f);
+	_greenTankNumber->setPosition(256, 512 - 265);
+	this->addChild(_greenTankNumber);
+
+	_whiteTankNumber = Label::createWithTTF("0", "/fonts/pixel.ttf", 21.0f);
+	_whiteTankNumber->setPosition(418, 512 - 265);
+	this->addChild(_whiteTankNumber);
+
+	// bot btn
+	auto decreaseBtn = ui::Button::create("arrowBtn.png", "arrowBtn_selected.png");
+	decreaseBtn->setPosition(Vec2(390, _whiteTankNumber->getPositionY()));
+	decreaseBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::decreaseBtnTouchEvent, this));
+	this->addChild(decreaseBtn);
+
+	auto increaseBtn = ui::Button::create("arrowBtn.png", "arrowBtn_selected.png");
+	increaseBtn->setScaleX(-1.0f);
+	increaseBtn->setPosition(Vec2(448, _whiteTankNumber->getPositionY()));
+	increaseBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::increaseBtnTouchEvent, this));
+	this->addChild(increaseBtn);
+
+	// tank btn
+	auto yellowTankBtn = ui::Button::create("tank_01.png", "tank_01.png");
+	yellowTankBtn->setPosition(Vec2(_yellowTankNumber->getPositionX(), 512 - 315));
+	yellowTankBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::whiteBtnTouchEvent, this));
+	this->addChild(yellowTankBtn);
+
+	auto greenTankBtn = ui::Button::create("tank_green_01.png", "tank_green_01.png");
+	greenTankBtn->setPosition(Vec2(_greenTankNumber->getPositionX(), yellowTankBtn->getPositionY()));
+	greenTankBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::greenBtnTouchEvent, this));
+	this->addChild(greenTankBtn);
+
+	auto whiteTankBtn = ui::Button::create("tank_white_01.png", "tank_white_01.png");
+	whiteTankBtn->setPosition(Vec2(_whiteTankNumber->getPositionX(), yellowTankBtn->getPositionY()));
+	this->addChild(whiteTankBtn);
+
+	_pointerPlayerSelect = Sprite::createWithSpriteFrameName("arrowBtn.png");
+	_pointerPlayerSelect->setPosition(yellowTankBtn->getPositionX(), yellowTankBtn->getPositionY() - 20);
+	_pointerPlayerSelect->setRotation(90.0f);
+	this->addChild(_pointerPlayerSelect);
 
 	// listener
 	auto keyboardListener = EventListenerKeyboard::create();
@@ -81,49 +138,98 @@ void WaitingScene::update(float dt)
 	ServerConnector::getInstance()->update(dt);
 
 	this->handleData();
-
-	//
-	auto message = (Label*)this->getChildByName("message");
-	auto messStr = String::createWithFormat("LOADING FROM SERVER: %d", _playLayer->getChildren().size());
-	message->setString(messStr->getCString());
-
-	// demo
-	if (_isReady && message->getString().compare("READY") != 0)
-	{
-		message->setString("READY! PRESS ENTER TO PLAY.");
-	}
 }
 
 void WaitingScene::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 {
-	if (keycode == EventKeyboard::KeyCode::KEY_ENTER)
+	//if (keycode == EventKeyboard::KeyCode::KEY_ENTER)
+	//{
+	//	if (!_isReady)
+	//		return;
+
+	//	auto index = _cursor->getCurrentIndex();
+	//	switch (index)
+	//	{
+	//	case 0:
+	//	{
+	//		this->createPlayer(eObjectId::YELLOW_TANK);
+	//		break;
+	//	}
+	//	case 1:
+	//	{
+	//		this->createPlayer(eObjectId::GREEN_TANK);
+	//		break;
+	//	}
+	//	default:
+	//		break;
+	//	}
+
+	//	this->gotoPlayScene();
+	//}
+
+}
+
+void WaitingScene::nameTextFieldEvent(Ref * pSender, cocos2d::ui::TextField::EventType type)
+{
+	switch (type)
 	{
-		if (!_isReady)
-			return;
-
-		auto index = _cursor->getCurrentIndex();
-		switch (index)
-		{
-		case 0:
-		{
-			this->createPlayer(eObjectId::YELLOW_TANK);
-			break;
-		}
-		case 1:
-		{
-			this->createPlayer(eObjectId::GREEN_TANK);
-			break;
-		}
-		default:
-			break;
-		}
-
-		this->gotoPlayScene();
+	case cocos2d::ui::TextField::EventType::ATTACH_WITH_IME:
+		_pointerInput->setVisible(true);
+		break;
+	case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
+		_pointerInput->setVisible(false);
+		break;
+	case cocos2d::ui::TextField::EventType::INSERT_TEXT:
+		break;
+	case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
+		break;
+	default:
+		break;
 	}
+}
+
+void WaitingScene::playBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+{
+	this->gotoPlayScene();
+}
+
+void WaitingScene::backBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+{
+}
+
+void WaitingScene::joinBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+{
+	auto connector = ServerConnector::getInstance();
+	if (!connector->isConnected())
+	{
+		connector->init(PORT, SERVER_ADD);
+		connector->connectServer();
+	}
+}
+
+void WaitingScene::decreaseBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+{
+}
+
+void WaitingScene::increaseBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+{
+}
+
+void WaitingScene::whiteBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+{
+	_pointerPlayerSelect->setPositionX(((ui::Button*)sender)->getPositionX());
+}
+
+void WaitingScene::greenBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+{
+	_pointerPlayerSelect->setPositionX(((ui::Button*)sender)->getPositionX());
 }
 
 void WaitingScene::handleData()
 {
+	if (!ServerConnector::getInstance()->isConnected())
+		return;
+
 	auto data = ServerConnector::getInstance()->getFactory()->convertNext();
 	if (data == nullptr)
 		return;
@@ -134,22 +240,15 @@ void WaitingScene::handleData()
 	{
 	case eDataType::OBJECT:
 	{
-		GameObject* gameObject = dynamic_cast<GameObject*>(data);
-		if (gameObject->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
-		{
-			return;
-		}
+		Player* gameObject = dynamic_cast<Player*>(data);
 		if (gameObject)
 		{
-			auto object = _playLayer->getChildByTag(gameObject->getUniqueId());
-			if (object == nullptr)
+			if (gameObject->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
 			{
-				_playLayer->addChild(gameObject);
 				return;
 			}
-
-			((GameObject*)object)->deserialize(*data->serialize());
 		}
+
 		break;
 	}
 	case eDataType::REPLY_ID:
@@ -170,6 +269,41 @@ void WaitingScene::handleData()
 				return;
 			}
 		}
+		break;
+	}
+	case eDataType::ROOM_INFO:
+	{
+		RoomInfo* packet = (RoomInfo*)data;
+		if (packet)
+		{
+			for (auto it = packet->playerCounters.begin(); it != packet->playerCounters.end(); it++)
+			{
+				switch (it->first)
+				{
+				case eObjectId::GREEN_TANK:
+				{
+					auto str = StringUtils::format("%d", it->second);
+					_greenTankNumber->setString(str);
+					break;
+				}
+				case eObjectId::YELLOW_TANK:
+				{
+					auto str = StringUtils::format("%d", it->second);
+					_yellowTankNumber->setString(str);
+					break;
+				}
+				case eObjectId::WHITE_TANK:
+				{
+					auto str = StringUtils::format("%d", it->second);
+					_whiteTankNumber->setString(str);
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		}
+		break;
 	}
 	default:
 		break;
@@ -178,10 +312,8 @@ void WaitingScene::handleData()
 
 void WaitingScene::gotoPlayScene()
 {
-	auto playScene = ServerPlayScene::createSceneWithLayer(_playLayer);
+	auto playScene = ServerPlayScene::createScene();
 	Director::getInstance()->replaceScene(playScene);
-
-	_playLayer->release();
 }
 
 void WaitingScene::createPlayer(eObjectId id)
@@ -206,7 +338,7 @@ void WaitingScene::createPlayer(eObjectId id)
 	player->setTag(ServerConnector::getInstance()->getUniqueId());
 	player->setName("player");
 
-	_playLayer->addChild(player);
+	// _playLayer->addChild(player);
 
 	// gửi info object lại
 	ServerConnector::getInstance()->send(player);

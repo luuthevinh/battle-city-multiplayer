@@ -17,6 +17,8 @@ int GameObject::INDEX_POSITION_X_BUFFER = 17;
 int GameObject::INDEX_POSITION_Y_BUFFER = 21;
 int GameObject::INDEX_TIME_BUFFER = 25;
 
+int GameObject::_nextId = 0;
+
 GameObject * GameObject::createWithBuffer(Buffer & buffer)
 {
 	buffer.setBeginRead(0);
@@ -74,16 +76,9 @@ GameObject::GameObject(eObjectId id) :
 	_lifeTime = 0.0f;
 }
 
-GameObject::GameObject(Buffer& buffer) : 
-	_previousBuffer(nullptr),
-	_lastBuffer(nullptr)
+GameObject::GameObject(Buffer& buffer)
 {
-	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
-	this->deserialize(buffer);
-
-	buffer.setBeginRead(buffer.getSize() - sizeof(int));
-
-	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
+	this->initWithBuffer(buffer);
 }
 
 GameObject::~GameObject()
@@ -214,17 +209,23 @@ void GameObject::update(float dt)
 {
 }
 
+int GameObject::getNextId()
+{
+	_nextId += 1;
+	return _nextId;
+}
+
 void GameObject::interpolate()
 {
 	if (_lastBuffer == nullptr || _previousBuffer == nullptr)
 		return;
 
-	_lastBuffer->setBeginRead(17);
+	_lastBuffer->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
 	float x = _lastBuffer->readFloat();
 	float y = _lastBuffer->readFloat();
 	Vec2 lastPos = Vec2(x, y);
 
-	_previousBuffer->setBeginRead(17);
+	_previousBuffer->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
 	x = _previousBuffer->readFloat();
 	y = _previousBuffer->readFloat();
 	Vec2 prevPos = Vec2(x, y);
@@ -241,4 +242,17 @@ void GameObject::updateLastBuffer(Buffer & buffer)
 
 	_previousBuffer = _lastBuffer;
 	_lastBuffer = buffer.clone();
+}
+
+void GameObject::initWithBuffer(Buffer & buffer)
+{
+	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
+	this->deserialize(buffer);
+
+	buffer.setBeginRead(buffer.getSize() - sizeof(int));
+
+	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
+
+	_previousBuffer = nullptr;
+	_lastBuffer = nullptr;
 }

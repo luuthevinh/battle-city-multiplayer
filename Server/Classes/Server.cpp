@@ -267,6 +267,28 @@ void Server::sendDataToAllWithTimeStep()
 	//printf("send data at time: %.2f\n", _lastTime);
 }
 
+void Server::sendRoomInfoToAllClients()
+{
+	// player info
+	auto allPlayers = _clientManager->getAllPlayers();
+	auto infopacket = new RoomInfo();
+
+	for (auto player : allPlayers)
+	{
+		if (infopacket->playerCounters.find(player->getId()) == infopacket->playerCounters.end())
+		{
+			infopacket->playerCounters[player->getId()] = 1;
+			continue;
+		}
+
+		infopacket->playerCounters.at(player->getId()) += 1;
+	}
+
+	this->send(infopacket);
+
+	delete infopacket;
+}
+
 void Server::sendDataToSocket(SOCKET socket)
 {
 	if (socket == 0)
@@ -276,7 +298,7 @@ void Server::sendDataToSocket(SOCKET socket)
 	if (_dataHandler->getSendQueue(socket) == nullptr || _dataHandler->getSendQueue(socket)->getIndex() <= 0)
 		return;
 
-	//printf("size queue socket %d: %d bytes | time: %.2f\n", socket, _dataHandler->getSendQueue(socket)->getIndex(), _game->getGameTime()->getTotalTime());
+	printf("size queue socket %d: %d bytes | time: %.2f\n", socket, _dataHandler->getSendQueue(socket)->getIndex(), _game->getGameTime()->getTotalTime());
 
 	DWORD sendBytes;
 	WSABUF dataBuffer;
@@ -319,11 +341,11 @@ void Server::addConnection(SOCKET socket)
 	int index = _clientManager->addClient(socket);
 
 	// tạo player
-	int tag = SceneManager::getInstance()->getCurrentScene()->addPlayer(index);
+	// int tag = SceneManager::getInstance()->getCurrentScene()->addPlayer(index);
 
 	// reply lại id trong server
 	ReplyPacket* rep = new ReplyPacket();
-	rep->setUniqueId(tag);
+	rep->setUniqueId(GameObject::getNextUniqueId());
 	rep->beginTime = _game->getGameTime()->getTotalTime();
 
 	_dataHandler->sendTo(socket, rep);
@@ -331,7 +353,9 @@ void Server::addConnection(SOCKET socket)
 	delete rep;
 
 	// send dữ liệu khởi tạo
-	SceneManager::getInstance()->getCurrentScene()->sendInitDataTo(socket);
+	// SceneManager::getInstance()->getCurrentScene()->sendInitDataTo(socket);
+
+	this->sendRoomInfoToAllClients();
 
 	printf("new connection: %d\n", socket);
 }

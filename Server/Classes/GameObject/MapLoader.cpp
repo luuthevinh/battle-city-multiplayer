@@ -1,6 +1,6 @@
 #include "MapLoader.h"
 #include "Wall.h"
-
+#include "..\Shared\Converter.h"
 MapLoader::MapLoader()
 {
 }
@@ -57,13 +57,12 @@ std::vector<GameObject*> MapLoader::getObjectsInLayer(const char * name)
 		switch (id)
 		{
 		case 1:
-		{
-			object = Wall::createWithPosition(eObjectId::BRICK_WALL, position);
-			break;
-		}
 		case 2:
+		case 3:
+		case 4:
+		case 5:
 		{
-			object = Wall::createWithPosition(eObjectId::STEEL_WALL, position);
+			object = Wall::createWithPosition(tank::Converter::tiledIdToObjectId(id), position);
 			break;
 		}
 		default:

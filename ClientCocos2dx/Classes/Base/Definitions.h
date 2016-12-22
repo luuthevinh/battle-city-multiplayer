@@ -19,6 +19,6 @@ enum eSpriteId
 	SPRITE_BULLET
 };
 
-#define DEFAULT_ANIMATION_TIME 0.1
+#define DEFAULT_ANIMATION_TIME 0.16
 
 #endif // !__DEFINITIONS_H__

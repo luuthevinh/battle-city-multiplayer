@@ -142,6 +142,7 @@
     <ClInclude Include="..\Classes\Scene\PlayScene.h" />
     <ClInclude Include="..\Classes\Server.h" />
     <ClInclude Include="..\Classes\Shared\Buffer.h" />
+    <ClInclude Include="..\Classes\Shared\Converter.h" />
     <ClInclude Include="..\Classes\Shared\ConverterFactory.h" />
     <ClInclude Include="..\Classes\Shared\DataHandler.h" />
     <ClInclude Include="..\Classes\Shared\DataPacket.h" />

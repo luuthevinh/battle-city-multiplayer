@@ -41,34 +41,23 @@ public:
 
 protected:
 	float _velocity;
-	float _remainMoveForTurn;
-
 	int _bulletCounter;
 
 	eTankLevel _tankLevel;
 
-	std::vector<eDirection> _inputTurns;
-
+	eDirection _oldDirection;
 	eDirection _collidingSide;
 	std::map<eDirection, int> _objectCollidingCounter;
 
 	void updatePosition(float dt);
-	void updatePosition(float dt, float velocity);
+	void fixPositionForTurn();
+
 	void updateBoundingBoxPosition();
-	void updateWithInputQueue(float dt);
 
-	void turnWithInputQueue(float dt);
-
-	void generateInput(eDirection direction, int number);
-
-	void move(float distance);
+	void moveByDistance(float distance);
 
 	void checkCollidingSide(GameObject& other);
 	bool isCollidingAtSide(eDirection side);
-
-	eDirection getDirectionInQueue();
-
-	void updateDirection(eDirection direction);
 
 	int getMaxBullet();
 

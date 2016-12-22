@@ -4,6 +4,7 @@
 #include "..\Base\SceneManager.h"
 
 #include "..\Shared\Utils.h"
+#include "..\Shared\Converter.h"
 
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0),
@@ -33,19 +34,11 @@ bool Tank::init()
 	_collisionChecker = new AABB();
 	_collisionChecker->setOffset(2);
 
-	_inputTurns.push_back(_direction);
-
-	_remainMoveForTurn = 0.0f;
-
 	return true;
 }
 
 void Tank::update(float dt)
 {
-	this->turnWithInputQueue(dt);
-
-	this->updateWithInputQueue(dt);
-
 	this->updatePosition(dt);
 
 	this->updateBoundingBoxPosition();
@@ -66,8 +59,6 @@ void Tank::updatePosition(float dt)
 		if (_velocity != 0)
 		{
 			_velocity = 0;
-
-			_inputTurns.clear();
 		}
 	}
 	else
@@ -97,16 +88,6 @@ void Tank::updatePosition(float dt)
 	}
 }
 
-void Tank::updatePosition(float dt, float distance)
-{
-	if (distance != 0)
-	{
-		this->onChanged();
-	}
-
-	this->move(distance);
-}
-
 void Tank::updateBoundingBoxPosition()
 {
 	// update bounding box
@@ -114,87 +95,11 @@ void Tank::updateBoundingBoxPosition()
 	_boudingBox.position.y = this->getPosition().y - _boudingBox.height / 2;
 }
 
-void Tank::turnWithInputQueue(float dt)
-{
-	if (_inputTurns.size() <= 0 || _remainMoveForTurn > 0)
-		return;
-
-	eDirection direction = _inputTurns.back();
-
-	if (direction == eDirection::NONE || _direction == direction)
-	{
-		return;
-	}
-
-	// nếu mà ko có va chạm hướng đó hoặc va chạm hơn 2 cái thì update direction luôn
-	if (!this->isCollidingAtSide(direction) || _objectCollidingCounter.at(direction) > 1)
-	{
-		this->updateDirection(direction);
-		return;
-	}
-
-	auto position = this->getPosition();
-	
-	int unit = 16;
-	float integral = 0.0f;
-	float fractionalX = 0.0f;	// phần lẻ sau dấu phẩy của vị trí ban đầu
-	fractionalX = modf(position.x, &integral);
-	float remainX = unit - (((int)integral % unit) + fractionalX);
-
-	float integralY = 0.0f;
-	float fractionalY = 0.0f;
-	fractionalY = modf(position.y, &integralY);
-	float remainY = unit - (((int)integralY % unit) + fractionalY);
-
-	if (fractionalX < fractionalY)
-	{
-		_remainMoveForTurn = remainX;
-	}
-	else
-	{
-		_remainMoveForTurn = remainY;
-	}
-
-	_inputTurns.clear();
-	_inputTurns.push_back(direction);
-	_inputTurns.push_back(_direction);
-
-	// printf("begin remain: %.2f, current dir: %d, dir: %d\n", _remainMoveForTurn, _direction, direction);
-
-	return;
-}
-
-void Tank::updateWithInputQueue(float dt)
-{
-	auto direction = this->getDirectionInQueue();
-	this->updateDirection(direction);
-}
-
-void Tank::generateInput(eDirection direction, int number)
-{
-	for (int i = 0; i < number; i++)
-	{
-		_inputTurns.push_back(direction);
-	}
-}
-
-void Tank::move(float distance)
+void Tank::moveByDistance(float distance)
 {
 	if (this->isCollidingAtSide(_direction) || distance == 0)
 		return;
 
-	if (_remainMoveForTurn > distance)
-	{
-		_remainMoveForTurn -= distance;
-		printf("remain: %.2f\n", _remainMoveForTurn);
-	}
-	else if (_remainMoveForTurn > 0.0f)
-	{
-		distance = _remainMoveForTurn;
-		_remainMoveForTurn = 0.0f;
-		printf("end: %.2f\n", _remainMoveForTurn);
-	}
-	
 	switch (_direction)
 	{
 	case LEFT:
@@ -231,27 +136,6 @@ void Tank::checkCollidingSide(GameObject& other)
 bool Tank::isCollidingAtSide(eDirection side)
 {
 	return (_collidingSide & side) == side;
-}
-
-eDirection Tank::getDirectionInQueue()
-{
-	if (_inputTurns.size() == 0)
-		return _direction;
-
-	auto ret = _inputTurns.back();
-
-	if(_remainMoveForTurn == 0)
-		_inputTurns.pop_back();
-
-	return ret;
-}
-
-void Tank::updateDirection(eDirection direction)
-{
-	if (_direction == direction)
-		return;
-
-	_direction = direction;
 }
 
 int Tank::getMaxBullet()
@@ -328,19 +212,15 @@ void Tank::checkCollision(GameObject & other, float dt)
 	if (time < 1.0f)
 	{
 		float distance = (_velocity * dt) * time;
-		this->updatePosition(dt, distance);
+
+		this->moveByDistance(distance);
+
+		this->removeStatus(eStatus::RUNNING);
+		
 		this->onContactBegin(other);
-
-		// ko cho chạy nữa
-		if (_inputTurns.size() == 0)
-		{
-			this->removeStatus(eStatus::RUNNING);
-		}
-
 		this->onChanged();
 	}
 	
-
 	float moveX, moveY;
 
 	if (_collisionChecker->isColliding(this->getBoundingBox(), other.getBoundingBox(), moveX, moveY, dt))
@@ -351,10 +231,12 @@ void Tank::checkCollision(GameObject & other, float dt)
 
 void Tank::setDirection(eDirection direction)
 {
-	if (_inputTurns.empty())
+	if (_direction != direction)
 	{
-		_inputTurns.push_back(direction);
+		_oldDirection = _direction;
 	}
+
+	_direction = direction;
 }
 
 void Tank::setNumberOfBullets(int number)
@@ -419,8 +301,78 @@ void Tank::move(eDirection direction, float dt)
 	this->addStatus(eStatus::RUNNING);
 	_velocity = TANK_NORMAL_VELOCITY;
 
-	this->move(_velocity * dt);
+	// fix position for turning
+	this->fixPositionForTurn();
+
+	this->moveByDistance(_velocity * dt);
 }
+
+void Tank::fixPositionForTurn()
+{
+	if (_oldDirection == _direction)
+		return;
+
+	if (!this->isCollidingAtSide(_direction) || _objectCollidingCounter.at(_direction) > 1)
+		return;
+
+	switch (_oldDirection)
+	{
+	case LEFT:
+	case RIGHT:
+	{
+		if (_direction == eDirection::LEFT || _direction == eDirection::RIGHT)
+			return;
+		break;
+	}
+	case UP:
+	case DOWN:
+	{
+		if (_direction == eDirection::UP || _direction == eDirection::DOWN)
+			return;
+		break;
+	}
+	default:
+		break;
+	}
+
+	auto position = this->getPosition();
+
+	// lúc này đã bỏ phần dư rồi, nên lúc sau ko cần trừ nữa
+	auto x = (int)(position.x) / TILE_WIDTH;
+	auto y = (int)(position.y) / TILE_WIDTH;
+
+	switch (_oldDirection)
+	{
+	case eDirection::UP:
+	{
+		if ((int)(position.y) % TILE_WIDTH != 0)
+		{
+			y++;
+		}
+		break;
+	}
+	case eDirection::RIGHT:
+	{
+		if ((int)(position.x) % TILE_WIDTH != 0)
+		{
+			x++;
+		}
+		break;
+	}
+	case eDirection::DOWN:
+		break;
+	case eDirection::LEFT:
+		break;
+	default:
+		break;
+	}
+
+	auto newPos = Vector2(TILE_WIDTH * (x), TILE_WIDTH * (y));
+	this->setPosition(newPos);
+
+	_oldDirection = _direction;
+}
+
 
 void Tank::shoot()
 {

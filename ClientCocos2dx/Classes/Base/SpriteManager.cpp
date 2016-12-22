@@ -74,6 +74,9 @@ void SpriteManager::initAnimate()
 			"explosion_03.png",
 			"explosion_04.png",
 			NULL));
+
+	// nước
+	this->_animates[_objectNames[eObjectId::WATER_WALL]].push_back(createAniamte("water_01.png", "water_02.png", nullptr));
 }
 
 // Khởi tạo cho mỗi eSpriteId một Sprite
@@ -99,6 +102,9 @@ void SpriteManager::mappingNames()
 
 	_objectNames[eObjectId::STEEL_WALL] = "steel";
 	_objectNames[eObjectId::BRICK_WALL] = "brick";
+	_objectNames[eObjectId::GRASS_WALL] = "grass";
+	_objectNames[eObjectId::ICE_WALL] = "ice";
+	_objectNames[eObjectId::WATER_WALL] = "water";
 }
 
 Animate* SpriteManager::createAniamte(char* frameName, ...)

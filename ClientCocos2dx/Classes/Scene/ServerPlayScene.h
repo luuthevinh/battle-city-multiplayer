@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "cocos2d.h"
+#include "..\Server\Classes\Shared\SharedDefinitions.h"
 
 class WorldSnapshot;
 
@@ -15,6 +16,7 @@ public:
 	~ServerPlayScene();
 
 	static Scene* createSceneWithLayer(Layer* layer);
+	static Scene* createScene();
 
 	CREATE_FUNC(ServerPlayScene);
 
@@ -25,6 +27,9 @@ public:
 
 private:
 	std::vector<WorldSnapshot*> _snapshots;
+
+	void initWithTMX();
+	void addWall(const Vec2& position, eObjectId id);
 };
 
 #endif // !__SERVER_PLAY_SCENE_H__

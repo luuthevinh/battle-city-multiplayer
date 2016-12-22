@@ -70,7 +70,7 @@ void TankBot::findNewWay()
 
 		auto target = this->getRandomNextPostion();
 		auto index = _aStarMap->positionToIndex(target);
-		printf("Next target: (%d, %d) index (%d, %d)\n", target.x, target.y, index.x, index.y);
+		// printf("Next target: (%d, %d) index (%d, %d)\n", target.x, target.y, index.x, index.y);
 
 		auto result = _aStarMap->findPath(tank::Point(current.x, current.y), target);
 
@@ -91,19 +91,19 @@ void TankBot::moveNext(float dt)
 	auto delta = nextPostion - current;
 	if (delta.x > 0)
 	{
-		this->updateDirection(eDirection::RIGHT);
+		this->setDirection(eDirection::RIGHT);
 	}
 	else if (delta.x < 0)
 	{
-		this->updateDirection(eDirection::LEFT);
+		this->setDirection(eDirection::LEFT);
 	}
 	else if (delta.y < 0)
 	{
-		this->updateDirection(eDirection::DOWN);
+		this->setDirection(eDirection::DOWN);
 	}
 	else if (delta.y > 0)
 	{
-		this->updateDirection(eDirection::UP);
+		this->setDirection(eDirection::UP);
 	}
 
 	float y = tank::lerp(nextPostion.y, current.y, 1.0f);

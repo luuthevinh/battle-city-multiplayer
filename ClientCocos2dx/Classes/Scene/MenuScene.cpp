@@ -1,5 +1,6 @@
 #include "MenuScene.h"
 #include "WaitingScene.h"
+#include "ServerPlayScene.h"
 #include "Base\SpriteManager.h"
 
 MenuScene::MenuScene()

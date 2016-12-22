@@ -90,6 +90,21 @@
     <ClCompile Include="..\..\Server\Classes\Shared\Utils.cpp">
       <Filter>src\Shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Water.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Ice.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Grass.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Steel.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Brick.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -165,6 +180,24 @@
       <Filter>src\Shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Server\Classes\Shared\Utils.h">
+      <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Water.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Ice.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Grass.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Steel.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Brick.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Classes\Shared\Converter.h">
       <Filter>src\Shared</Filter>
     </ClInclude>
   </ItemGroup>

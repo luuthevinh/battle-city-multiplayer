@@ -12,12 +12,12 @@ public:
 
 	int getIndex();
 
-	void updateInput(eKeyInput input, bool start);
-
 	virtual void handleData(Serializable* data) override;
 
 private:
 	int _index;		// index socket trong client manager
+
+	//void updateInput(eKeyInput input, bool start);
 };
 
 #endif // !__PLAYER_SERVER_H__

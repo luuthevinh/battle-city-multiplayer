@@ -48,6 +48,8 @@ bool Player::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+	_enableSync = false;
+
 	return true;
 }
 
@@ -195,11 +197,27 @@ void Player::reconcile(Buffer & data)
 	float x = data.readFloat();
 	float y = data.readFloat();
 
+	//_enableSync = true;
 	_lastUpdatedPosition = Vec2(x, y);
-	//this->setPosition(actualPosition);
+	
+	// this->setPosition(x, y);
 
 	//this->updateLastBuffer(data);
 	this->deserialize(data);
+
+	//auto time = data.readFloat();
+	//for (auto i = 0; i < _pendingBuffer.size(); i++)
+	//{
+	//	_pendingBuffer[i]->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+	//	auto x = _pendingBuffer[i]->readFloat();
+	//	auto y = _pendingBuffer[i]->readFloat();
+	//	auto t = _pendingBuffer[i]->readFloat();
+
+	//	if (t >= time)
+	//	{
+	//		_lastUpdatedPosition = Vec2(x, y);
+	//	}
+	//}
 
 	//if (_pendingBuffer.size() <= 0)
 	//{
@@ -227,29 +245,34 @@ void Player::reconcile(Buffer & data)
 	//	delete _pendingBuffer.front();
 	//	_pendingBuffer.pop_front();
 	//}
+
+	//_pendingBuffer.clear();
 }
 
 void Player::updateWithCommand(CommandPacket * commad, float dt)
 {
 	Tank::updateWithCommand(commad, dt);
 
-	//this->addToPendingBuffer();
+	// this->addToPendingBuffer();
+
+	if (!this->hasStatus(eStatus::RUNNING))
+		return;
 
 	switch (_direction)
 	{
 	case NONE:
 		break;
 	case LEFT:
-		_lastUpdatedPosition.x -= TANK_NORMAL_VELOCITY * dt;
+		_lastUpdatedPosition.x -= _velocity * dt;
 		break;
 	case UP:
-		_lastUpdatedPosition.y += TANK_NORMAL_VELOCITY * dt;
+		_lastUpdatedPosition.y += _velocity * dt;
 		break;
 	case RIGHT:
-		_lastUpdatedPosition.x += TANK_NORMAL_VELOCITY * dt;
+		_lastUpdatedPosition.x += _velocity * dt;
 		break;
 	case DOWN:
-		_lastUpdatedPosition.y -= TANK_NORMAL_VELOCITY * dt;
+		_lastUpdatedPosition.y -= _velocity * dt;
 		break;
 	default:
 		break;
@@ -258,6 +281,9 @@ void Player::updateWithCommand(CommandPacket * commad, float dt)
 
 void Player::syncPositionWithLastUpdate(float dt)
 {
+	if (!this->hasStatus(eStatus::RUNNING))
+		return;
+
 	if (_lastUpdatedPosition != this->getPosition())
 	{
 		float x = tank::lerp(_lastUpdatedPosition.x, this->getPosition().x, TANK_NORMAL_VELOCITY * dt);
@@ -265,6 +291,11 @@ void Player::syncPositionWithLastUpdate(float dt)
 
 		this->setPosition(x, y);
 	}
+}
+
+void Player::addPendingCommand(CommandPacket * command)
+{
+	_pendingCommands[ServerConnector::getInstance()->getTime()] = *command;
 }
 
 void Player::predict(float dt)

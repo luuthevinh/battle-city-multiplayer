@@ -129,6 +129,9 @@
     <ClInclude Include="..\Classes\Scene\PlayScene.h">
       <Filter>Source Files\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Shared\Converter.h">
+      <Filter>Source Files\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\GameObject.cpp">

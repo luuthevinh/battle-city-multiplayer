@@ -20,6 +20,7 @@ public:
 
 	bool init(u_short port,  char* address);
 	bool connectServer();
+	bool isConnected();
 
 	void recieveData();
 
@@ -48,6 +49,7 @@ public:
 
 private:
 	static ServerConnector* _instance;
+	static int _lastObjectIdOnServer;
 
 	WSADATA _wsaData;
 	SOCKET _socket;

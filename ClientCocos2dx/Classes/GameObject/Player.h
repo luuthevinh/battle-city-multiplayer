@@ -26,6 +26,10 @@ private:
 
 	virtual void updateWithCommand(CommandPacket* commad, float dt) override;
 	void syncPositionWithLastUpdate(float dt);
+
+	bool _enableSync;
+	std::vector<CommandPacket> _pendingCommands;
+	void addPendingCommand(CommandPacket* command);
 };
 
 #endif // !__PLAYER_H__
