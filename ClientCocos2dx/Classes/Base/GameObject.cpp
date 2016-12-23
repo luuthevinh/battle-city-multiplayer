@@ -74,6 +74,9 @@ GameObject::GameObject(eObjectId id) :
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
 
 	_lifeTime = 0.0f;
+	_previousBuffer = new Buffer(_buffer->getSize());
+	_lastBuffer = new Buffer(_buffer->getSize());
+	_firstUpdated = true;
 }
 
 GameObject::GameObject(Buffer& buffer)
@@ -84,6 +87,8 @@ GameObject::GameObject(Buffer& buffer)
 GameObject::~GameObject()
 {
 	delete _buffer;
+	delete _lastBuffer;
+	delete _previousBuffer;
 }
 
 void GameObject::addStatus(eStatus status)
@@ -197,10 +202,8 @@ void GameObject::addToPendingBuffer()
 void GameObject::reconcile(Buffer &data)
 {
 	this->deserialize(data);
-	this->updateLastBuffer(data);
 
-	if (_previousBuffer == nullptr)
-		return;
+	this->updateLastBuffer(data);
 
 	this->interpolate();
 }
@@ -220,6 +223,18 @@ void GameObject::interpolate()
 	if (_lastBuffer == nullptr || _previousBuffer == nullptr)
 		return;
 
+	if (_firstUpdated)
+	{
+		_previousBuffer->setBeginRead(GameObject::INDEX_OBJECT_ID_BUFFER);
+		int type = _previousBuffer->readInt();
+		if (type == this->getId())
+		{
+			_firstUpdated = false;
+		}
+
+		return;
+	}
+
 	_lastBuffer->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
 	float x = _lastBuffer->readFloat();
 	float y = _lastBuffer->readFloat();
@@ -232,16 +247,13 @@ void GameObject::interpolate()
 
 	_lastPosition = lastPos;
 	_deltaDistance = (lastPos - prevPos);
-	_nextPosition = lastPos + _deltaDistance;
+	_nextPosition = prevPos + _deltaDistance;
 }
 
 void GameObject::updateLastBuffer(Buffer & buffer)
 {
-	if (_previousBuffer != nullptr)
-		delete _previousBuffer;
-
-	_previousBuffer = _lastBuffer;
-	_lastBuffer = buffer.clone();
+	_previousBuffer->copy(*_lastBuffer);
+	_lastBuffer->copy(buffer);
 }
 
 void GameObject::initWithBuffer(Buffer & buffer)
@@ -253,6 +265,7 @@ void GameObject::initWithBuffer(Buffer & buffer)
 
 	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
 
-	_previousBuffer = nullptr;
-	_lastBuffer = nullptr;
+	_previousBuffer = new Buffer(_buffer->getSize());
+	_lastBuffer = new Buffer(_buffer->getSize());
+	_firstUpdated = true;
 }

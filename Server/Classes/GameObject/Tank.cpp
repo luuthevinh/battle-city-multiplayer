@@ -231,7 +231,7 @@ void Tank::checkCollision(GameObject & other, float dt)
 
 void Tank::setDirection(eDirection direction)
 {
-	//if (_direction != direction)
+	if (_direction != direction)
 	{
 		_oldDirection = _direction;
 	}
@@ -302,7 +302,7 @@ void Tank::move(eDirection direction, float dt)
 	_velocity = TANK_NORMAL_VELOCITY;
 
 	// fix position for turning
-	this->fixPositionForTurn();
+	// this->fixPositionForTurn();
 
 	this->moveByDistance(_velocity * dt);
 }

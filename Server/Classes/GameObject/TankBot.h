@@ -19,6 +19,9 @@ public:
 
 	virtual void onContactBegin(GameObject& object);
 	virtual void checkCollision(GameObject& other, float dt) override;
+
+	Point getRandomNextPostion();
+
 private:
 	// ref
 	tank::AStarMap* _aStarMap;
@@ -31,7 +34,6 @@ private:
 
 	Vector2 _oldPositon;
 
-	Point getRandomNextPostion();
 };
 
 

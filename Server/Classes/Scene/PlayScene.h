@@ -38,6 +38,7 @@ private:
 	void updateSnapshot(Serializable * object);
 
 	tank::AStarMap* _aStarMap;
+	std::vector<Vector2> _beginPositions;
 };
 
 

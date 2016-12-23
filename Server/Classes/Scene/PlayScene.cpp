@@ -6,6 +6,7 @@
 #include "..\GameObject\MapLoader.h"
 #include "..\GameObject\TankBot.h"
 #include "..\Shared\AStarMap.h"
+#include "..\Shared\SharedDefinitions.h"
 
 PlayScene::PlayScene()
 {
@@ -50,6 +51,21 @@ bool PlayScene::init()
 	{
 		this->addStaticObject(obj);
 	}
+
+	// load objects group
+	//auto objectsLayer = loader->getLayer("objects");
+	//
+	//auto object = objectsLayer->content.objgr->head;
+	//while (object)
+	//{
+	//	if (strcmp(object->name, "player_01") == 0 || strcmp(object->name, "player_02") == 0 || 
+	//		strcmp(object->name, "player_03") == 0 || strcmp(object->name, "player_04") == 0)
+	//	{
+	//		_beginPositions.push_back(Vector2(object->x + object->width / 2, WINDOW_HEIGHT - object->y - object->height / 2));
+	//	}
+
+	//	object = object->next;
+	//}
 
 	_snapshot = new WorldSnapshot();
 
@@ -273,9 +289,17 @@ tank::AStarMap * PlayScene::getMap()
 
 void PlayScene::beginGame()
 {
-	// add 1 bots
-	auto tankbot = new TankBot();
-	tankbot->setMap(_aStarMap);
-	tankbot->init();
-	this->addObject(tankbot);
+	srand(time(NULL));
+
+	for (auto i = 0; i < Game::instance->getNumberOfBots(); i++)
+	{
+		// add 1 bots
+		auto tankbot = new TankBot();
+		tankbot->setMap(_aStarMap);
+		tankbot->init();
+		auto begin = tankbot->getRandomNextPostion();
+		tankbot->setPosition(Vector2(begin.x, begin.y));
+		this->addObject(tankbot);
+	}
+	
 }

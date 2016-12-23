@@ -25,7 +25,7 @@ MapLoader* MapLoader::createWithTMX(const char * path)
 bool MapLoader::initWithTMX(const char * path)
 {
 	_tmxMap = tmx_load(path);
-
+	
 	if (_tmxMap == nullptr)
 	{
 		tmx_perror("tmx_load");

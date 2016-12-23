@@ -36,7 +36,7 @@ public:
 	char* readData(unsigned int size);
 
 	Buffer* clone();
-
+	void copy(Buffer& other);
 
 protected:
 	char* _data;

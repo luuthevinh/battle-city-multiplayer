@@ -72,6 +72,7 @@ protected:
 	void addToPendingBuffer();
 
 	bool _hasChanged;
+	bool _firstUpdated;
 
 	Buffer* _lastBuffer;
 	Buffer* _previousBuffer;

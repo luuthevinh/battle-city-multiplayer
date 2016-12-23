@@ -4,7 +4,7 @@
 
 #include "..\Shared\Utils.h"
 
-TankBot::TankBot() : Tank(eObjectId::GREEN_TANK)
+TankBot::TankBot() : Tank(eObjectId::WHITE_TANK)
 {
 }
 
@@ -18,13 +18,6 @@ bool TankBot::init()
 	{
 		return false;
 	}
-
-	this->setPosition(0, 0);
-
-	this->findNewWay();
-
-	_oldPositon = _nextPostions.front();
-	_nextPostions.pop();
 }
 
 void TankBot::update(float dt)
@@ -107,8 +100,8 @@ void TankBot::moveNext(float dt)
 		this->setDirection(eDirection::UP);
 	}
 
-	float y = tank::lerp(nextPostion.y, current.y, 1.0f);
-	float x = tank::lerp(nextPostion.x, current.x, 1.0f);
+	float y = tank::lerp(nextPostion.y, current.y, TANK_NORMAL_VELOCITY * dt);
+	float x = tank::lerp(nextPostion.x, current.x, TANK_NORMAL_VELOCITY * dt);
 
 	if (this->getPosition() != Vector2(x, y))
 	{
@@ -141,23 +134,22 @@ Point TankBot::getRandomNextPostion()
 	//auto randNode = _aStarMap->getRandomNodeHasValue(0);
 	//return randNode->getIndexInPosition();
 	
-	srand(time(NULL));
 	int value = rand() % 5;
 
 	switch (value)
 	{
-	case 0:
-		return Point(1 * 16, (31 - 0) * 16);
-	case 1:
-		return Point(25 * 16, (31 - 0) * 16);
-	case 2:
-		return Point(13 * 16, (31 - 16) * 16);
-	case 3:
-		return Point(25 * 16, (31 - 30) * 16);
-	case 4:
-		return Point(1 * 16, (31 - 30) * 16);
-	default:
-		break;
+		case 0:
+			return Point(1 * 16, (31 - 0) * 16);
+		case 1:
+			return Point(25 * 16, (31 - 0) * 16);
+		case 2:
+			return Point(13 * 16, (31 - 16) * 16);
+		case 3:
+			return Point(25 * 16, (31 - 30) * 16);
+		case 4:
+			return Point(1 * 16, (31 - 30) * 16);
+		default:
+			break;
 	}
 	
 }

@@ -182,3 +182,10 @@ Buffer * Buffer::clone()
 
 	return ret;
 }
+
+void Buffer::copy(Buffer & other)
+{
+	assert(_size == other.getSize());
+
+	std::memcpy(_data, other.getData(), other.getSize());
+}

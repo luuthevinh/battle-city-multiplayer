@@ -27,6 +27,7 @@ private:
 	eDirection _direction;
 	float _speed;
 
+	void explode();
 
 };
 

@@ -31,10 +31,10 @@ Bullet * Bullet::create(const Vec2 & position, eDirection direction)
 Bullet * Bullet::createWithBuffer(Buffer & buffer)
 {
 	Bullet* bullet = new(std::nothrow) Bullet();
-	bullet->deserialize(buffer);
 
 	if (bullet->init())
 	{
+		bullet->initWithBuffer(buffer);
 		bullet->autorelease();
 		return bullet;
 	}
@@ -79,11 +79,19 @@ bool Bullet::init()
 void Bullet::update(float dt)
 {
 	GameObject::update(dt);
-
-	if (_nextPosition != Vec2::ZERO)
+	
+	if (_nextPosition != Vec2::ZERO && !_firstUpdated)
 	{
 		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), _speed * dt));
 		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), _speed * dt));
+
+		if (this->getPosition() == _nextPosition)
+		{
+			if (_status == eStatus::DIE)
+			{
+				this->explode();
+			}
+		}
 	}
 	else
 	{
@@ -151,18 +159,23 @@ void Bullet::updateWithStatus(eStatus status)
 	{
 	case DIE:
 	{
-		if (this->getParent() == nullptr)
-			break;
-
-		auto explosion = Explosion::create(false);
-		explosion->setPosition(this->getPosition());
-
-		this->getParent()->addChild(explosion);
-		this->runAction(RemoveSelf::create());
+		
 
 		break;
 	}
 	default:
 		break;
 	}
+}
+
+void Bullet::explode()
+{
+	if (this->getParent() == nullptr)
+		return;
+
+	auto explosion = Explosion::create(false);
+	explosion->setPosition(this->getPosition());
+
+	this->getParent()->addChild(explosion);
+	this->runAction(RemoveSelf::create());
 }

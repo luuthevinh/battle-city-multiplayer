@@ -302,8 +302,8 @@ void Tank::setDirection(eDirection direction)
 
 bool Tank::onContactBegin(PhysicsContact & contact)
 {
-	_velocity = 0;
-	this->removeStatus(eStatus::RUNNING);
+	//_velocity = 0;
+	//this->removeStatus(eStatus::RUNNING);
 	
 	return true;
 }
