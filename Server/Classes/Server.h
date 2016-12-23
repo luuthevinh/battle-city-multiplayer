@@ -70,6 +70,9 @@ private:
 
 	void sendRoomInfoToAllClients();
 	void takeAndSendSnapshot();
+
+	char* _localIp;
+	void getLocalIp();
 };
 
 #endif // !__SERVER_H__

@@ -232,7 +232,7 @@ void GameObject::interpolate()
 
 	_lastPosition = lastPos;
 	_deltaDistance = (lastPos - prevPos);
-	_nextPosition = prevPos + _deltaDistance;
+	_nextPosition = lastPos + _deltaDistance;
 }
 
 void GameObject::updateLastBuffer(Buffer & buffer)

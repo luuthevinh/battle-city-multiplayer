@@ -41,6 +41,8 @@ bool Server::init()
 		return false;
 	}
 
+	this->getLocalIp();
+
 	// socket address
 	_internetAddress.sin_family = AF_INET;
 	_internetAddress.sin_addr.s_addr = inet_addr(_address);
@@ -323,6 +325,23 @@ void Server::takeAndSendSnapshot()
 	}
 }
 
+void Server::getLocalIp()
+{
+	char hostname[80];
+	gethostname(hostname, sizeof(hostname));
+	printf("Hostname: %s\n", hostname);
+
+	struct hostent *phe = gethostbyname(hostname);
+	for (int i = 0; phe->h_addr_list[i] != 0; ++i) 
+	{
+		struct in_addr addr;
+		memcpy(&addr, phe->h_addr_list[i], sizeof(struct in_addr));
+
+		_address = inet_ntoa(addr);
+		printf("Address: %s\n", _address);
+	}
+}
+
 void Server::sendDataToSocket(SOCKET socket)
 {
 	if (socket == 0)
@@ -332,7 +351,7 @@ void Server::sendDataToSocket(SOCKET socket)
 	if (_dataHandler->getSendQueue(socket) == nullptr || _dataHandler->getSendQueue(socket)->getIndex() <= 0)
 		return;
 
-	printf("size queue socket %d: %d bytes | time: %.2f\n", socket, _dataHandler->getSendQueue(socket)->getIndex(), _game->getGameTime()->getTotalTime());
+	// printf("size queue socket %d: %d bytes | time: %.2f\n", socket, _dataHandler->getSendQueue(socket)->getIndex(), _game->getGameTime()->getTotalTime());
 
 	DWORD sendBytes;
 	WSABUF dataBuffer;

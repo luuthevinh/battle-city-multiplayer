@@ -231,7 +231,7 @@ void Tank::checkCollision(GameObject & other, float dt)
 
 void Tank::setDirection(eDirection direction)
 {
-	if (_direction != direction)
+	//if (_direction != direction)
 	{
 		_oldDirection = _direction;
 	}
@@ -368,7 +368,12 @@ void Tank::fixPositionForTurn()
 	}
 
 	auto newPos = Vector2(TILE_WIDTH * (x), TILE_WIDTH * (y));
-	this->setPosition(newPos);
+	auto delta = newPos - this->getPosition();
+	
+	if (delta.lenght() < TILE_WIDTH)
+	{
+		this->setPosition(newPos);
+	}
 
 	_oldDirection = _direction;
 }

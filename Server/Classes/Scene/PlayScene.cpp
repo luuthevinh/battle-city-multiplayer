@@ -20,6 +20,12 @@ PlayScene::~PlayScene()
 bool PlayScene::init()
 {
 	auto loader = MapLoader::createWithTMX("Resources/map/map_01.tmx");
+	if (loader == nullptr)
+	{
+		printf("cannot create loader tmx.\n");
+		system("pause");
+	}
+
 	auto objects = loader->getObjectsInLayer("wall");
 
 	int rows = loader->getRows();

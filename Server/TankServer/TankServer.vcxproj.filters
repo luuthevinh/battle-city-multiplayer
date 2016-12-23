@@ -234,9 +234,4 @@
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\map\map_01.tmx">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>

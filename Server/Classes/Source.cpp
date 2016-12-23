@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv)
 {
-	Server* server = new Server(1495, "127.0.0.1");
+	Server* server = new Server(PORT, LOCALHOST);
 	server->init();
 
 	printf("Server running...\n");
