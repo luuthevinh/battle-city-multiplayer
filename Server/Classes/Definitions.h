@@ -12,6 +12,8 @@
 
 #define GAME_FRAMERATE 60
 
+#define MAX_NUMBER_OF_BOTS 50
+
 // uncomment to disable assert
 // #define NDEBUG
 

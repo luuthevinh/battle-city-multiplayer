@@ -25,12 +25,18 @@ public:
 	virtual void removeObject(int tag);
 
 	virtual int addPlayer(int socketIndex);
+	virtual void addPlayer(Player* player);
+
 	virtual void removePlayer(int socketIndex);
 	virtual Player* getPlayer(int tag);
 
 	virtual void sendInitDataTo(SOCKET socket);
 
 	virtual WorldSnapshot* getSnapshot();
+
+	virtual const Vector2& getPlayerStartPosition();
+
+	virtual void beginGame() { }
 
 protected:
 	std::vector<GameObject*> _gameObjects;

@@ -4,7 +4,8 @@
 #include "..\Shared\DataPacket.h"
 
 Player::Player(eObjectId id, int index) : Tank(id),
-	_index(index)
+	_index(index),
+	_isHost(false)
 {
 }
 
@@ -12,7 +13,7 @@ Player::~Player()
 {
 }
 
-int Player::getIndex()
+int Player::getIndex() const
 {
 	return _index;
 }
@@ -46,4 +47,14 @@ void Player::handleData(Serializable * data)
 	default:
 		break;
 	}
+}
+
+void Player::setHost(bool value)
+{
+	_isHost = value;
+}
+
+bool Player::isHost() const
+{
+	return _isHost;
 }

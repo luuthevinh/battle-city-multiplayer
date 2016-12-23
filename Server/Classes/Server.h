@@ -29,6 +29,7 @@ public:
 	void addConnection(SOCKET socket);
 
 	DataHandler* getDataHandler();
+	ClientManager* getClientManager();
 
 	void send(Serializable* object);
 	void sendTo(SOCKET socket, Serializable* object);
@@ -39,6 +40,7 @@ private:
 	char* _address;
 
 	bool _running;
+	bool _isLocalhost;
 
 	SOCKET _listenSocket;
 	WSADATA _wsaData;
@@ -61,12 +63,13 @@ private:
 
 	int selectSockets();
 	void acceptAndAddConnection();
+	SOCKET acceptSocket();
 
 	void recieveDataFromAll();
 	void sendDataToAllWithTimeStep();
 
 	void sendRoomInfoToAllClients();
-
+	void takeAndSendSnapshot();
 };
 
 #endif // !__SERVER_H__

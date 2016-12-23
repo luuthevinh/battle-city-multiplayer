@@ -10,12 +10,16 @@ public:
 	Player(eObjectId id, int index);
 	~Player();
 
-	int getIndex();
+	int getIndex() const;
 
 	virtual void handleData(Serializable* data) override;
+	
+	void setHost(bool value);
+	bool isHost() const;
 
 private:
 	int _index;		// index socket trong client manager
+	bool _isHost;
 
 	//void updateInput(eKeyInput input, bool start);
 };

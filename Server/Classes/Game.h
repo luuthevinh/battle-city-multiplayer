@@ -24,10 +24,12 @@ public:
 	float getFrameRate();
 
 	void handleData();
-	
+	void handleDataFromWaitingRoom(Serializable* data);
+	void handleIntegerPacket(IntegerPacket* integer);
 	void setConverterFactory(ConverterFactory* factory);
 	
 	GameTime* getGameTime();
+	int getNumberOfBots();
 
 private:
 	float _frameRate;
@@ -36,7 +38,13 @@ private:
 	float _detalTime;
 	float _lastTime;
 
+	int _totalBots;
+	int _maxBots;
+
 	ConverterFactory* _factory;
+	void updateBots(int value);
+
+	void createPlayer(const Player& info);
 };
 
 #endif // !__GAME_H__

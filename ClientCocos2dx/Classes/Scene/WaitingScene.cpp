@@ -35,6 +35,10 @@ bool WaitingScene::init()
 	}
 
 	_isReady = false;
+	_whiteTankCounter = 0;
+	_yellowTankCounter = 0;
+	_greenTankCounter = 0;
+	_maxBots = 10;
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -60,6 +64,13 @@ bool WaitingScene::init()
 	_pointerInput->setVisible(false);
 	_pointerInput->setScaleX(-1.0f);
 	this->addChild(_pointerInput);
+
+	_addrTextField = ui::TextField::create(SERVER_ADD, "/fonts/pixel.ttf", 21.0f);
+	_addrTextField->setAnchorPoint(Vec2(0.0f, 1.0f));
+	_addrTextField->setTextAreaSize(Size(325, 36));
+	_addrTextField->setPosition(Vec2(45, 512 - 120));
+	_addrTextField->addEventListener(CC_CALLBACK_2(WaitingScene::nameTextFieldEvent, this));
+	this->addChild(_addrTextField);
 
 	// play btn
 	auto joinBtn = ui::Button::create("joinBtn.png", "joinBtn_selected.png");
@@ -107,7 +118,7 @@ bool WaitingScene::init()
 	// tank btn
 	auto yellowTankBtn = ui::Button::create("tank_01.png", "tank_01.png");
 	yellowTankBtn->setPosition(Vec2(_yellowTankNumber->getPositionX(), 512 - 315));
-	yellowTankBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::whiteBtnTouchEvent, this));
+	yellowTankBtn->addTouchEventListener(CC_CALLBACK_2(WaitingScene::yellowBtnTouchEvent, this));
 	this->addChild(yellowTankBtn);
 
 	auto greenTankBtn = ui::Button::create("tank_green_01.png", "tank_green_01.png");
@@ -174,11 +185,16 @@ void WaitingScene::nameTextFieldEvent(Ref * pSender, cocos2d::ui::TextField::Eve
 	switch (type)
 	{
 	case cocos2d::ui::TextField::EventType::ATTACH_WITH_IME:
+	{
 		_pointerInput->setVisible(true);
+		_pointerInput->setPositionY(((ui::Button*)pSender)->getPositionY() - 16);
 		break;
+	}
 	case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
-		_pointerInput->setVisible(false);
+	{
+		// _pointerInput->setVisible(false);
 		break;
+	}
 	case cocos2d::ui::TextField::EventType::INSERT_TEXT:
 		break;
 	case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
@@ -190,39 +206,127 @@ void WaitingScene::nameTextFieldEvent(Ref * pSender, cocos2d::ui::TextField::Eve
 
 void WaitingScene::playBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
 {
-	this->gotoPlayScene();
+	if (type == ui::Widget::TouchEventType::BEGAN)
+	{
+		this->gotoPlayScene();
+	}
 }
 
 void WaitingScene::backBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
 {
+	if (type == ui::Widget::TouchEventType::BEGAN)
+	{
+		
+	}
 }
 
 void WaitingScene::joinBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
 {
-	auto connector = ServerConnector::getInstance();
-	if (!connector->isConnected())
+	switch (type)
 	{
-		connector->init(PORT, SERVER_ADD);
-		connector->connectServer();
+	case cocos2d::ui::Widget::TouchEventType::BEGAN:
+	{
+		auto connector = ServerConnector::getInstance();
+		if (!connector->isConnected())
+		{
+			auto address = _addrTextField->getString();
+			if (address.compare("") == 0)
+			{
+				connector->init(PORT, SERVER_ADD);
+			}
+			else
+			{
+
+				connector->init(PORT, address.c_str());
+			}
+			connector->connectServer();
+		}
+		break;
 	}
+	case cocos2d::ui::Widget::TouchEventType::MOVED:
+		break;
+	case cocos2d::ui::Widget::TouchEventType::ENDED:
+		break;
+	case cocos2d::ui::Widget::TouchEventType::CANCELED:
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void WaitingScene::decreaseBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
 {
+	switch (type)
+	{
+	case cocos2d::ui::Widget::TouchEventType::BEGAN:
+	{
+		//_whiteTankCounter--;
+		//if (_whiteTankCounter < 0)
+		//{
+		//	_whiteTankCounter = _maxBots;
+		//}
+
+		//this->updateWhiteNumberText();
+		this->updateNumberOfBots(-1);
+
+		break;
+	}
+	case cocos2d::ui::Widget::TouchEventType::MOVED:
+		break;
+	case cocos2d::ui::Widget::TouchEventType::ENDED:
+		break;
+	case cocos2d::ui::Widget::TouchEventType::CANCELED:
+		break;
+	default:
+		break;
+	}
+
 }
 
 void WaitingScene::increaseBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
 {
+	switch (type)
+	{
+	case cocos2d::ui::Widget::TouchEventType::BEGAN:
+	{
+		//_whiteTankCounter++;
+		//if (_whiteTankCounter > _maxBots)
+		//{
+		//	_whiteTankCounter = 0;
+		//}
+		//this->updateWhiteNumberText();
+		this->updateNumberOfBots(1);
+
+		break;
+	}
+	case cocos2d::ui::Widget::TouchEventType::MOVED:
+		break;
+	case cocos2d::ui::Widget::TouchEventType::ENDED:
+		break;
+	case cocos2d::ui::Widget::TouchEventType::CANCELED:
+		break;
+	default:
+		break;
+	}
 }
 
-void WaitingScene::whiteBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
+void WaitingScene::yellowBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
 {
-	_pointerPlayerSelect->setPositionX(((ui::Button*)sender)->getPositionX());
+	if (type == ui::Widget::TouchEventType::BEGAN)
+	{
+		_pointerPlayerSelect->setPositionX(((ui::Button*)sender)->getPositionX());
+		this->updateAndSendPlayerId(eObjectId::YELLOW_TANK);
+	}
 }
 
 void WaitingScene::greenBtnTouchEvent(Ref * sender, ui::Widget::TouchEventType type)
 {
-	_pointerPlayerSelect->setPositionX(((ui::Button*)sender)->getPositionX());
+	if (type == ui::Widget::TouchEventType::BEGAN)
+	{
+		_pointerPlayerSelect->setPositionX(((ui::Button*)sender)->getPositionX());
+		this->updateAndSendPlayerId(eObjectId::GREEN_TANK);
+	}
 }
 
 void WaitingScene::handleData()
@@ -240,14 +344,14 @@ void WaitingScene::handleData()
 	{
 	case eDataType::OBJECT:
 	{
-		Player* gameObject = dynamic_cast<Player*>(data);
-		if (gameObject)
-		{
-			if (gameObject->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
-			{
-				return;
-			}
-		}
+		//Player* player = dynamic_cast<Player*>(data);
+		//if (player)
+		//{
+		//	if (player->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
+		//	{
+		//		_currentPlayer->setPosition(player->getPosition());
+		//	}
+		//}
 
 		break;
 	}
@@ -271,37 +375,52 @@ void WaitingScene::handleData()
 		}
 		break;
 	}
+	case eDataType::INTEGER:
+	{
+		auto packet = dynamic_cast<IntegerPacket*>(data);
+		if (packet && packet->integerType == IntegerPacket::Type::SET_HOST)
+		{
+			ServerConnector::getInstance()->setHost(packet->value);
+		}
+		break;
+	}
 	case eDataType::ROOM_INFO:
 	{
 		RoomInfo* packet = (RoomInfo*)data;
 		if (packet)
 		{
+			_greenTankCounter = 0;
+			_yellowTankCounter = 0;
+			_whiteTankCounter = 0;
+
 			for (auto it = packet->playerCounters.begin(); it != packet->playerCounters.end(); it++)
 			{
 				switch (it->first)
 				{
 				case eObjectId::GREEN_TANK:
 				{
-					auto str = StringUtils::format("%d", it->second);
-					_greenTankNumber->setString(str);
+					_greenTankCounter = it->second;
+					
 					break;
 				}
 				case eObjectId::YELLOW_TANK:
 				{
-					auto str = StringUtils::format("%d", it->second);
-					_yellowTankNumber->setString(str);
+					_yellowTankCounter = it->second;
 					break;
 				}
 				case eObjectId::WHITE_TANK:
 				{
-					auto str = StringUtils::format("%d", it->second);
-					_whiteTankNumber->setString(str);
+					_whiteTankCounter = it->second;
 					break;
 				}
 				default:
 					break;
 				}
 			}
+
+			this->updateGreenNumberText();
+			this->updateYellowNumberText();
+			this->updateWhiteNumberText();
 		}
 		break;
 	}
@@ -314,6 +433,13 @@ void WaitingScene::gotoPlayScene()
 {
 	auto playScene = ServerPlayScene::createScene();
 	Director::getInstance()->replaceScene(playScene);
+
+	auto play = new IntegerPacket();
+	play->integerType = IntegerPacket::BEGIN_PLAY;
+	play->setUniqueId(ServerConnector::getInstance()->getUniqueId());
+
+	ServerConnector::getInstance()->send(play);
+	delete play;
 }
 
 void WaitingScene::createPlayer(eObjectId id)
@@ -342,4 +468,50 @@ void WaitingScene::createPlayer(eObjectId id)
 
 	// gửi info object lại
 	ServerConnector::getInstance()->send(player);
+}
+
+void WaitingScene::updateYellowNumberText()
+{
+	auto str = StringUtils::format("%d", _yellowTankCounter);
+	_yellowTankNumber->setString(str);
+}
+
+void WaitingScene::updateGreenNumberText()
+{
+	auto str = StringUtils::format("%d", _greenTankCounter);
+	_greenTankNumber->setString(str);
+}
+
+void WaitingScene::updateWhiteNumberText()
+{
+	auto str = StringUtils::format("%d", _whiteTankCounter);
+	_whiteTankNumber->setString(str);
+}
+
+void WaitingScene::updateAndSendPlayerId(eObjectId id)
+{
+	_playerSelected = id;
+	auto integer = new IntegerPacket();
+	integer->integerType = IntegerPacket::PLAYER_CHARACTER_SELECTION;
+	integer->value = id;
+	integer->setUniqueId(ServerConnector::getInstance()->getUniqueId());
+
+	ServerConnector::getInstance()->send(integer);
+
+	delete integer;
+}
+
+void WaitingScene::updateNumberOfBots(int value)
+{
+	if (!ServerConnector::getInstance()->isHost())
+		return;
+
+	auto integer = new IntegerPacket();
+	integer->integerType = IntegerPacket::SET_BOT;
+	integer->value = value;
+	integer->setUniqueId(ServerConnector::getInstance()->getUniqueId());
+
+	ServerConnector::getInstance()->send(integer);
+
+	delete integer;
 }

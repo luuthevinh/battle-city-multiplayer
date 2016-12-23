@@ -18,7 +18,7 @@ public:
 	virtual inline void setType(eDataType type) { _type = type; }
 
 	virtual inline void setUniqueId(int id) { _uniqueId = id; }
-	virtual inline int getUniqueId() { return _uniqueId; }
+	virtual inline int getUniqueId() const { return _uniqueId; }
 
 protected:
 	eDataType _type;

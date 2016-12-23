@@ -16,7 +16,7 @@ Server::Server(u_short port, char * address)
 	_lastTime = 0;
 
 	_running = true;
-
+	_isLocalhost = true;
 }
 
 Server::~Server()
@@ -150,32 +150,52 @@ void Server::acceptAndAddConnection()
 	// kiểm tra kết nối tới server
 	if (FD_ISSET(_listenSocket, &_readSet))
 	{
-		SOCKET acceptSocket;
+		SOCKET acceptedSocket;
 
 		// accept socket mới
-		if ((acceptSocket = accept(_listenSocket, NULL, NULL)) != INVALID_SOCKET)
+		if ((acceptedSocket = acceptSocket()) != INVALID_SOCKET)
 		{
 			// set socket kết nối tới server thành non-blocking
 			_nonBlocking = 1;
-			if (ioctlsocket(acceptSocket, FIONBIO, &_nonBlocking) == SOCKET_ERROR)
+			if (ioctlsocket(acceptedSocket, FIONBIO, &_nonBlocking) == SOCKET_ERROR)
 			{
 				printf("ioctlsocket(FIONBIO) failed!\n");
 				system("pause");
 			}
 
 			// lưu lại socket
-			addConnection(acceptSocket);
+			addConnection(acceptedSocket);
 		}
 		else
 		{
 			if (WSAGetLastError() != WSAEWOULDBLOCK)
 			{
-				printf("accept() failed");
+				printf("accept() failed\n");
 				system("pause");;
 			}
 
 			printf("accept() is fine!\n");
 		}
+	}
+}
+
+SOCKET Server::acceptSocket()
+{
+	SOCKET acceptSocket;
+
+	if (_isLocalhost)
+	{
+		return accept(_listenSocket, NULL, NULL);
+	}
+	else
+	{
+		SOCKADDR_IN clientAddress;
+		int size;
+		auto acceptSock = accept(_listenSocket, (struct sockaddr*)&clientAddress, &size);
+
+		printf("client address: %s\n", inet_ntoa(clientAddress.sin_addr));
+
+		return acceptSock;
 	}
 }
 
@@ -235,17 +255,9 @@ void Server::sendDataToAllWithTimeStep()
 
 	_lastTime += _timeStep;
 
-	// take snapshot
-	auto snapshot = SceneManager::getInstance()->getCurrentScene()->getSnapshot();
-	if (snapshot != nullptr)
-	{
-		snapshot->setUniqueId(WorldSnapshot::getNextId());
-		snapshot->setServerTime(_game->getGameTime()->getTotalTime());
+	this->takeAndSendSnapshot();
 
-		this->send(snapshot);
-		// update lại
-		snapshot->clearObjects();
-	}
+	this->sendRoomInfoToAllClients();
 
 	// gửi cho tất cả client
 	for (int i = 0; i < _clientManager->getAllClients().size(); i++)
@@ -269,6 +281,9 @@ void Server::sendDataToAllWithTimeStep()
 
 void Server::sendRoomInfoToAllClients()
 {
+	if (!_clientManager->hasChanged())
+		return;
+
 	// player info
 	auto allPlayers = _clientManager->getAllPlayers();
 	auto infopacket = new RoomInfo();
@@ -284,9 +299,28 @@ void Server::sendRoomInfoToAllClients()
 		infopacket->playerCounters.at(player->getId()) += 1;
 	}
 
+	// bots
+	infopacket->playerCounters[eObjectId::WHITE_TANK] = Game::instance->getNumberOfBots();
+
 	this->send(infopacket);
 
+	_clientManager->setChanged(false);
 	delete infopacket;
+}
+
+void Server::takeAndSendSnapshot()
+{
+	// take snapshot
+	auto snapshot = SceneManager::getInstance()->getCurrentScene()->getSnapshot();
+	if (snapshot != nullptr)
+	{
+		snapshot->setUniqueId(WorldSnapshot::getNextId());
+		snapshot->setServerTime(_game->getGameTime()->getTotalTime());
+
+		this->send(snapshot);
+		// update lại
+		snapshot->clearObjects();
+	}
 }
 
 void Server::sendDataToSocket(SOCKET socket)
@@ -343,19 +377,30 @@ void Server::addConnection(SOCKET socket)
 	// tạo player
 	// int tag = SceneManager::getInstance()->getCurrentScene()->addPlayer(index);
 
+	auto player = _clientManager->getPlayerBySocket(socket);
+
 	// reply lại id trong server
 	ReplyPacket* rep = new ReplyPacket();
-	rep->setUniqueId(GameObject::getNextUniqueId());
+	rep->setUniqueId(player->getUniqueId());
 	rep->beginTime = _game->getGameTime()->getTotalTime();
-
+	
 	_dataHandler->sendTo(socket, rep);
 
 	delete rep;
 
+	if (player->isHost())
+	{
+		auto setHost = new IntegerPacket();
+		setHost->integerType = IntegerPacket::SET_HOST;
+		setHost->value = 1;
+		setHost->setUniqueId(player->getUniqueId());
+
+		_dataHandler->sendTo(socket, setHost);
+		delete setHost;
+	}
+
 	// send dữ liệu khởi tạo
 	// SceneManager::getInstance()->getCurrentScene()->sendInitDataTo(socket);
-
-	this->sendRoomInfoToAllClients();
 
 	printf("new connection: %d\n", socket);
 }
@@ -363,6 +408,11 @@ void Server::addConnection(SOCKET socket)
 DataHandler * Server::getDataHandler()
 {
 	return _dataHandler;
+}
+
+ClientManager * Server::getClientManager()
+{
+	return _clientManager;
 }
 
 void Server::send(Serializable * object)

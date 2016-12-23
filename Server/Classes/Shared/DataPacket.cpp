@@ -111,7 +111,7 @@ Buffer * IntegerPacket::serialize()
 	_buffer->setIndex(0);
 	_buffer->setBeginRead(0);
 
-	_buffer->writeInt(eDataType::PACKET);
+	_buffer->writeInt(eDataType::INTEGER);
 	_buffer->writeInt(integerType);
 	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeInt(value);

@@ -46,7 +46,10 @@ public:
 	enum Type
 	{
 		PLAYER_CHARACTER_SELECTION = 1,
-		READY
+		READY = 2,
+		BEGIN_PLAY = 3,
+		SET_BOT = 4,
+		SET_HOST = 5,
 	};
 
 	IntegerPacket();

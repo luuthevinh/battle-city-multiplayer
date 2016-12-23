@@ -243,11 +243,6 @@ void PlayScene::sendInitDataTo(SOCKET socket)
 
 int PlayScene::addPlayer(int socketIndex)
 {
-	auto tankbot = new TankBot();
-	tankbot->setMap(_aStarMap);
-	tankbot->init();
-	this->addObject(tankbot);
-
 	return Scene::addPlayer(socketIndex);;
 }
 
@@ -268,4 +263,13 @@ void PlayScene::updateMap(const Vector2 & position, int value)
 tank::AStarMap * PlayScene::getMap()
 {
 	return _aStarMap;
+}
+
+void PlayScene::beginGame()
+{
+	// add 1 bots
+	auto tankbot = new TankBot();
+	tankbot->setMap(_aStarMap);
+	tankbot->init();
+	this->addObject(tankbot);
 }

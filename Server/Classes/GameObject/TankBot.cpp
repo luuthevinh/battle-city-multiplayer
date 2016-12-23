@@ -35,6 +35,7 @@ void TankBot::update(float dt)
 	}
 	else
 	{
+		this->addStatus(eStatus::RUNNING);
 		this->findNewWay();
 	}
 }
@@ -120,6 +121,7 @@ void TankBot::moveNext(float dt)
 
 	if(current == nextPostion || target == 0)
 	{
+		// this->removeStatus(eStatus::RUNNING);
 		_oldPositon = _nextPostions.front();
 		_nextPostions.pop();
 	}

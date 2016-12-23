@@ -18,7 +18,7 @@ public:
 	ServerConnector();
 	~ServerConnector();
 
-	bool init(u_short port,  char* address);
+	bool init(u_short port, const char* address);
 	bool connectServer();
 	bool isConnected();
 
@@ -47,6 +47,9 @@ public:
 	void setUniqueId(int id);
 	int getUniqueId();
 
+	void setHost(bool value);
+	bool isHost();
+
 private:
 	static ServerConnector* _instance;
 	static int _lastObjectIdOnServer;
@@ -70,6 +73,7 @@ private:
 	bool _isRunning;
 
 	int _uniqueIdOnServer;
+	bool _isHost;
 };
 
 

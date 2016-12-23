@@ -35,7 +35,7 @@ public:
 	virtual bool hasStatus(eStatus status);
 	virtual eStatus getStatus();
 
-	virtual eObjectId getId();
+	virtual eObjectId getId() const;
 	virtual void setId(eObjectId id);
 
 	virtual void onChanged();

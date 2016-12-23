@@ -55,6 +55,12 @@ int Scene::addPlayer(int socketIndex)
 	return player->getUniqueId();
 }
 
+void Scene::addPlayer(Player* player)
+{
+	player->setPosition(this->getPlayerStartPosition());
+	_players.push_back(player);
+}
+
 void Scene::removePlayer(int index)
 {
 	for (auto i = 0; i < _players.size(); i++)
@@ -84,4 +90,9 @@ void Scene::sendInitDataTo(SOCKET socket)
 WorldSnapshot * Scene::getSnapshot()
 {
 	return _snapshot;
+}
+
+const Vector2 & Scene::getPlayerStartPosition()
+{
+	return Vector2(0, 0);
 }

@@ -25,7 +25,8 @@ ServerConnector * ServerConnector::getInstance()
 
 ServerConnector::ServerConnector() : 
 	_connecting(false),
-	_isRunning(false)
+	_isRunning(false),
+	_isHost(false)
 {
 }
 
@@ -39,7 +40,7 @@ ServerConnector::~ServerConnector()
 	delete _factory;
 }
 
-bool ServerConnector::init(u_short port, char * address)
+bool ServerConnector::init(u_short port, const char * address)
 {
 	// start winsocket
 	if (WSAStartup(MAKEWORD(2, 2), &_wsaData) != 0)
@@ -222,6 +223,13 @@ void ServerConnector::handleData(cocos2d::Layer* layer)
 		GameObject* gameObject = dynamic_cast<GameObject*>(data);
 		if (gameObject)
 		{
+			if (gameObject->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
+			{
+				auto player = Player::createWithBuffer(*data->serialize());
+				layer->addChild(player);
+				return;
+			}
+
 			auto object = (GameObject*)layer->getChildByTag(gameObject->getUniqueId());
 			if (object == nullptr)
 			{
@@ -293,6 +301,16 @@ void ServerConnector::setUniqueId(int id)
 int ServerConnector::getUniqueId()
 {
 	return _uniqueIdOnServer;
+}
+
+void ServerConnector::setHost(bool value)
+{
+	_isHost = value;
+}
+
+bool ServerConnector::isHost()
+{
+	return _isHost;
 }
 
 void ServerConnector::setTime(float time)

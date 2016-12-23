@@ -47,6 +47,11 @@ Serializable * ServerConverterFactory::convertNext()
 			ret = new CommandPacket(*buffer);
 			break;
 		}
+		case INTEGER:
+		{
+			ret = new IntegerPacket(*buffer);
+			break;
+		}
 		default:
 			break;
 	}

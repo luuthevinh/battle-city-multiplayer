@@ -32,6 +32,27 @@ Player* Player::create(eObjectId id)
 	}
 }
 
+Player * Player::createWithBuffer(Buffer & data)
+{
+	Player* tank = new(std::nothrow) Player(eObjectId::YELLOW_TANK);
+	
+	if (tank && tank->init())
+	{
+		tank->initWithBuffer(data);
+
+		data.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+		float x = data.readFloat();
+		float y = data.readFloat();
+		tank->setPosition(x, y);
+
+		tank->autorelease();
+		return tank;
+	}
+
+	delete tank;
+	return nullptr;
+}
+
 bool Player::init()
 {
 	if (!Tank::init())

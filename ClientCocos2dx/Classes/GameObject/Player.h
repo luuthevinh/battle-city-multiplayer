@@ -10,6 +10,7 @@ public:
 	~Player();
 
 	static Player* create(eObjectId id);
+	static Player* createWithBuffer(Buffer& data);
 
 	virtual bool init() override;
 	virtual void update(float dt) override;

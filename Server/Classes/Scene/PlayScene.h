@@ -30,6 +30,7 @@ public:
 	virtual void updateMap(const Vector2& position, int value);
 	tank::AStarMap* getMap();
 
+	virtual void beginGame() override;
 private:
 	void checkCollisionObjects(float dt);
 	void checkStatusObjects();

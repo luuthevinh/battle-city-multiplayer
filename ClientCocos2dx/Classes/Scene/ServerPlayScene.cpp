@@ -54,7 +54,7 @@ bool ServerPlayScene::init()
 
 	this->initWithTMX();
 
-	//auto player = Player::create(eObjectId::YELLOW_TANK);
+	//auto player = Player::create(ServerConnector::getInstance()->);
 	//player->setPosition(16, 144);
 	//player->setName("player");
 	//this->addChild(player);
@@ -91,6 +91,11 @@ void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 		{
 			//node->deserialize(*(it->second));
 			node->reconcile(*(it->second));
+		}
+		else if (it->first == ServerConnector::getInstance()->getUniqueId())
+		{
+			auto player = Player::createWithBuffer(*(it->second));
+			this->addChild(player);
 		}
 		else
 		{

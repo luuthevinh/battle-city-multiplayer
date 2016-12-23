@@ -7,6 +7,8 @@
 
 USING_NS_CC;
 
+class Player;
+
 class WaitingScene : public Layer
 {
 public:
@@ -28,7 +30,7 @@ public:
 
 	void decreaseBtnTouchEvent(Ref* sender, ui::Widget::TouchEventType type);
 	void increaseBtnTouchEvent(Ref* sender, ui::Widget::TouchEventType type);
-	void whiteBtnTouchEvent(Ref* sender, ui::Widget::TouchEventType type);
+	void yellowBtnTouchEvent(Ref* sender, ui::Widget::TouchEventType type);
 	void greenBtnTouchEvent(Ref* sender, ui::Widget::TouchEventType type);
 
 private:
@@ -37,6 +39,7 @@ private:
 
 	// ui
 	ui::TextField* _textField;
+	ui::TextField* _addrTextField;
 	Sprite* _pointerInput;
 	Sprite* _pointerPlayerSelect;
 	Label* _greenTankNumber;
@@ -48,6 +51,9 @@ private:
 	void handleData();
 	void gotoPlayScene();
 	void createPlayer(eObjectId id);
+	void updateYellowNumberText();
+	void updateGreenNumberText();
+	void updateWhiteNumberText();
 
 	int _greenTankCounter;
 	int _yellowTankCounter;
@@ -55,6 +61,10 @@ private:
 	int _maxBots;
 
 	eObjectId _playerSelected;
+	void updateAndSendPlayerId(eObjectId id);
+	void updateNumberOfBots(int value);
+
+	Player* _currentPlayer;
 };
 
 #endif // !__WAITING_SCENE_H__

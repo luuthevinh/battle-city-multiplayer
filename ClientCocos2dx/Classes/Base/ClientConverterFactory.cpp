@@ -63,6 +63,11 @@ Serializable * ClientConverterFactory::convertNext()
 		ret = new RoomInfo(*buffer);
 		break;
 	}
+	case INTEGER: 
+	{
+		ret = new IntegerPacket(*buffer);
+		break;
+	}
 	default:
 		break;
 	}

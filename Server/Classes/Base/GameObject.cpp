@@ -142,7 +142,7 @@ void GameObject::setId(eObjectId id)
 	_id = id;
 }
 
-eObjectId GameObject::getId()
+eObjectId GameObject::getId() const
 {
 	return _id;
 }
