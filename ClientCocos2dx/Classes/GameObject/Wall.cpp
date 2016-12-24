@@ -66,6 +66,8 @@ bool Wall::init()
 
 	_direction = eDirection::NONE;
 
+	this->setContentSize(Size(16.0f, 16.0f));
+
 	return true;
 }
 

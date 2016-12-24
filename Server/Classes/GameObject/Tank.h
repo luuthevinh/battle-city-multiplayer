@@ -64,6 +64,8 @@ protected:
 	void updateWithCommand(CommandPacket* commad, float dt);
 
 	std::queue<CommandPacket*> _commandQueue;
+
+	void resetCollidingSide();
 };
 
 #endif // !__TANK_H__

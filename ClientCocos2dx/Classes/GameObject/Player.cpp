@@ -247,9 +247,9 @@ void Player::reconcile(Buffer & data)
 
 void Player::updateWithCommand(CommandPacket * commad, float dt)
 {
-	// Tank::updateWithCommand(commad, dt);
+	Tank::updateWithCommand(commad, dt);
 
-	if (!this->hasStatus(eStatus::RUNNING) || _nextPosition == Vec2::ZERO)
+	if (!this->hasStatus(eStatus::RUNNING) || _firstUpdated)
 		return;
 
 	float x = tank::lerp(_nextPosition.x, _lastUpdatedPosition.x, TANK_NORMAL_VELOCITY * dt);
@@ -266,8 +266,8 @@ void Player::syncPositionWithLastUpdate(float dt)
 
 	if (_lastUpdatedPosition != this->getPosition() && !_firstUpdated)
 	{
-		float x = tank::lerp(_lastUpdatedPosition.x, this->getPosition().x, TANK_NORMAL_VELOCITY * dt);
-		float y = tank::lerp(_lastUpdatedPosition.y, this->getPosition().y, TANK_NORMAL_VELOCITY * dt);
+		float x = tank::lerp(_lastUpdatedPosition.x, this->getPosition().x, 1.0f);
+		float y = tank::lerp(_lastUpdatedPosition.y, this->getPosition().y, 1.0f);
 
 		this->setPosition(x, y);
 	}

@@ -11,3 +11,6 @@ ClientCocos2dx/CMakeLists.txt
 /ClientCocos2dx/proj.win32/Debug.win32
 /ClientCocos2dx/proj.win32/Debug
 /ClientCocos2dx/proj.win32/*.sdf
+/ClientCocos2dx/proj.win32/Release.win32
+/ClientCocos2dx/proj.win32/Release
+/Server/TankServer/Release

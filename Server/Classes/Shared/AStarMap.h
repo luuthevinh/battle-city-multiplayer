@@ -23,8 +23,13 @@ public:
 
 	const Point& positionToIndex(const Point& position);
 
+	void addTempObstacle(const Point& index);
+	void clearTempObstacle();
+	bool isInTempObstacle(const Point& index);
+
 private:
 	std::vector<MapNode*> _nodes;
+	std::vector<Point> _tempObstales;
 
 	int _rows;
 	int _columns;

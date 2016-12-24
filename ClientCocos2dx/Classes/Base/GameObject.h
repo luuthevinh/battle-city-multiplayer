@@ -85,6 +85,8 @@ protected:
 	void updateLastBuffer(Buffer& buffer);
 
 	void initWithBuffer(Buffer& buffer);
+
+	eDirection getIntersectSide(const Rect& other);
 };
 
 

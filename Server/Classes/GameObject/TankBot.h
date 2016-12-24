@@ -29,6 +29,8 @@ private:
 	std::queue<Vector2> _nextPostions;
 	
 	void findNewWay();
+	void findNewWayWithTempObstacle(const tank::Point& index);
+
 	void moveNext(float dt);
 	void addCommand(eKeyInput input, bool begin = true);
 

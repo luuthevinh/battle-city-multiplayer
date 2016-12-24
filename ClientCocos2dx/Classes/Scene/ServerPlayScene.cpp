@@ -54,7 +54,7 @@ bool ServerPlayScene::init()
 
 	this->initWithTMX();
 
-	//auto player = Player::create(ServerConnector::getInstance()->);
+	//auto player = Player::create(eObjectId::YELLOW_TANK);
 	//player->setPosition(16, 144);
 	//player->setName("player");
 	//this->addChild(player);

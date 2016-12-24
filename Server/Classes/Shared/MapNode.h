@@ -17,6 +17,11 @@ public:
 
 	int x;
 	int y;
+
+	bool operator== (const Point& other) 
+	{
+		return x == other.x && y == other.y;
+	}
 };
 
 class MapNode

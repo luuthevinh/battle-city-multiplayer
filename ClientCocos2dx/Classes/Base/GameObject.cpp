@@ -75,7 +75,7 @@ GameObject::GameObject(eObjectId id) :
 
 	_lifeTime = 0.0f;
 	_previousBuffer = new Buffer(_buffer->getSize());
-	_lastBuffer = new Buffer(_buffer->getSize());
+	_lastBuffer = this->serialize()->clone();
 	_firstUpdated = true;
 }
 
@@ -220,9 +220,6 @@ int GameObject::getNextId()
 
 void GameObject::interpolate()
 {
-	if (_lastBuffer == nullptr || _previousBuffer == nullptr)
-		return;
-
 	if (_firstUpdated)
 	{
 		_previousBuffer->setBeginRead(GameObject::INDEX_OBJECT_ID_BUFFER);
@@ -247,7 +244,7 @@ void GameObject::interpolate()
 
 	_lastPosition = lastPos;
 	_deltaDistance = (lastPos - prevPos);
-	_nextPosition = prevPos + _deltaDistance;
+	_nextPosition = lastPos + _deltaDistance;
 }
 
 void GameObject::updateLastBuffer(Buffer & buffer)
@@ -266,6 +263,35 @@ void GameObject::initWithBuffer(Buffer & buffer)
 	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
 
 	_previousBuffer = new Buffer(_buffer->getSize());
-	_lastBuffer = new Buffer(_buffer->getSize());
+	_lastBuffer = this->serialize()->clone();
 	_firstUpdated = true;
+}
+
+eDirection GameObject::getIntersectSide(const Rect & other)
+{
+	auto myRect = this->getBoundingBox();
+
+	if (!myRect.intersectsRect(other))
+		return eDirection::NONE;
+
+	float left = other.getMinX() - myRect.getMaxX();
+	float top = other.getMaxY() - myRect.getMinY();
+	float right = other.getMaxX() - myRect.getMinX();
+	float bottom = other.getMinY() - myRect.getMaxY();
+
+	Vec2 deltaPosition = Vec2(other.getMidX() - myRect.getMidX(), other.getMidY() - myRect.getMidY());
+
+	if (deltaPosition.x <= 0 && (top > 0 && bottom < 0))
+		return eDirection::LEFT;
+
+	if (deltaPosition.x >= 0 && (top > 0 && bottom < 0))
+		return eDirection::RIGHT;
+
+	if (deltaPosition.y <= 0 && (right > 0 && left < 0))
+		return eDirection::DOWN;
+
+	if (deltaPosition.y >= 0 && (right > 0 && left < 0))
+		return eDirection::UP;
+
+	return eDirection::NONE;
 }

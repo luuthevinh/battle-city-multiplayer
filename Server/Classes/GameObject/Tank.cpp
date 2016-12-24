@@ -42,14 +42,7 @@ void Tank::update(float dt)
 	this->updatePosition(dt);
 
 	this->updateBoundingBoxPosition();
-
-	// reset hướng va chạm
-	for (auto it = _objectCollidingCounter.begin(); it != _objectCollidingCounter.end(); it++)
-	{
-		it->second = 0;
-	}
-
-	_collidingSide = eDirection::NONE;
+	this->resetCollidingSide();
 }
 
 void Tank::updatePosition(float dt)
@@ -203,14 +196,14 @@ void Tank::checkCollision(GameObject & other, float dt)
 
 	this->updateBoundingBoxPosition();
 
-	this->checkCollidingSide(other);
-
 	eDirection result;
 	float time = _collisionChecker->checkCollision(*this, other, result, dt);
 
 	// có va chạm
 	if (time < 1.0f)
 	{
+		this->checkCollidingSide(other);
+
 		float distance = (_velocity * dt) * time;
 
 		this->moveByDistance(distance);
@@ -292,6 +285,17 @@ void Tank::updateWithCommand(CommandPacket* commad, float dt)
 		_velocity = 0;
 		this->onChanged();
 	}
+}
+
+void Tank::resetCollidingSide()
+{
+	// reset hướng va chạm
+	for (auto it = _objectCollidingCounter.begin(); it != _objectCollidingCounter.end(); it++)
+	{
+		it->second = 0;
+	}
+
+	_collidingSide = eDirection::NONE;
 }
 
 void Tank::move(eDirection direction, float dt)

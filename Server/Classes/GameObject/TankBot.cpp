@@ -1,4 +1,5 @@
 ﻿#include "TankBot.h"
+#include "..\Base\AABB.h"
 #include <time.h>
 #include <random>
 
@@ -18,6 +19,8 @@ bool TankBot::init()
 	{
 		return false;
 	}
+
+	return true;
 }
 
 void TankBot::update(float dt)
@@ -29,8 +32,11 @@ void TankBot::update(float dt)
 	else
 	{
 		this->addStatus(eStatus::RUNNING);
+		_velocity = TANK_NORMAL_VELOCITY;
 		this->findNewWay();
 	}
+
+	this->updateBoundingBoxPosition();
 }
 
 void TankBot::setMap(tank::AStarMap* map)
@@ -40,16 +46,42 @@ void TankBot::setMap(tank::AStarMap* map)
 
 void TankBot::onContactBegin(GameObject & object)
 {
-	while (_nextPostions.size() > 1)
+	if (object.getId() == this->getId())
 	{
-		_nextPostions.pop();
+		while (_nextPostions.size() > 1)
+		{
+			_nextPostions.pop();
+		}
+
+		auto curPosition = object.getPosition();
+		auto otherIndex = _aStarMap->positionToIndex(tank::Point(curPosition.x, curPosition.y));
+
+		this->findNewWayWithTempObstacle(otherIndex);
 	}
 
-	this->findNewWay();
+	
 }
 
 void TankBot::checkCollision(GameObject & other, float dt)
 {
+	if (!this->canCollisionWith(other.getCategoryBitmask()))
+		return;
+
+	if (other.getId() == eObjectId::BULLET)
+	{
+		return;
+	}
+
+	this->updateBoundingBoxPosition();
+
+	eDirection result;
+	float time = _collisionChecker->checkCollision(*this, other, result, dt);
+
+	// có va chạm
+	if (time < 1.0f)
+	{
+		this->onContactBegin(other);
+	}
 }
 
 void TankBot::findNewWay()
@@ -76,6 +108,15 @@ void TankBot::findNewWay()
 	}
 }
 
+void TankBot::findNewWayWithTempObstacle(const tank::Point & index)
+{
+	_aStarMap->addTempObstacle(index);
+
+	this->findNewWay();
+
+	_aStarMap->clearTempObstacle();
+}
+
 void TankBot::moveNext(float dt)
 {
 	auto current = this->getPosition();
@@ -100,8 +141,8 @@ void TankBot::moveNext(float dt)
 		this->setDirection(eDirection::UP);
 	}
 
-	float y = tank::lerp(nextPostion.y, current.y, TANK_NORMAL_VELOCITY * dt);
-	float x = tank::lerp(nextPostion.x, current.x, TANK_NORMAL_VELOCITY * dt);
+	float y = tank::lerp(nextPostion.y, current.y, _velocity * dt);
+	float x = tank::lerp(nextPostion.x, current.x, _velocity * dt);
 
 	if (this->getPosition() != Vector2(x, y))
 	{

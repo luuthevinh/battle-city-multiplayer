@@ -109,7 +109,9 @@ bool Tank::init()
 	contactListener->onContactBegin = CC_CALLBACK_1(Tank::onContactBegin, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
-	
+
+	this->setContentSize(Size(32.0f, 32.0f));
+
 	return true;
 }
 
@@ -117,7 +119,7 @@ void Tank::update(float dt)
 {
 	GameObject::update(dt);
 
-	if(_nextPosition != Vec2::ZERO)
+	if(!_firstUpdated)
 	{
 		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), TANK_NORMAL_VELOCITY * dt));
 		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), TANK_NORMAL_VELOCITY * dt));
@@ -302,9 +304,28 @@ void Tank::setDirection(eDirection direction)
 
 bool Tank::onContactBegin(PhysicsContact & contact)
 {
-	//_velocity = 0;
-	//this->removeStatus(eStatus::RUNNING);
-	
+	//auto objectA = (GameObject*)contact.getShapeA()->getBody()->getNode();
+	//auto objectB = (GameObject*)contact.getShapeB()->getBody()->getNode();
+	//
+	//if (objectA->getTag() == this->getTag())
+	//{
+	//	eDirection side = this->getIntersectSide(objectB->getBoundingBox());
+	//	if (side != eDirection::NONE && side == _direction)
+	//	{
+	//		_velocity = 0;
+	//		this->removeStatus(eStatus::RUNNING);
+	//	}
+	//}
+	//else if (objectB->getTag() == this->getTag())
+	//{
+	//	eDirection side = this->getIntersectSide(objectA->getBoundingBox());
+	//	if (side != eDirection::NONE && side == _direction)
+	//	{
+	//		_velocity = 0;
+	//		this->removeStatus(eStatus::RUNNING);
+	//	}
+	//}
+
 	return true;
 }
 

@@ -170,6 +170,25 @@ const Point & AStarMap::positionToIndex(const Point & position)
 	return Point(x, y);
 }
 
+void AStarMap::addTempObstacle(const Point & index)
+{
+	_tempObstales.push_back(index);
+}
+
+void AStarMap::clearTempObstacle()
+{
+	_tempObstales.clear();
+}
+
+bool AStarMap::isInTempObstacle(const Point & index)
+{
+	auto result = std::find(_tempObstales.begin(), _tempObstales.end(), index);
+	if (result == _tempObstales.end())
+		return false;
+
+	return true;
+}
+
 std::vector<MapNode*> AStarMap::getNeigbour(MapNode * node)
 {
 	auto result = std::vector<MapNode*>();
@@ -240,10 +259,11 @@ MapNode * AStarMap::minCostNode(std::vector<MapNode*>& nodes)
 bool AStarMap::canMove(MapNode * node)
 {
 	auto cur = node->getIndex();
-	if(node->getValue() != 0)
-		return false;
 
-	return true;
+	if(node->getValue() == eTiledObjectId::GRASS_TILE ||( node->getValue() == 0 && !isInTempObstacle(cur)))
+		return true;
+
+	return false;
 }
 
 bool AStarMap::canMoveRight(MapNode * node)
