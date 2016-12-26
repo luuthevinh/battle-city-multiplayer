@@ -30,23 +30,24 @@ public:
 
 	virtual void setId(eObjectId id) override;
 
-	virtual void shoot() {}
+	virtual void shoot();
 	virtual void move(eDirection direction, float dt);
 
 	void deserialize(Buffer & data) override;
 
 protected:
 	float _velocity;
+	int _bulletCounter;
+	eTankLevel _tankLevel;
 
 	std::map<eDirection, Animate*> _animations;
-
-	void runAnimateByDirection(eDirection direction);
-	void updateSpriteWithId();
+	std::queue<CommandPacket*> _commandQueue;
 
 	virtual void updateWithCommand(CommandPacket* commad, float dt);
 
-	std::queue<CommandPacket*> _commandQueue;
-
+	void runAnimateByDirection(eDirection direction);
+	void updateSpriteWithId();
+	int getMaxBullet();
 };
 
 #endif // !__TANK_H__

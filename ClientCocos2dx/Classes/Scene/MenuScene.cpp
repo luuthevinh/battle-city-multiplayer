@@ -2,6 +2,7 @@
 #include "WaitingScene.h"
 #include "ServerPlayScene.h"
 #include "Base\SpriteManager.h"
+#include "SinglePlayScene.h"
 
 MenuScene::MenuScene()
 {
@@ -34,9 +35,21 @@ bool MenuScene::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
-	auto joinServer = Label::createWithTTF("JOIN SERVER", "/fonts/pixel.ttf", 15.0f);
-	joinServer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
-	this->addChild(joinServer);
+	auto single = Label::createWithTTF("SINGLE PLAYER", "/fonts/pixel.ttf", 18.0f);
+	//single->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	//this->addChild(single);
+
+	auto multi = Label::createWithTTF("MULIPLAYER", "/fonts/pixel.ttf", 18.0f);
+	//multi->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	//this->addChild(joinServer);
+
+	auto singleItem = MenuItemLabel::create(single, CC_CALLBACK_1(MenuScene::onSinglePlayerTouch, this));
+	auto multiItem = MenuItemLabel::create(multi, CC_CALLBACK_1(MenuScene::onMultiPlayerTouch, this));
+
+	auto menu = Menu::create(singleItem, multiItem, nullptr);
+	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+	menu->alignItemsVerticallyWithPadding(10.0f);
+	this->addChild(menu);
 
 	auto keyboardListener = EventListenerKeyboard::create();
 	keyboardListener->onKeyPressed = CC_CALLBACK_2(MenuScene::onKeyPressed, this);
@@ -57,4 +70,14 @@ void MenuScene::onKeyPressed(EventKeyboard::KeyCode keycode, Event * event)
 
 void MenuScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event * event)
 {
+}
+
+void MenuScene::onSinglePlayerTouch(Ref * node)
+{
+	Director::getInstance()->replaceScene(SinglePlayScene::createScene());
+}
+
+void MenuScene::onMultiPlayerTouch(Ref * node)
+{
+	Director::getInstance()->replaceScene(WaitingScene::createScene());
 }

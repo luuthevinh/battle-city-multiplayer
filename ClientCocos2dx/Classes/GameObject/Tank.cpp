@@ -1,6 +1,7 @@
 ﻿#include "Tank.h"
 #include "Explosion.h"
 #include "Base\ServerConnector.h"
+#include "Bullet.h"
 
 // shared
 #include "..\Server\Classes\Shared\Buffer.h"
@@ -80,6 +81,8 @@ void Tank::deserialize(Buffer & data)
 
 bool Tank::init()
 {
+	this->setZOrder(TANK_Z_INDEX);
+
 	// update object
 	this->scheduleUpdate();
 
@@ -357,4 +360,62 @@ void Tank::updateWithStatus(eStatus status)
 	default:
 		break;
 	}
+}
+
+void Tank::shoot()
+{
+	if (_bulletCounter >= this->getMaxBullet())
+	{
+		return;
+	}
+
+	Vec2 shootPosition = this->getPosition();
+	float offset = 10.0f;
+
+	switch (_direction)
+	{
+	case LEFT:
+		shootPosition.x -= offset;
+		break;
+	case UP:
+		shootPosition.y += offset;
+		break;
+	case RIGHT:
+		shootPosition.x += offset;
+		break;
+	case DOWN:
+		shootPosition.y -= offset;
+		break;
+	default:
+		break;
+	}
+
+	auto bullet = Bullet::create(shootPosition, this->getDirection());
+	bullet->setOwner(this);
+
+	auto parent = this->getParent();
+	if (parent != nullptr)
+	{
+		parent->addChild(bullet);
+		_bulletCounter++;
+	}
+}
+
+int Tank::getMaxBullet()
+{
+	switch (_tankLevel)
+	{
+	case eTankLevel::BASIC_TANK:
+		return 1;
+	case eTankLevel::FAST_TANK:
+		return 2;
+	case eTankLevel::POWER_TANK:
+		return 3;
+	case eTankLevel::ARMOR_TANK:
+		return 2;
+	default:
+		break;
+	}
+
+	return 1;
 }

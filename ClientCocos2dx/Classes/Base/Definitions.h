@@ -21,4 +21,9 @@ enum eSpriteId
 
 #define DEFAULT_ANIMATION_TIME 0.16
 
+#define GRASS_Z_INDEX 100
+#define TANK_Z_INDEX 10
+#define ICE_Z_INDEX 5
+#define BULLET_Z_INDEX 6
+
 #endif // !__DEFINITIONS_H__

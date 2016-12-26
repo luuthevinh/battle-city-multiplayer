@@ -169,6 +169,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\GameObject\Water.cpp" />
     <ClCompile Include="..\Classes\Scene\MenuScene.cpp" />
     <ClCompile Include="..\Classes\Scene\ServerPlayScene.cpp" />
+    <ClCompile Include="..\Classes\Scene\SinglePlayScene.cpp" />
     <ClCompile Include="..\Classes\Scene\WaitingScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -202,6 +203,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameObject\Water.h" />
     <ClInclude Include="..\Classes\Scene\MenuScene.h" />
     <ClInclude Include="..\Classes\Scene\ServerPlayScene.h" />
+    <ClInclude Include="..\Classes\Scene\SinglePlayScene.h" />
     <ClInclude Include="..\Classes\Scene\WaitingScene.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

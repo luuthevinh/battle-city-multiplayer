@@ -144,6 +144,7 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		if (input == eKeyInput::KEY_SHOOT)
 		{
 			ServerConnector::getInstance()->send(command);
+			this->shoot();
 		}
 		else
 		{

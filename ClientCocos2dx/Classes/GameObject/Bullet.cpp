@@ -21,6 +21,7 @@ Bullet * Bullet::create(const Vec2 & position, eDirection direction)
 		bullet->autorelease();
 		bullet->setPosition(position);
 		bullet->setDirection(direction);
+
 		return bullet;
 	}
 
@@ -71,7 +72,23 @@ bool Bullet::init()
 	_sprite = Sprite::createWithSpriteFrameName(SpriteManager::getInstance()->getObjectName(eObjectId::BULLET));
 	this->addChild(_sprite);
 
+	auto body = PhysicsBody::createBox(Size(BULLET_SIZE_WIDTH, BULLET_SIZE_WIDTH), PhysicsMaterial(0, 0, 0));
+	this->setPhysicsBody(body);
+
+	body->setCategoryBitmask(eObjectId::BULLET);
+	body->setContactTestBitmask(0xFFFFFFFF);
+	body->getShapes().at(0)->setSensor(true);
+
 	_speed = BULLET_SPEED_01;
+
+	this->setZOrder(BULLET_Z_INDEX);
+	this->setContentSize(Size(BULLET_SIZE_WIDTH, BULLET_SIZE_WIDTH));
+
+	// listener
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(Bullet::onContactBegin, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	return true;
 }
@@ -178,4 +195,20 @@ void Bullet::explode()
 
 	this->getParent()->addChild(explosion);
 	this->runAction(RemoveSelf::create());
+}
+
+void Bullet::setOwner(GameObject* owner)
+{
+	_owner = owner;
+}
+
+GameObject* Bullet::getOwner()
+{
+	return _owner;
+}
+
+bool Bullet::onContactBegin(PhysicsContact & contact)
+{
+	this->explode();
+	return true;
 }

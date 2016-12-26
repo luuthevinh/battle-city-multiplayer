@@ -105,6 +105,9 @@
     <ClCompile Include="..\Classes\GameObject\Brick.cpp">
       <Filter>src\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Scene\SinglePlayScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Server\Classes\Shared\Converter.h">
       <Filter>src\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\SinglePlayScene.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

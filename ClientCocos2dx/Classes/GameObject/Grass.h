@@ -9,6 +9,8 @@ public:
 	Grass();
 	~Grass();
 
+	virtual bool init() override;
+
 private:
 
 };

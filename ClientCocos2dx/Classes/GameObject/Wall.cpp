@@ -62,7 +62,7 @@ bool Wall::init()
 	this->setPhysicsBody(body);
 
 	body->getShapes().at(0)->setSensor(true);
-	body->setContactTestBitmask(0x1);
+	body->setContactTestBitmask(eObjectId::BULLET | eObjectId::WHITE_TANK | eObjectId::YELLOW_TANK | eObjectId::GREEN_TANK);
 
 	_direction = eDirection::NONE;
 

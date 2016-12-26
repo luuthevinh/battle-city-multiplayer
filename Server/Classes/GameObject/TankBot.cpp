@@ -46,7 +46,10 @@ void TankBot::setMap(tank::AStarMap* map)
 
 void TankBot::onContactBegin(GameObject & object)
 {
-	if (object.getId() == this->getId())
+	this->removeStatus(eStatus::RUNNING);
+	_velocity = 0;
+
+	//if (object.getId() == this->getId())
 	{
 		while (_nextPostions.size() > 1)
 		{

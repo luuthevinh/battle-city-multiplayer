@@ -20,6 +20,9 @@ public:
 	void onKeyPressed(EventKeyboard::KeyCode keycode, Event* event);
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 
+	void onSinglePlayerTouch(Ref* node);
+	void onMultiPlayerTouch(Ref* node);
+
 private:
 
 };

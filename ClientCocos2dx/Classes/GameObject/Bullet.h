@@ -23,12 +23,19 @@ public:
 	virtual void predict(float dt) override;
 
 	virtual void deserialize(Buffer & data) override;
+
+	virtual void setOwner(GameObject* owner);
+	virtual GameObject* getOwner();
+
+	bool onContactBegin(PhysicsContact& contact);
+
 private:
 	eDirection _direction;
 	float _speed;
 
 	void explode();
 
+	GameObject* _owner;
 };
 
 #endif // !__BULLET_H__

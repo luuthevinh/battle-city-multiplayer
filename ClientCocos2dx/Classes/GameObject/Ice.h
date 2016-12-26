@@ -9,6 +9,8 @@ public:
 	Ice();
 	~Ice();
 
+	virtual bool init() override;
+
 private:
 
 };
