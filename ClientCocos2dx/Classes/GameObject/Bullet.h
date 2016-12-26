@@ -31,11 +31,14 @@ public:
 
 private:
 	eDirection _direction;
+	eBulletLevel _level;
 	float _speed;
 
 	void explode();
 
 	GameObject* _owner;
+	void checkCollisionWithBouding();
+	float getBulletSpeed();
 };
 
 #endif // !__BULLET_H__

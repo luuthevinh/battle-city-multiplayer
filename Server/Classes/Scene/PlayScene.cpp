@@ -299,6 +299,7 @@ void PlayScene::beginGame()
 		tankbot->init();
 		auto begin = tankbot->getRandomNextPostion();
 		tankbot->setPosition(Vector2(begin.x, begin.y));
+		tankbot->setTankLevel(eTankLevel::BASIC_TANK);
 		this->addObject(tankbot);
 	}
 	

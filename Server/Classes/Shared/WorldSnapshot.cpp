@@ -77,6 +77,15 @@ void WorldSnapshot::deserialize(Buffer & data)
 			auto buffer = new Buffer(data.readData(BUFFER_SIZE_GAMEOBJECT), BUFFER_SIZE_GAMEOBJECT);
 			this->addBuffer(uniqueId, buffer);
 		}
+		else if (objectType == eDataType::TANK)
+		{
+			data.setBeginRead(data.getReadIndex() + sizeof(int)); // int kế tiếp là object id, tạm bỏ qua
+			auto uniqueId = data.readInt();
+			data.setBeginRead(data.getReadIndex() - sizeof(int) * 3);
+
+			auto buffer = new Buffer(data.readData(BUFFER_SIZE_TANK), BUFFER_SIZE_TANK);
+			this->addBuffer(uniqueId, buffer);
+		}
 	}
 }
 

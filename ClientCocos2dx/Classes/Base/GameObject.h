@@ -23,9 +23,12 @@ public:
 
 	static GameObject* createWithBuffer(Buffer& buffer);
 
+	GameObject() {}
 	GameObject(eObjectId id);
 	GameObject(Buffer& buffer);
 	~GameObject();
+
+	virtual void createBuffer();
 
 	virtual void addStatus(eStatus status);
 	virtual void removeStatus(eStatus status);
@@ -56,6 +59,8 @@ public:
 	virtual void onChanged(bool value = true) { _hasChanged = value; }
 
 	static int getNextId();
+
+	virtual unsigned int getBufferSize();
 protected:
 	static int _nextId;
 
@@ -84,7 +89,7 @@ protected:
 	void interpolate();
 	void updateLastBuffer(Buffer& buffer);
 
-	void initWithBuffer(Buffer& buffer);
+	virtual void initWithBuffer(Buffer& buffer);
 
 	eDirection getIntersectSide(const Rect& other);
 };

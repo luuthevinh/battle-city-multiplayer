@@ -223,17 +223,33 @@ void ServerConnector::handleData(cocos2d::Layer* layer)
 		GameObject* gameObject = dynamic_cast<GameObject*>(data);
 		if (gameObject)
 		{
-			if (gameObject->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
+			auto object = (GameObject*)layer->getChildByTag(gameObject->getUniqueId());
+			if (object == nullptr)
+			{
+				layer->addChild(gameObject);
+				return;
+			}
+
+			object->deserialize(*data->serialize());
+		}
+		break;
+	}
+	case eDataType::TANK:
+	{
+		Tank* tank = dynamic_cast<Tank*>(data);
+		if (tank)
+		{
+			if (tank->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
 			{
 				auto player = Player::createWithBuffer(*data->serialize());
 				layer->addChild(player);
 				return;
 			}
 
-			auto object = (GameObject*)layer->getChildByTag(gameObject->getUniqueId());
+			auto object = (Tank*)layer->getChildByTag(tank->getUniqueId());
 			if (object == nullptr)
 			{
-				layer->addChild(gameObject);
+				layer->addChild(tank);
 				return;
 			}
 

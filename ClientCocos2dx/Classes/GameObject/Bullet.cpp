@@ -76,10 +76,11 @@ bool Bullet::init()
 	this->setPhysicsBody(body);
 
 	body->setCategoryBitmask(eObjectId::BULLET);
-	body->setContactTestBitmask(0xFFFFFFFF);
+	body->setContactTestBitmask(eObjectId::ALL);
 	body->getShapes().at(0)->setSensor(true);
 
-	_speed = BULLET_SPEED_01;
+	_level = eBulletLevel::SLOW_BULLET;
+	_speed = this->getBulletSpeed();
 
 	this->setZOrder(BULLET_Z_INDEX);
 	this->setContentSize(Size(BULLET_SIZE_WIDTH, BULLET_SIZE_WIDTH));
@@ -133,6 +134,8 @@ void Bullet::update(float dt)
 	default:
 		break;
 	}
+
+	this->checkCollisionWithBouding();
 }
 
 void Bullet::predict(float dt)
@@ -187,6 +190,8 @@ void Bullet::updateWithStatus(eStatus status)
 
 void Bullet::explode()
 {
+	this->setStatus(eStatus::DIE);
+
 	if (this->getParent() == nullptr)
 		return;
 
@@ -195,6 +200,36 @@ void Bullet::explode()
 
 	this->getParent()->addChild(explosion);
 	this->runAction(RemoveSelf::create());
+}
+
+void Bullet::checkCollisionWithBouding()
+{
+	auto position = this->getPosition();
+	if (position.x < 0 || position.x > 26 * TILE_WIDTH || 
+		position.y < 0 || position.y > 32 * TILE_WIDTH)
+	{
+		this->explode();
+	}
+}
+
+float Bullet::getBulletSpeed()
+{
+	switch (_level)
+	{
+	case SLOW_BULLET:
+		_speed = BULLET_SPEED_01;
+		break;
+	case NORMAL_BULLET:
+		_speed = BULLET_SPEED_02;
+		break;
+	case FAST_BULLET:
+		_speed = BULLET_SPEED_03;
+		break;
+	default:
+		break;
+	}
+
+	return _speed;
 }
 
 void Bullet::setOwner(GameObject* owner)
@@ -209,6 +244,13 @@ GameObject* Bullet::getOwner()
 
 bool Bullet::onContactBegin(PhysicsContact & contact)
 {
-	this->explode();
+	auto objectA = contact.getShapeA()->getBody()->getNode();
+	auto objectB = contact.getShapeB()->getBody()->getNode();
+
+	if (objectA != _owner && objectB != _owner)
+	{
+		this->explode();
+	}
+
 	return true;
 }

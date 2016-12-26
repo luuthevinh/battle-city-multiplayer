@@ -41,8 +41,11 @@ Serializable * ClientConverterFactory::convertNext()
 		ret = GameObject::createWithBuffer(*buffer);
 		break;
 	}
-	case PACKET:
+	case TANK:
+	{
+		ret = Tank::createWithBuffer(*buffer);
 		break;
+	}
 	case REPLY_ID:
 	{
 		ret = new ReplyPacket(*buffer);

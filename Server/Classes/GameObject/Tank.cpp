@@ -24,8 +24,52 @@ Tank::~Tank()
 	delete _collisionChecker;
 }
 
+Buffer * Tank::serialize()
+{
+	_buffer->setIndex(0);
+	_buffer->setBeginRead(0);
+
+	_buffer->writeInt(eDataType::TANK);
+	_buffer->writeInt(this->getId());
+	_buffer->writeInt(this->getUniqueId());
+	_buffer->writeInt(this->getStatus());
+	_buffer->writeByte(this->getDirection());
+	_buffer->writeFloat(this->getPosition().x);
+	_buffer->writeFloat(this->getPosition().y);
+	_buffer->writeInt(this->getTankLevel());
+	
+	_buffer->writeFloat(0.0f);
+
+	return _buffer;
+}
+
+void Tank::deserialize(Buffer & data)
+{
+	data.setBeginRead(0);
+
+	eDataType type = (eDataType)data.readInt();
+	if (type != eDataType::TANK)
+		return;
+
+	this->setType(type);
+	this->setId((eObjectId)data.readInt());
+	this->setUniqueId(data.readInt());
+	this->setStatus((eStatus)data.readInt());
+	this->setDirection((eDirection)data.readByte());
+	float x = data.readFloat();
+	float y = data.readFloat();
+	this->setPosition(x, y);
+	this->setTankLevel((eTankLevel)data.readInt());
+
+	auto number = data.readFloat();
+
+	data.setBeginRead(0);
+}
+
 bool Tank::init()
 {
+	_buffer = new Buffer(BUFFER_SIZE_TANK);
+
 	_boudingBox.width = 32;
 	_boudingBox.height = 32;
 
@@ -33,6 +77,8 @@ bool Tank::init()
 
 	_collisionChecker = new AABB();
 	_collisionChecker->setOffset(2);
+
+	this->setTankLevel(eTankLevel::DEFAULT_TANK);
 
 	return true;
 }
@@ -423,4 +469,19 @@ void Tank::shoot()
 
 void Tank::onContactBegin(GameObject& object)
 {
+}
+
+void Tank::setTankLevel(eTankLevel level)
+{
+	_tankLevel = level;
+}
+
+eTankLevel Tank::getTankLevel()
+{
+	return _tankLevel;
+}
+
+unsigned int Tank::getBufferSize()
+{
+	return BUFFER_SIZE_TANK;
 }

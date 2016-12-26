@@ -75,6 +75,8 @@ public:
 	virtual void setParentScene(Scene* scene);
 	virtual Scene* getParentScene();
 
+	virtual unsigned int getBufferSize();
+
 protected:
 	Vector2 _position;
 	eDirection _direction;

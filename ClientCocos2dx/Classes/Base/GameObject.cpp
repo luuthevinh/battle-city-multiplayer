@@ -24,7 +24,7 @@ GameObject * GameObject::createWithBuffer(Buffer & buffer)
 	buffer.setBeginRead(0);
 
 	eDataType type = (eDataType)buffer.readInt();
-	if (type != eDataType::OBJECT)
+	if (type != eDataType::OBJECT && type != eDataType::TANK)
 		return nullptr;
 
 	GameObject* ret = nullptr;
@@ -37,6 +37,10 @@ GameObject * GameObject::createWithBuffer(Buffer & buffer)
 		case WHITE_TANK:
 		{
 			ret = Tank::createWithBuffer(buffer);
+			buffer.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+			float x = buffer.readFloat();
+			float y = buffer.readFloat();
+			ret->setPosition(x, y);
 
 			break;
 		}
@@ -70,7 +74,7 @@ GameObject::GameObject(eObjectId id) :
 	_previousBuffer(nullptr),
 	_lastBuffer(nullptr)
 {
-	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
+	this->createBuffer();
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
 
 	_lifeTime = 0.0f;
@@ -89,6 +93,11 @@ GameObject::~GameObject()
 	delete _buffer;
 	delete _lastBuffer;
 	delete _previousBuffer;
+}
+
+void GameObject::createBuffer()
+{
+	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
 }
 
 void GameObject::addStatus(eStatus status)
@@ -218,6 +227,11 @@ int GameObject::getNextId()
 	return _nextId;
 }
 
+unsigned int GameObject::getBufferSize()
+{
+	return BUFFER_SIZE_GAMEOBJECT;
+}
+
 void GameObject::interpolate()
 {
 	if (_firstUpdated)
@@ -255,13 +269,12 @@ void GameObject::updateLastBuffer(Buffer & buffer)
 
 void GameObject::initWithBuffer(Buffer & buffer)
 {
-	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
+	this->createBuffer();
 	this->deserialize(buffer);
-
-	buffer.setBeginRead(buffer.getSize() - sizeof(int));
 
 	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
 
+	_lifeTime = 0.0f;
 	_previousBuffer = new Buffer(_buffer->getSize());
 	_lastBuffer = this->serialize()->clone();
 	_firstUpdated = true;
@@ -270,27 +283,37 @@ void GameObject::initWithBuffer(Buffer & buffer)
 eDirection GameObject::getIntersectSide(const Rect & other)
 {
 	auto myRect = this->getBoundingBox();
+	auto halfWidth = myRect.size.width / 2;
+	auto halfHeight = myRect.size.height / 2;
+	myRect.origin.x -= halfWidth;
+	myRect.origin.y -= halfHeight;
 
-	if (!myRect.intersectsRect(other))
-		return eDirection::NONE;
+	auto otherRect = other;
+	otherRect.origin.x -= other.size.width / 2;
+	otherRect.origin.y -= other.size.height / 2;
 
-	float left = other.getMinX() - myRect.getMaxX();
-	float top = other.getMaxY() - myRect.getMinY();
-	float right = other.getMaxX() - myRect.getMinX();
-	float bottom = other.getMinY() - myRect.getMaxY();
+	//if (!myRect.intersectsRect(otherRect))
+	//	return eDirection::NONE;
 
-	Vec2 deltaPosition = Vec2(other.getMidX() - myRect.getMidX(), other.getMidY() - myRect.getMidY());
+	int offset = 0.0f;
 
-	if (deltaPosition.x <= 0 && (top > 0 && bottom < 0))
+	float left = otherRect.getMinX() - myRect.getMaxX();
+	float top = otherRect.getMaxY() - myRect.getMinY();
+	float right = otherRect.getMaxX() - myRect.getMinX();
+	float bottom = otherRect.getMinY() - myRect.getMaxY();
+
+	Vec2 deltaPosition = Vec2(otherRect.getMidX() - myRect.getMidX(), otherRect.getMidY() - myRect.getMidY());
+
+	if (deltaPosition.x <= -halfWidth && (top > offset && bottom < -offset))
 		return eDirection::LEFT;
 
-	if (deltaPosition.x >= 0 && (top > 0 && bottom < 0))
+	if (deltaPosition.x >= halfWidth && (top > offset && bottom < -offset))
 		return eDirection::RIGHT;
 
-	if (deltaPosition.y <= 0 && (right > 0 && left < 0))
+	if (deltaPosition.y <= -halfHeight && (right > offset && left < -offset))
 		return eDirection::DOWN;
 
-	if (deltaPosition.y >= 0 && (right > 0 && left < 0))
+	if (deltaPosition.y >= halfHeight && (right > offset && left < -offset))
 		return eDirection::UP;
 
 	return eDirection::NONE;

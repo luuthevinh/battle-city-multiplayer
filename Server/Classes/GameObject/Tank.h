@@ -16,6 +16,9 @@ public:
 	Tank(Buffer& data);
 	~Tank();
 
+	virtual Buffer * serialize() override;
+	virtual void deserialize(Buffer & data) override;
+
 	virtual bool init() override;
 	virtual void update(float dt) override;
 	
@@ -38,6 +41,11 @@ public:
 	virtual void shoot();
 
 	virtual void onContactBegin(GameObject& object);
+
+	virtual void setTankLevel(eTankLevel level);
+	virtual eTankLevel getTankLevel();
+
+	virtual unsigned int getBufferSize() override;
 
 protected:
 	float _velocity;

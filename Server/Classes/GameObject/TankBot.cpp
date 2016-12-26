@@ -7,6 +7,7 @@
 
 TankBot::TankBot() : Tank(eObjectId::WHITE_TANK)
 {
+	this->init();
 }
 
 TankBot::~TankBot()
@@ -19,6 +20,8 @@ bool TankBot::init()
 	{
 		return false;
 	}
+
+	this->setTankLevel(eTankLevel::BASIC_TANK);
 
 	return true;
 }

@@ -154,6 +154,19 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 
 		//CCLOG("shoot: %.2f, %.2f", this->getPositionX(), this->getPositionY());
 	}
+
+	// test
+	if (keycode == EventKeyboard::KeyCode::KEY_SPACE)
+	{
+		auto number = (_tankLevel + 1);
+		if (number > 8)
+		{
+			number = 1;
+		}
+
+		_tankLevel = (eTankLevel)number;
+		this->updateSprite();
+	}
 }
 
 void Player::onKeyReleased(EventKeyboard::KeyCode keycode, Event * e)

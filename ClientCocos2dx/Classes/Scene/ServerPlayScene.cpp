@@ -87,6 +87,7 @@ void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 	for (auto it = ids.begin(); it != ids.end(); it++)
 	{
 		auto node = (GameObject*)this->getChildByTag(it->first);
+
 		if (node != nullptr)
 		{
 			//node->deserialize(*(it->second));

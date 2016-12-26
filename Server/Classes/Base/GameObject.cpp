@@ -55,7 +55,7 @@ GameObject::GameObject(eObjectId id) :
 	_categoryBitmask(1),
 	_lastPacketNumber(0)
 {
-	_buffer = new Buffer(29);
+	this->init();
 }
 
 GameObject::GameObject(Buffer & buffer) :
@@ -64,7 +64,7 @@ GameObject::GameObject(Buffer & buffer) :
 	_collisionChecker(nullptr),
 	_lastPacketNumber(0)
 {
-	_buffer = new Buffer(29);
+	this->init();
 	this->deserialize(buffer);
 }
 
@@ -75,6 +75,8 @@ GameObject::~GameObject()
 
 bool GameObject::init()
 {
+	_buffer = new Buffer(BUFFER_SIZE_GAMEOBJECT);
+
 	return true;
 }
 
@@ -276,4 +278,9 @@ void GameObject::setParentScene(Scene * scene)
 Scene * GameObject::getParentScene()
 {
 	return _parentScene;
+}
+
+unsigned int GameObject::getBufferSize()
+{
+	return BUFFER_SIZE_GAMEOBJECT;
 }

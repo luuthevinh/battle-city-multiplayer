@@ -4,10 +4,80 @@
 	<dict>
 		<key>frames</key>
 		<dict>
+			<key>100.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,1009},{26,14}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{4,8},{26,14}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>200.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{66,1009},{28,14}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,8},{28,14}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>300.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{95,1009},{28,14}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,8},{28,14}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>400.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,999},{28,14}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,8},{28,14}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>500.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,1009},{28,14}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,8},{28,14}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
 			<key>arrowBtn.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{43,1009},{8,12}}</string>
+				<string>{{322,1011},{8,12}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -21,7 +91,7 @@
 			<key>arrowBtn_selected.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{34,1009},{8,12}}</string>
+				<string>{{313,1011},{8,12}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -35,7 +105,7 @@
 			<key>backBtn.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,590},{88,19}}</string>
+				<string>{{0,650},{88,19}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -49,7 +119,7 @@
 			<key>backBtn_selected.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,550},{88,19}}</string>
+				<string>{{0,590},{88,19}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -63,7 +133,7 @@
 			<key>brick_00.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{81,870},{16,16}}</string>
+				<string>{{513,218},{16,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -77,7 +147,7 @@
 			<key>brick_06.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{81,904},{8,16}}</string>
+				<string>{{89,662},{8,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -91,7 +161,7 @@
 			<key>brick_07.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,1009},{16,8}}</string>
+				<string>{{0,1014},{16,8}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -105,7 +175,7 @@
 			<key>brick_08.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{81,887},{8,16}}</string>
+				<string>{{304,1005},{8,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -119,7 +189,7 @@
 			<key>brick_09.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{17,1009},{16,8}}</string>
+				<string>{{65,793},{16,8}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -133,7 +203,7 @@
 			<key>bullet.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{33,808},{8,6}}</string>
+				<string>{{66,1002},{8,6}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -158,10 +228,94 @@
 				<string>{325,36}</string>
 			</dict>
 
+			<key>effect_appearance_01.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,934},{30,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{30,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>effect_appearance_02.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,1005},{18,18}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{6,6},{18,18}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>effect_appearance_03.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{308,581},{22,22}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{4,4},{22,22}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>effect_appearance_04.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{513,174},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>effect_protection_01.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,902},{32,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>effect_protection_02.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,935},{32,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
 			<key>explosion_00.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{65,657},{22,22}}</string>
+				<string>{{98,770},{22,22}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -175,7 +329,7 @@
 			<key>explosion_01.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,816},{30,28}}</string>
+				<string>{{130,936},{30,28}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -189,7 +343,7 @@
 			<key>explosion_02.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,783},{32,32}}</string>
+				<string>{{0,840},{32,32}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -203,7 +357,7 @@
 			<key>explosion_03.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,695},{64,58}}</string>
+				<string>{{0,685},{64,58}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -217,7 +371,7 @@
 			<key>explosion_04.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,630},{64,64}}</string>
+				<string>{{0,744},{64,64}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -231,7 +385,7 @@
 			<key>flag_00.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,754},{32,28}}</string>
+				<string>{{0,873},{32,28}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -245,7 +399,7 @@
 			<key>flag_01.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,845},{28,28}}</string>
+				<string>{{285,821},{28,28}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -256,10 +410,24 @@
 				<string>{32,32}</string>
 			</dict>
 
+			<key>gameover.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,809},{62,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{62,30}}</string>
+				<key>sourceSize</key>
+				<string>{64,32}</string>
+			</dict>
+
 			<key>grass_00.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{65,731},{16,16}}</string>
+				<string>{{396,633},{16,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -273,7 +441,7 @@
 			<key>ice_00.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{65,714},{16,16}}</string>
+				<string>{{513,201},{16,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -282,6 +450,146 @@
 				<string>{{0,0},{16,16}}</string>
 				<key>sourceSize</key>
 				<string>{16,16}</string>
+			</dict>
+
+			<key>item_grenade.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{63,809},{32,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>item_gun.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{33,871},{32,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>item_helmet.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{33,902},{32,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>item_shovel.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{33,987},{32,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>item_star.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{33,840},{32,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>item_tank.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,968},{32,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>item_timer.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{89,631},{32,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{32,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>joinBtn.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,570},{88,19}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{88,19}}</string>
+				<key>sourceSize</key>
+				<string>{88,19}</string>
+			</dict>
+
+			<key>joinBtn_selected.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,630},{88,19}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{88,19}}</string>
+				<key>sourceSize</key>
+				<string>{88,19}</string>
+			</dict>
+
+			<key>pause.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,670},{78,14}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{78,14}}</string>
+				<key>sourceSize</key>
+				<string>{80,16}</string>
 			</dict>
 
 			<key>playBtn.png</key>
@@ -301,7 +609,7 @@
 			<key>playBtn_selected.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,570},{88,19}}</string>
+				<string>{{0,550},{88,19}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -315,7 +623,7 @@
 			<key>steel_00.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{65,697},{16,16}}</string>
+				<string>{{477,606},{16,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -329,7 +637,7 @@
 			<key>tank_01.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{58,808},{26,26}}</string>
+				<string>{{503,954},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -343,7 +651,7 @@
 			<key>tank_02.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{56,843},{26,26}}</string>
+				<string>{{503,927},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -357,7 +665,7 @@
 			<key>tank_03.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{65,630},{26,26}}</string>
+				<string>{{503,900},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -371,7 +679,7 @@
 			<key>tank_04.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{60,781},{26,26}}</string>
+				<string>{{503,873},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -385,7 +693,7 @@
 			<key>tank_05.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{60,754},{26,26}}</string>
+				<string>{{503,846},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -399,7 +707,7 @@
 			<key>tank_06.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{33,781},{26,26}}</string>
+				<string>{{503,819},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -413,7 +721,7 @@
 			<key>tank_07.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,901},{26,26}}</string>
+				<string>{{503,792},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -427,7 +735,7 @@
 			<key>tank_08.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{54,980},{26,26}}</string>
+				<string>{{503,765},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -438,10 +746,794 @@
 				<string>{32,32}</string>
 			</dict>
 
+			<key>tank_09.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{503,732},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_10.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{503,699},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_11.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{33,933},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_12.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{65,685},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_13.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{503,639},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_14.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{503,606},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_15.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{65,712},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_16.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{66,840},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_17.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,976},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_18.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,945},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_19.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{130,965},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_20.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{153,577},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_21.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,852},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_22.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,821},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_23.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{153,604},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_24.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{160,658},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_25.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{306,604},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_26.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,850},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_27.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{160,685},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_28.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{160,714},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_29.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,881},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_30.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,912},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_31.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{160,743},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_32.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,772},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_33.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,958},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_34.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,927},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_35.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,801},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_36.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,828},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_37.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,830},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_38.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,799},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_39.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,855},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_40.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,882},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_41.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,714},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_42.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,683},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_43.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,909},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_44.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,936},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_45.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{445,544},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_46.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{434,513},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_47.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,963},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_48.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{161,990},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_49.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,970},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_50.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,939},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_51.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{184,550},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_52.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{184,577},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_53.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,881},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_54.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,850},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_55.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{191,658},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_56.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{191,685},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_57.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,757},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_58.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,726},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_59.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,766},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_60.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,793},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_61.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,633},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_62.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{418,544},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_63.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,874},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_64.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,901},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
 			<key>tank_green_01.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{54,953},{26,26}}</string>
+				<string>{{513,58},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -455,7 +1547,7 @@
 			<key>tank_green_02.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{54,926},{26,26}}</string>
+				<string>{{513,0},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -469,7 +1561,7 @@
 			<key>tank_green_03.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{54,899},{26,26}}</string>
+				<string>{{395,898},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -483,7 +1575,7 @@
 			<key>tank_green_04.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{54,872},{26,26}}</string>
+				<string>{{395,871},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -497,7 +1589,7 @@
 			<key>tank_green_05.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,874},{26,26}}</string>
+				<string>{{395,844},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -511,7 +1603,7 @@
 			<key>tank_green_06.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{33,754},{26,26}}</string>
+				<string>{{395,817},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -525,7 +1617,7 @@
 			<key>tank_green_07.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{31,816},{26,26}}</string>
+				<string>{{395,790},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -539,7 +1631,7 @@
 			<key>tank_green_08.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{29,845},{26,26}}</string>
+				<string>{{503,672},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -550,10 +1642,1690 @@
 				<string>{32,32}</string>
 			</dict>
 
+			<key>tank_green_09.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{395,726},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_10.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{395,693},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_11.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{66,867},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_12.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{66,948},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_13.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{395,660},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_14.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,695},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_15.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{66,975},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_16.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{33,960},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_17.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,986},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_18.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,955},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_19.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,982},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_20.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{130,855},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_21.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,862},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_22.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,831},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_23.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{215,631},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_24.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{222,658},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_25.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,943},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_26.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{313,635},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_27.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,741},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_28.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,770},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_29.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,974},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_30.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{308,550},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_31.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,853},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_32.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,882},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_33.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{395,925},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_34.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,978},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_35.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,965},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_36.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,992},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_37.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,885},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_38.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,854},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_39.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,826},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_40.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,853},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_41.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,761},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_42.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{513,85},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_43.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{130,828},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_44.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,965},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_45.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,738},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_46.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{364,544},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_47.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,992},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_48.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{277,550},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_49.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,918},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_50.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,887},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_51.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{277,577},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_52.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,880},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_53.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{326,513},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_54.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,949},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_55.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,745},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_56.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,907},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_57.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,761},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_58.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,730},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_59.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{253,691},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_60.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,718},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_61.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{362,575},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_62.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{513,143},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_63.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{215,550},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_green_64.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{129,743},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_01.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{369,633},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,4},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_02.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{369,606},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,4},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_03.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{389,575},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{4,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_04.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{450,602},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{4,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_05.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{395,956},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_06.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{503,981},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_07.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{504,575},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_08.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{513,116},{26,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_09.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{335,581},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_10.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,697},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_11.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{96,793},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_12.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{89,577},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_13.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,823},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_14.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,697},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_15.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{89,550},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_16.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{66,921},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_17.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,707},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_18.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,730},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_19.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{253,664},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_20.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{253,637},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_21.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,792},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_22.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,823},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_23.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,799},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_24.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{254,772},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_25.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{277,604},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_26.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,759},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_27.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{246,608},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_28.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{222,685},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_29.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,697},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_30.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{284,635},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_31.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{246,579},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_32.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{246,550},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_33.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{395,759},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_34.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,947},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_35.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,938},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_36.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,911},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_37.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{342,645},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_38.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{353,513},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_39.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,826},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_40.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{223,799},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_41.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{380,513},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_42.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,676},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_43.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{222,714},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_44.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{215,577},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_45.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,769},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_46.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,800},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_47.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{215,604},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_48.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{153,631},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_49.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,893},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_50.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{368,924},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_51.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,955},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_52.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,928},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_53.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{395,983},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_54.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{396,602},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_55.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,847},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_56.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{192,820},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_57.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,664},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_58.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,695},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_59.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{191,739},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_60.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{191,712},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_61.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,788},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_62.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{422,819},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_63.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{184,631},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_red_64.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{184,604},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
 			<key>tank_white_01.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{27,982},{26,26}}</string>
+				<string>{{416,575},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -567,7 +3339,7 @@
 			<key>tank_white_02.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{27,955},{26,26}}</string>
+				<string>{{422,912},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -581,7 +3353,7 @@
 			<key>tank_white_03.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{27,928},{26,26}}</string>
+				<string>{{423,602},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -595,7 +3367,7 @@
 			<key>tank_white_04.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{27,901},{26,26}}</string>
+				<string>{{443,575},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -609,7 +3381,7 @@
 			<key>tank_white_05.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{27,874},{26,26}}</string>
+				<string>{{449,629},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -623,7 +3395,7 @@
 			<key>tank_white_06.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,982},{26,26}}</string>
+				<string>{{449,656},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -637,7 +3409,7 @@
 			<key>tank_white_07.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,955},{26,26}}</string>
+				<string>{{449,745},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -651,13 +3423,797 @@
 			<key>tank_white_08.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,928},{26,26}}</string>
+				<string>{{449,772},{26,26}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false/>
 				<key>sourceColorRect</key>
 				<string>{{2,2},{26,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_09.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,861},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_10.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,894},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_11.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{66,894},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_12.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{65,766},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_13.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,629},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_14.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,662},{26,32}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,32}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_15.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{65,739},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_16.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{89,604},{32,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{32,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_17.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,790},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_18.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,883},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_19.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{153,550},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_20.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{130,992},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_21.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,914},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_22.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{513,27},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_23.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{130,909},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_24.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{130,882},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_25.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{284,666},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_26.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,790},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_27.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{130,799},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_28.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{129,770},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_29.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{313,666},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_30.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{285,728},{28,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{28,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_31.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{129,687},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_32.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{129,658},{30,28}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,28}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_33.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,759},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_34.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{461,513},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_35.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{122,577},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_36.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{122,550},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_37.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{449,989},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_38.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,980},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_39.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{99,928},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_40.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{99,901},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_41.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{341,916},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_42.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,856},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_43.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{99,820},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_44.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{98,743},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_45.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{314,792},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_46.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{337,544},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_47.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{129,716},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_48.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{122,631},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_49.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{342,614},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_50.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{472,544},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_51.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{98,689},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_52.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{98,662},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,4},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_53.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{476,728},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_54.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{391,544},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_55.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{98,716},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_56.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{99,847},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_57.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{407,513},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_58.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{477,575},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_59.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{99,874},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_60.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{99,955},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_61.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{488,513},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_62.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{499,544},{26,30}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{2,0},{26,30}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_63.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{99,982},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
+				<key>sourceSize</key>
+				<string>{32,32}</string>
+			</dict>
+
+			<key>tank_white_64.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{122,604},{30,26}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,2},{30,26}}</string>
 				<key>sourceSize</key>
 				<string>{32,32}</string>
 			</dict>
@@ -679,7 +4235,7 @@
 			<key>water_00.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{54,1007},{16,16}}</string>
+				<string>{{342,676},{16,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -693,7 +4249,7 @@
 			<key>water_01.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{65,680},{16,16}}</string>
+				<string>{{422,1001},{16,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -707,7 +4263,7 @@
 			<key>water_02.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{71,1007},{16,16}}</string>
+				<string>{{476,1007},{16,16}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
