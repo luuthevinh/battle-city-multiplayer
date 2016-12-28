@@ -227,6 +227,16 @@ int GameObject::getNextId()
 	return _nextId;
 }
 
+int GameObject::getLastUniqueId()
+{
+	return _nextId;
+}
+
+void GameObject::setLastUniqueId(int id)
+{
+	_nextId = id;
+}
+
 unsigned int GameObject::getBufferSize()
 {
 	return BUFFER_SIZE_GAMEOBJECT;

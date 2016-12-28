@@ -103,15 +103,8 @@ void Bullet::update(float dt)
 		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), _speed * dt));
 		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), _speed * dt));
 
-		if (this->getPosition() == _nextPosition)
-		{
-			if (_status == eStatus::DIE)
-			{
-				this->explode();
-			}
-		}
 	}
-	else
+	else if(_firstUpdated)
 	{
 		this->predict(dt);
 	}
@@ -179,8 +172,7 @@ void Bullet::updateWithStatus(eStatus status)
 	{
 	case DIE:
 	{
-		
-
+		this->runAction(RemoveSelf::create());
 		break;
 	}
 	default:
@@ -199,7 +191,6 @@ void Bullet::explode()
 	explosion->setPosition(this->getPosition());
 
 	this->getParent()->addChild(explosion);
-	this->runAction(RemoveSelf::create());
 }
 
 void Bullet::checkCollisionWithBouding()
@@ -209,6 +200,7 @@ void Bullet::checkCollisionWithBouding()
 		position.y < 0 || position.y > 32 * TILE_WIDTH)
 	{
 		this->explode();
+		this->runAction(RemoveSelf::create());
 	}
 }
 
@@ -244,12 +236,22 @@ GameObject* Bullet::getOwner()
 
 bool Bullet::onContactBegin(PhysicsContact & contact)
 {
-	auto objectA = contact.getShapeA()->getBody()->getNode();
-	auto objectB = contact.getShapeB()->getBody()->getNode();
+	auto objectA = (GameObject*)contact.getShapeA()->getBody()->getNode();
+	auto objectB = (GameObject*)contact.getShapeB()->getBody()->getNode();
+
+	if (objectA->getId() != eObjectId::BULLET && objectB->getId() != eObjectId::BULLET)
+		return true;
 
 	if (objectA != _owner && objectB != _owner)
 	{
-		this->explode();
+		if (objectA->getId() == eObjectId::BULLET && objectB->getId() == eObjectId::BULLET)
+		{
+			this->setStatus(eStatus::DIE);
+		}
+		else
+		{
+			this->explode();
+		}
 	}
 
 	return true;

@@ -6,6 +6,7 @@
 #include "..\Server\Classes\Shared\SharedDefinitions.h"
 
 class WorldSnapshot;
+class GameObject;
 
 USING_NS_CC;
 
@@ -27,9 +28,15 @@ public:
 
 private:
 	std::vector<WorldSnapshot*> _snapshots;
+	std::deque<GameObject*> _tankPending;
 
 	void initWithTMX();
 	void addWall(const Vec2& position, eObjectId id);
+	void addObject(GameObject* object);
+	void addTank(GameObject* tank);
+
+	GameObject* findTankPendingByUniqueId(int id);
+	void removeTankPendingByUniqueId(int id);
 };
 
 #endif // !__SERVER_PLAY_SCENE_H__

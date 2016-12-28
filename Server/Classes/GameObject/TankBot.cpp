@@ -23,11 +23,19 @@ bool TankBot::init()
 
 	this->setTankLevel(eTankLevel::BASIC_TANK);
 
+	_isActive = false;
+	_activeTimer = 3.0f;
+
 	return true;
 }
 
 void TankBot::update(float dt)
 {
+	this->countingToActive(dt);
+
+	if (!_isActive)
+		return;
+
 	if (_nextPostions.size() > 1)
 	{
 		this->moveNext(dt);
@@ -49,11 +57,11 @@ void TankBot::setMap(tank::AStarMap* map)
 
 void TankBot::onContactBegin(GameObject & object)
 {
-	this->removeStatus(eStatus::RUNNING);
-	_velocity = 0;
-
-	//if (object.getId() == this->getId())
+	if (object.getId() == this->getId())
 	{
+		this->removeStatus(eStatus::RUNNING);
+		_velocity = 0;
+
 		while (_nextPostions.size() > 1)
 		{
 			_nextPostions.pop();
@@ -64,16 +72,14 @@ void TankBot::onContactBegin(GameObject & object)
 
 		this->findNewWayWithTempObstacle(otherIndex);
 	}
-
-	
 }
 
 void TankBot::checkCollision(GameObject & other, float dt)
 {
-	if (!this->canCollisionWith(other.getCategoryBitmask()))
+	if (!_isActive)
 		return;
 
-	if (other.getId() == eObjectId::BULLET)
+	if (other.getId() == eObjectId::BULLET || other.getId() == eObjectId::GRASS_WALL)
 	{
 		return;
 	}
@@ -174,6 +180,22 @@ void TankBot::addCommand(eKeyInput input, bool begin)
 	command->input = input;
 
 	_commandQueue.push(command);
+}
+
+void TankBot::countingToActive(float dt)
+{
+	if (_isActive)
+		return;
+
+	if (_activeTimer > 0.0f)
+	{
+		_activeTimer -= dt;
+	}
+	else
+	{
+		_activeTimer == 0.0f;
+		_isActive = true;
+	}
 }
 
 Point TankBot::getRandomNextPostion()

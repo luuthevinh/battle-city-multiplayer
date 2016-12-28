@@ -56,6 +56,7 @@ void Wall::gotHit(Damage* damage)
 		this->setStatus(eStatus::DIE);
 
 		this->updateMap();
+		delete damage;
 
 		return;
 	}

@@ -43,6 +43,7 @@ private:
 	void mappingNames();
 	
 	Animate* createAniamte(char* framename, ...);
+	Animate* createAniamte(float time, char* framename, ...);
 	void addFrameCache(const std::string& plist);
 	void addFrameCache(const std::string& plist, const std::string& imagefile);
 

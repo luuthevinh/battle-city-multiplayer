@@ -39,7 +39,7 @@ float AABB::checkCollision(const GameObject & object, const GameObject & other, 
 	// nếu object khác cũng đang di chuyển
 	if (otherVeloc != Vector2(0, 0))
 	{
-		velocity = otherVeloc - myVeloc;
+		velocity = myVeloc - otherVeloc;
 	}
 
 	// tìm khoảng cách giữa các cạnh

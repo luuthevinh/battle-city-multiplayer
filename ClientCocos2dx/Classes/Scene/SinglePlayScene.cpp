@@ -1,6 +1,7 @@
 #include "SinglePlayScene.h"
 #include "GameObject\Wall.h"
 #include "GameObject\Player.h"
+#include "GameObject\AppearanceEffect.h"
 
 // shared
 #include "..\Server\Classes\Shared\Converter.h"
@@ -39,6 +40,10 @@ bool SinglePlayScene::init()
 	player->setPosition(144, 16);
 	player->setName("player");
 	this->addChild(player);
+
+	auto effect = AppearanceEffect::create();
+	effect->setPosition(player->getPosition() + Vec2(0, 32));
+	this->addChild(effect);
 
 	return true;
 }

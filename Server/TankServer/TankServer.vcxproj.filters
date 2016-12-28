@@ -132,6 +132,9 @@
     <ClInclude Include="..\Classes\Shared\Converter.h">
       <Filter>Source Files\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Spawner.h">
+      <Filter>Source Files\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Base\GameObject.cpp">
@@ -232,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Scene\PlayScene.cpp">
       <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Spawner.cpp">
+      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

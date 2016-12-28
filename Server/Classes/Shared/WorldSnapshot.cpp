@@ -35,13 +35,14 @@ Buffer * WorldSnapshot::serialize()
 	if (_buffer != nullptr)
 		delete _buffer;
 
-	int newSize = _totalSize + 16;
+	int newSize = _totalSize + 20;
 	_buffer = new Buffer(newSize);
 
 	_buffer->writeInt(eDataType::SNAPSHOT);
 	_buffer->writeInt(this->getUniqueId());
 	_buffer->writeFloat(_serverTime);
 	_buffer->writeFloat(_clientTime);
+	_buffer->writeInt(GameObject::getLastUniqueId());
 
 	// object data
 	for (auto it = _dataObjects.begin(); it != _dataObjects.end(); it++)
@@ -64,6 +65,7 @@ void WorldSnapshot::deserialize(Buffer & data)
 	this->setUniqueId(data.readInt());
 	_serverTime = data.readFloat();
 	_clientTime = data.readFloat();
+	_lastObjectId = data.readInt();
 
 	while (!data.isEndOfData())
 	{
@@ -146,6 +148,11 @@ void WorldSnapshot::clearObjects()
 	}
 	_dataObjects.clear();
 	_totalSize = 0;
+}
+
+int WorldSnapshot::getLastUniqueId()
+{
+	return _lastObjectId;
 }
 
 void WorldSnapshot::addBuffer(int uniqueId, Buffer* buffer)

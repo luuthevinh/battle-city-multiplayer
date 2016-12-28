@@ -4,7 +4,7 @@
 #include <vector>
 #include "..\Base\GameObject.h"
 #include "..\Base\Scene.h"
-
+#include "..\GameObject\Spawner.h"
 #include "..\Shared\AStarMap.h"
 
 class PlayScene : public Scene
@@ -31,14 +31,25 @@ public:
 	tank::AStarMap* getMap();
 
 	virtual void beginGame() override;
+
+	virtual int getRandomPositionIndex();
+	virtual Vector2 getBotStartPosition(int index);
+
+	virtual const Vector2& getPlayerStartPosition() override;
+
 private:
 	void checkCollisionObjects(float dt);
 	void checkStatusObjects();
 	void sendChangedObjects();
 	void updateSnapshot(Serializable * object);
+	void createBot();
 
 	tank::AStarMap* _aStarMap;
-	std::vector<Vector2> _beginPositions;
+	std::vector<Vector2> _beginPlayerPositions;
+	std::vector<Vector2> _beginBotPositions;
+
+	int _numberOfBotsCreated;
+	Spawner* _botSpawner;
 };
 
 

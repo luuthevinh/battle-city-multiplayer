@@ -35,7 +35,9 @@ private:
 	void addCommand(eKeyInput input, bool begin = true);
 
 	Vector2 _oldPositon;
+	float _activeTimer;
 
+	void countingToActive(float dt);
 };
 
 

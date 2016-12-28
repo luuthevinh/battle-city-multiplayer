@@ -142,6 +142,7 @@
     <ClInclude Include="..\Classes\GameObject\Damage.h" />
     <ClInclude Include="..\Classes\GameObject\MapLoader.h" />
     <ClInclude Include="..\Classes\GameObject\Player.h" />
+    <ClInclude Include="..\Classes\GameObject\Spawner.h" />
     <ClInclude Include="..\Classes\GameObject\Tank.h" />
     <ClInclude Include="..\Classes\GameObject\TankBot.h" />
     <ClInclude Include="..\Classes\GameObject\Wall.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="..\Classes\GameObject\MapLoader.cpp" />
     <ClCompile Include="..\Classes\GameObject\Player.cpp" />
     <ClCompile Include="..\Classes\GameObject\Damage.cpp" />
+    <ClCompile Include="..\Classes\GameObject\Spawner.cpp" />
     <ClCompile Include="..\Classes\GameObject\Tank.cpp" />
     <ClCompile Include="..\Classes\GameObject\TankBot.cpp" />
     <ClCompile Include="..\Classes\GameObject\Wall.cpp" />

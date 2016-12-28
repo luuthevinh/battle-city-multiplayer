@@ -24,6 +24,7 @@ public:
 	
 	virtual void setVelocity(float velocity);
 	virtual float getVeloctiy();
+	virtual float getVelocityByLevel();
 
 	virtual Vector2 getVelocity() const override;
 
@@ -46,10 +47,18 @@ public:
 	virtual eTankLevel getTankLevel();
 
 	virtual unsigned int getBufferSize() override;
+	
+	virtual void setStartPositionIndex(int index);
+	virtual int getStartPositionIndex();
+
+	virtual void gotHit(Damage* damage) override;
 
 protected:
 	float _velocity;
 	int _bulletCounter;
+	int _startPositionIndex;
+	bool _isActive;
+	int _health;
 
 	eTankLevel _tankLevel;
 
@@ -58,7 +67,7 @@ protected:
 	std::map<eDirection, int> _objectCollidingCounter;
 
 	void updatePosition(float dt);
-	void fixPositionForTurn();
+	virtual void fixPositionForTurn();
 
 	void updateBoundingBoxPosition();
 
@@ -68,6 +77,7 @@ protected:
 	bool isCollidingAtSide(eDirection side);
 
 	int getMaxBullet();
+	int getMaxHealth();
 
 	void updateWithCommand(CommandPacket* commad, float dt);
 

@@ -66,6 +66,7 @@ public:
 	virtual void setBoundingBox(const Rect &box);
 
 	static int getNextUniqueId();
+	static int getLastUniqueId();
 
 	virtual void gotHit(Damage* damage);
 

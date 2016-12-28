@@ -16,6 +16,7 @@ PlayScene::~PlayScene()
 {
 	delete _snapshot;
 	delete _aStarMap;
+	delete _botSpawner;
 }
 
 bool PlayScene::init()
@@ -53,21 +54,35 @@ bool PlayScene::init()
 	}
 
 	// load objects group
-	//auto objectsLayer = loader->getLayer("objects");
-	//
-	//auto object = objectsLayer->content.objgr->head;
-	//while (object)
-	//{
-	//	if (strcmp(object->name, "player_01") == 0 || strcmp(object->name, "player_02") == 0 || 
-	//		strcmp(object->name, "player_03") == 0 || strcmp(object->name, "player_04") == 0)
-	//	{
-	//		_beginPositions.push_back(Vector2(object->x + object->width / 2, WINDOW_HEIGHT - object->y - object->height / 2));
-	//	}
+	auto objectsLayer = loader->getLayer("objects");
+	
+	auto object = objectsLayer->content.objgr->head;
+	while (object)
+	{
+		if (strcmp(object->name, "player_01") == 0 || strcmp(object->name, "player_02") == 0 || 
+			strcmp(object->name, "player_03") == 0 || strcmp(object->name, "player_04") == 0)
+		{
+			_beginPlayerPositions.push_back(Vector2(object->x + object->width / 2, WINDOW_HEIGHT - object->y - object->height / 2));
+		}
+		else if (strcmp(object->name, "enemy_01") == 0 || strcmp(object->name, "enemy_02") == 0 || 
+			strcmp(object->name, "enemy_03") == 0)
+		{
+			_beginBotPositions.push_back(Vector2(object->x + object->width / 2, WINDOW_HEIGHT - object->y - object->height / 2));
+		}
+		else if (strcmp(object->name, "flag") == 0)
+		{
 
-	//	object = object->next;
-	//}
+		}
+
+		object = object->next;
+	}
 
 	_snapshot = new WorldSnapshot();
+
+	_numberOfBotsCreated = 0;
+
+	_botSpawner = new Spawner(eObjectId::WHITE_TANK, this);
+	_botSpawner->setTime(5.0f);
 
 	return true;
 }
@@ -98,6 +113,8 @@ void PlayScene::update(float dt)
 
 	// kiểm tra trạng thái object
 	this->checkStatusObjects();
+
+	_botSpawner->update(dt);
 }
 
 void PlayScene::destroy()
@@ -227,6 +244,10 @@ void PlayScene::updateSnapshot(Serializable * object)
 	_snapshot->addObject(object);
 }
 
+void PlayScene::createBot()
+{
+}
+
 void PlayScene::handleData(Serializable * object)
 {
 	// player
@@ -289,18 +310,22 @@ tank::AStarMap * PlayScene::getMap()
 
 void PlayScene::beginGame()
 {
-	srand(time(NULL));
+	_botSpawner->setTotalObjects(Game::instance->getNumberOfBots());
+}
 
-	for (auto i = 0; i < Game::instance->getNumberOfBots(); i++)
-	{
-		// add 1 bots
-		auto tankbot = new TankBot();
-		tankbot->setMap(_aStarMap);
-		tankbot->init();
-		auto begin = tankbot->getRandomNextPostion();
-		tankbot->setPosition(Vector2(begin.x, begin.y));
-		tankbot->setTankLevel(eTankLevel::BASIC_TANK);
-		this->addObject(tankbot);
-	}
-	
+int PlayScene::getRandomPositionIndex()
+{
+	return rand() % _beginBotPositions.size();
+}
+
+Vector2 PlayScene::getBotStartPosition(int index)
+{
+	return _beginBotPositions[index];
+}
+
+const Vector2 & PlayScene::getPlayerStartPosition()
+{
+	auto randIndex = rand() % _beginPlayerPositions.size();
+
+	return _beginPlayerPositions[randIndex];
 }

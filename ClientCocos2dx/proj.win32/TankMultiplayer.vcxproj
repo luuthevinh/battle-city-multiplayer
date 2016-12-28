@@ -156,6 +156,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Base\GameObject.cpp" />
     <ClCompile Include="..\Classes\Base\ServerConnector.cpp" />
     <ClCompile Include="..\Classes\Base\SpriteManager.cpp" />
+    <ClCompile Include="..\Classes\GameObject\AppearanceEffect.cpp" />
     <ClCompile Include="..\Classes\GameObject\Brick.cpp" />
     <ClCompile Include="..\Classes\GameObject\Bullet.cpp" />
     <ClCompile Include="..\Classes\GameObject\Explosion.cpp" />
@@ -190,6 +191,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Base\GameObject.h" />
     <ClInclude Include="..\Classes\Base\ServerConnector.h" />
     <ClInclude Include="..\Classes\Base\SpriteManager.h" />
+    <ClInclude Include="..\Classes\GameObject\AppearanceEffect.h" />
     <ClInclude Include="..\Classes\GameObject\Brick.h" />
     <ClInclude Include="..\Classes\GameObject\Bullet.h" />
     <ClInclude Include="..\Classes\GameObject\Explosion.h" />

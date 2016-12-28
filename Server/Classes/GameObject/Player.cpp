@@ -3,6 +3,8 @@
 #include "..\Base\SceneManager.h"
 #include "..\Shared\DataPacket.h"
 
+#include "..\Server.h"
+
 Player::Player(eObjectId id, int index) : Tank(id),
 	_index(index),
 	_isHost(false)
@@ -47,6 +49,25 @@ void Player::handleData(Serializable * data)
 	default:
 		break;
 	}
+}
+
+void Player::shoot()
+{
+	Tank::shoot();
+
+}
+
+void Player::move(eDirection direction, float dt)
+{
+	this->setDirection(direction);
+
+	this->addStatus(eStatus::RUNNING);
+	_velocity = this->getVelocityByLevel();
+
+	// fix position for turning
+	this->fixPositionForTurn();
+
+	this->moveByDistance(_velocity * dt);
 }
 
 void Player::setHost(bool value)

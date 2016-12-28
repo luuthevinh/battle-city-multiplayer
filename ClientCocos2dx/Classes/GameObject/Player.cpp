@@ -82,7 +82,7 @@ void Player::update(float dt)
 	{
 		ServerConnector::getInstance()->send(_commandQueue.front());
 	}
-
+	
 	this->syncPositionWithLastUpdate(dt);
 }
 
@@ -130,7 +130,7 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 		if (input != eKeyInput::KEY_SHOOT)
 		{
 			_keyDirectionCounter++;
-			_velocity = TANK_NORMAL_VELOCITY;
+			_velocity = this->getVelocityByLevel();
 			this->addStatus(eStatus::RUNNING);
 
 			this->onChanged();
@@ -233,6 +233,9 @@ void Player::reconcile(Buffer & data)
 	float y = data.readFloat();
 
 	_lastUpdatedPosition = Vec2(x, y);
+	_enableSync = true;
+
+	this->setPosition(_lastPosition);
 
 	//auto time = ServerConnector::getInstance()->getTime();
 
@@ -262,29 +265,34 @@ void Player::reconcile(Buffer & data)
 void Player::updateWithCommand(CommandPacket * commad, float dt)
 {
 	Tank::updateWithCommand(commad, dt);
+	
+	//if (!this->hasStatus(eStatus::RUNNING) || _firstUpdated)
+	//	return;
 
-	if (!this->hasStatus(eStatus::RUNNING) || _firstUpdated)
-		return;
+	//float x = tank::lerp(_nextPosition.x, _lastUpdatedPosition.x, TANK_NORMAL_VELOCITY * dt);
+	//float y = tank::lerp(_nextPosition.y, _lastUpdatedPosition.y, TANK_NORMAL_VELOCITY * dt);
 
-	float x = tank::lerp(_nextPosition.x, _lastUpdatedPosition.x, TANK_NORMAL_VELOCITY * dt);
-	float y = tank::lerp(_nextPosition.y, _lastUpdatedPosition.y, TANK_NORMAL_VELOCITY * dt);
-
-	_lastUpdatedPosition.x = x;
-	_lastUpdatedPosition.y = y;
+	//_lastUpdatedPosition.x = x;
+	//_lastUpdatedPosition.y = y;
 }
 
 void Player::syncPositionWithLastUpdate(float dt)
 {
-	if (!this->hasStatus(eStatus::RUNNING))
-		return;
+	//if (!this->hasStatus(eStatus::RUNNING) || !_enableSync)
+	//	return;
 
-	if (_lastUpdatedPosition != this->getPosition() && !_firstUpdated)
-	{
-		float x = tank::lerp(_lastUpdatedPosition.x, this->getPosition().x, 1.0f);
-		float y = tank::lerp(_lastUpdatedPosition.y, this->getPosition().y, 1.0f);
 
-		this->setPosition(x, y);
-	}
+	//if (_lastUpdatedPosition != this->getPosition() && !_firstUpdated)
+	//{
+	//	float x = tank::lerp(_lastUpdatedPosition.x, this->getPosition().x, TANK_NORMAL_VELOCITY * dt);
+	//	float y = tank::lerp(_lastUpdatedPosition.y, this->getPosition().y, TANK_NORMAL_VELOCITY * dt);
+
+	//	this->setPosition(x, y);
+	//}
+	//else
+	//{
+	//	_enableSync = false;
+	//}
 }
 
 void Player::addPendingCommand(CommandPacket * command)
@@ -306,4 +314,37 @@ void Player::predict(float dt)
 		delete _commandQueue.front();
 		_commandQueue.pop();
 	}
+}
+
+void Player::move(eDirection direction, float dt)
+{
+	this->setDirection(direction);
+
+	if (this->isCollidingAtSide(direction))
+		return;
+
+	if (!this->hasStatus(eStatus::RUNNING))
+		return;
+
+	this->fixPositionForTurn();
+
+	switch (_direction)
+	{
+	case LEFT:
+		this->setPositionX(this->getPositionX() - _velocity * dt);
+		break;
+	case UP:
+		this->setPositionY(this->getPositionY() + _velocity * dt);
+		break;
+	case RIGHT:
+		this->setPositionX(this->getPositionX() + _velocity * dt);
+		break;
+	case DOWN:
+		this->setPositionY(this->getPositionY() - _velocity * dt);
+		break;
+	default:
+		break;
+	}
+
+	this->onChanged();
 }

@@ -266,6 +266,11 @@ int GameObject::getNextUniqueId()
 	return _nextUniqueId;
 }
 
+int GameObject::getLastUniqueId()
+{
+	return _nextUniqueId;
+}
+
 void GameObject::gotHit(Damage * damage)
 {
 }

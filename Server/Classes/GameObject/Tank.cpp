@@ -1,5 +1,6 @@
 ﻿#include "Tank.h"
 #include "Bullet.h"
+#include "..\Definitions.h"
 #include "..\Base\AABB.h"
 #include "..\Base\SceneManager.h"
 
@@ -8,13 +9,15 @@
 
 Tank::Tank(eObjectId id) : GameObject(id),
 	_velocity(0),
-	_tankLevel(eTankLevel::BASIC_TANK)
+	_tankLevel(eTankLevel::BASIC_TANK),
+	_startPositionIndex(0)
 {
 	this->init();
 }
 
 Tank::Tank(Buffer& data) : GameObject(data),
-	_velocity(0)
+	_velocity(0),
+	_startPositionIndex(0)
 {
 	this->init();
 }
@@ -38,7 +41,7 @@ Buffer * Tank::serialize()
 	_buffer->writeFloat(this->getPosition().y);
 	_buffer->writeInt(this->getTankLevel());
 	
-	_buffer->writeFloat(0.0f);
+	_buffer->writeInt(this->getStartPositionIndex());
 
 	return _buffer;
 }
@@ -60,8 +63,7 @@ void Tank::deserialize(Buffer & data)
 	float y = data.readFloat();
 	this->setPosition(x, y);
 	this->setTankLevel((eTankLevel)data.readInt());
-
-	auto number = data.readFloat();
+	this->setStartPositionIndex(data.readInt());
 
 	data.setBeginRead(0);
 }
@@ -80,11 +82,17 @@ bool Tank::init()
 
 	this->setTankLevel(eTankLevel::DEFAULT_TANK);
 
+	_isActive = true;
+	_health = this->getMaxHealth();
+	
 	return true;
 }
 
 void Tank::update(float dt)
 {
+	if (!_isActive)
+		return;
+
 	this->updatePosition(dt);
 
 	this->updateBoundingBoxPosition();
@@ -104,7 +112,7 @@ void Tank::updatePosition(float dt)
 	{
 		if (_velocity == 0)
 		{
-			_velocity = TANK_NORMAL_VELOCITY;
+			_velocity = this->getVelocityByLevel();
 		}
 	}
 
@@ -196,6 +204,25 @@ int Tank::getMaxBullet()
 	return 1;
 }
 
+int Tank::getMaxHealth()
+{
+	switch (_tankLevel)
+	{
+	case eTankLevel::BASIC_TANK:
+		return 1;
+	case eTankLevel::FAST_TANK:
+		return 1;
+	case eTankLevel::POWER_TANK:
+		return 1;
+	case eTankLevel::ARMOR_TANK:
+		return 3;
+	default:
+		break;
+	}
+
+	return 1;
+}
+
 void Tank::setVelocity(float velocity)
 {
 	_velocity = velocity;
@@ -204,6 +231,31 @@ void Tank::setVelocity(float velocity)
 float Tank::getVeloctiy()
 {
 	return _velocity;
+}
+
+float Tank::getVelocityByLevel()
+{
+	switch (_tankLevel)
+	{
+	case DEFAULT_TANK:
+		return TANK_NORMAL_VELOCITY;
+	case SECOND_TANK:
+		return TANK_NORMAL_VELOCITY;
+	case THIRD_TANK:
+		return TANK_FAST_VELOCITY;
+	case FOURTH_TANK:
+		return TANK_FAST_VELOCITY;
+	case BASIC_TANK:
+		return TANK_SLOW_VELOCITY;
+	case FAST_TANK:
+		return TANK_FAST_VELOCITY;
+	case POWER_TANK:
+		return TANK_NORMAL_VELOCITY;
+	case ARMOR_TANK:
+		return TANK_NORMAL_VELOCITY;
+	default:
+		return TANK_NORMAL_VELOCITY;
+	}
 }
 
 Vector2 Tank::getVelocity() const
@@ -232,10 +284,10 @@ void Tank::onChanged()
 
 void Tank::checkCollision(GameObject & other, float dt)
 {
-	if (!this->canCollisionWith(other.getCategoryBitmask()))
+	if (!_isActive)
 		return;
 
-	if (other.getId() == eObjectId::BULLET)
+	if (other.getId() == eObjectId::GRASS_WALL || other.getId() == eObjectId::BULLET)
 	{
 		return;
 	}
@@ -349,7 +401,7 @@ void Tank::move(eDirection direction, float dt)
 	this->setDirection(direction);
 
 	this->addStatus(eStatus::RUNNING);
-	_velocity = TANK_NORMAL_VELOCITY;
+	_velocity = this->getVelocityByLevel();
 
 	// fix position for turning
 	// this->fixPositionForTurn();
@@ -484,4 +536,27 @@ eTankLevel Tank::getTankLevel()
 unsigned int Tank::getBufferSize()
 {
 	return BUFFER_SIZE_TANK;
+}
+
+void Tank::setStartPositionIndex(int index)
+{
+	_startPositionIndex = index;
+}
+
+int Tank::getStartPositionIndex()
+{
+	return _startPositionIndex;
+}
+
+void Tank::gotHit(Damage * damage)
+{
+	_health -= damage->getValue();
+
+	if (_health <= 0)
+	{
+		this->setStatus(eStatus::DIE);
+		this->onChanged();
+	}
+
+	delete damage;
 }

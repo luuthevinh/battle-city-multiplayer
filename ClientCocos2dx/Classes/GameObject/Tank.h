@@ -44,6 +44,8 @@ public:
 
 	virtual unsigned int getBufferSize() override;
 
+	float getVelocityByLevel();
+
 protected:
 	float _velocity;
 	int _bulletCounter;
@@ -60,10 +62,12 @@ protected:
 	void updateSprite();
 	int getMaxBullet();
 
-	void fixPositionForTurn();
+	virtual void fixPositionForTurn();
 	bool isCollidingAtSide(eDirection side);
 	void removeCollidingObject(GameObject* object);
 	void fixPosition(eDirection direction, GameObject* other);
+
+	void stand();
 };
 
 #endif // !__TANK_H__

@@ -33,9 +33,10 @@ public:
 
 	void clearObjects();
 
+	int getLastUniqueId();
+
 private:
-
-
+	int _lastObjectId;
 	float _serverTime;
 	float _clientTime;
 	int _totalSize;

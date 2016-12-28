@@ -21,6 +21,8 @@ public:
 	virtual void reconcile(Buffer &data) override;
 	void predict(float dt);
 
+	virtual void move(eDirection direction, float dt) override;
+
 private:
 	int _keyDirectionCounter;
 	Vec2 _lastUpdatedPosition;

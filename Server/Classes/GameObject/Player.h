@@ -13,9 +13,12 @@ public:
 	int getIndex() const;
 
 	virtual void handleData(Serializable* data) override;
-	
+	virtual void shoot() override;
+
 	void setHost(bool value);
 	bool isHost() const;
+
+	virtual void move(eDirection direction, float dt) override;
 
 private:
 	int _index;		// index socket trong client manager

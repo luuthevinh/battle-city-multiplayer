@@ -2,6 +2,7 @@
 #include "GameObject\Player.h"
 #include "Base\ServerConnector.h"
 #include "Base\GameObject.h"
+#include "GameObject\AppearanceEffect.h"
 
 // shared
 #include "..\Server\Classes\Shared\WorldSnapshot.h"
@@ -82,6 +83,11 @@ void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 	// cập nhật luôn vầy nghĩa là ko có lag trên đường truyền
 	ServerConnector::getInstance()->setTime(snapshot->getServerTime());
 
+	if (GameObject::getLastUniqueId() != snapshot->getLastUniqueId())
+	{
+		GameObject::setLastUniqueId(snapshot->getLastUniqueId());
+	}
+
 	auto ids  = snapshot->getDataObjects();
 
 	for (auto it = ids.begin(); it != ids.end(); it++)
@@ -103,7 +109,7 @@ void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 			auto gameObject = GameObject::createWithBuffer(*(it->second));
 			if (gameObject)
 			{
-				this->addChild(gameObject);
+				this->addObject(gameObject);
 			}
 		}
 	}
@@ -149,4 +155,68 @@ void ServerPlayScene::addWall(const Vec2 & position, eObjectId id)
 	wall->setTag(GameObject::getNextId());
 
 	this->addChild(wall);
+}
+
+void ServerPlayScene::addObject(GameObject * object)
+{
+	auto type = object->getId();
+	switch (type)
+	{
+	case YELLOW_TANK:
+	case GREEN_TANK:
+	case WHITE_TANK:
+		this->addTank(object);
+		break;
+	default:
+		this->addChild(object);
+		break;
+	}
+}
+
+void ServerPlayScene::addTank(GameObject * tank)
+{
+	auto result = this->findTankPendingByUniqueId(tank->getUniqueId());
+	if (result != nullptr)
+		return;
+
+	auto func = CallFunc::create([&] {	
+		auto t = _tankPending.front();
+		
+		this->addChild(t);
+		t->release();
+
+		_tankPending.pop_front();
+	});
+
+	auto effect = AppearanceEffect::create();
+	effect->setPosition(tank->getPosition());
+	this->addChild(effect);
+
+	_tankPending.push_back(tank);
+	tank->retain();
+
+	this->runAction(Sequence::createWithTwoActions(DelayTime::create(0.5f), func));
+}
+
+GameObject * ServerPlayScene::findTankPendingByUniqueId(int id)
+{
+	for (auto i = _tankPending.begin(); i < _tankPending.end(); i++)
+	{
+		if ((*i)->getUniqueId() == id)
+			return (*i);
+	}
+
+	return nullptr;
+}
+
+void ServerPlayScene::removeTankPendingByUniqueId(int id)
+{
+	for (auto i = _tankPending.begin(); i < _tankPending.end(); i++)
+	{
+		if ((*i)->getUniqueId() == id)
+		{
+			_tankPending.erase(i);
+			return;
+		}
+	}
 }

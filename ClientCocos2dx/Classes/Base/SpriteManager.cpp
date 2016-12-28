@@ -121,10 +121,10 @@ void SpriteManager::initAnimate()
 	this->_animates[_objectNames[eObjectId::GREEN_TANK] + "_fourth_" + "_right"].push_back(createAniamte("tank_green_31.png", "tank_green_32.png", NULL));
 
 	// xe trắng basic
-	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_up"].push_back(createAniamte("tank_white_01.png", "tank_white_02.png", NULL));
-	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_left"].push_back(createAniamte("tank_white_03.png", "tank_white_04.png", NULL));
-	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_down"].push_back(createAniamte("tank_white_05.png", "tank_white_06.png", NULL));
-	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_right"].push_back(createAniamte("tank_white_07.png", "tank_white_08.png", NULL));
+	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_up"].push_back(createAniamte("tank_white_33.png", "tank_white_34.png", NULL));
+	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_left"].push_back(createAniamte("tank_white_35.png", "tank_white_36.png", NULL));
+	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_down"].push_back(createAniamte("tank_white_37.png", "tank_white_38.png", NULL));
+	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_basic_" + "_right"].push_back(createAniamte("tank_white_39.png", "tank_white_40.png", NULL));
 
 	// xe trắng fast
 	this->_animates[_objectNames[eObjectId::WHITE_TANK] + "_fast_" + "_up"].push_back(createAniamte("tank_white_41.png", "tank_white_42.png", NULL));
@@ -158,6 +158,16 @@ void SpriteManager::initAnimate()
 			"explosion_03.png",
 			"explosion_04.png",
 			NULL));
+
+	this->_animates["appearance"].push_back(createAniamte(
+		0.05f,
+		"effect_appearance_02.png",
+		"effect_appearance_03.png",
+		"effect_appearance_04.png",
+		"effect_appearance_01.png",
+		"effect_appearance_04.png",
+		"effect_appearance_03.png",
+		NULL));
 
 	// nước
 	this->_animates[_objectNames[eObjectId::WATER_WALL]].push_back(createAniamte("water_01.png", "water_02.png", nullptr));
@@ -206,6 +216,27 @@ Animate* SpriteManager::createAniamte(char* frameName, ...)
 	va_end(framenames);
 
 	Animation* animation = Animation::createWithSpriteFrames(spriteFrames, DEFAULT_ANIMATION_TIME);
+	auto animate = Animate::create(animation);
+	animate->retain();
+
+	return animate;
+}
+
+Animate * SpriteManager::createAniamte(float time, char * framename, ...)
+{
+	va_list framenames;
+	va_start(framenames, framename);
+
+	Vector<SpriteFrame*> spriteFrames;
+
+	do {
+		spriteFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(framename));
+		framename = va_arg(framenames, char*);
+	} while (framename != NULL);
+
+	va_end(framenames);
+
+	Animation* animation = Animation::createWithSpriteFrames(spriteFrames, time);
 	auto animate = Animate::create(animation);
 	animate->retain();
 

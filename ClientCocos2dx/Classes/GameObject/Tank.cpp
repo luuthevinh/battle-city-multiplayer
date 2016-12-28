@@ -117,6 +117,10 @@ void Tank::createBuffer()
 void Tank::setTankLevel(eTankLevel level)
 {
 	_tankLevel = level;
+	auto s = tank::Converter::tankLevelToString(_tankLevel);
+	
+	CCLOG("tank level: %s", s);
+
 	this->updateSprite();
 }
 
@@ -180,8 +184,8 @@ void Tank::update(float dt)
 
 	if(!_firstUpdated)
 	{
-		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), TANK_NORMAL_VELOCITY * dt));
-		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), TANK_NORMAL_VELOCITY * dt));
+		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), this->getVelocityByLevel() * dt));
+		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), this->getVelocityByLevel() * dt));
 	}
 }
 
@@ -198,7 +202,7 @@ void Tank::updatePosition(float dt)
 	{
 		if (_velocity == 0)
 		{
-			_velocity = TANK_NORMAL_VELOCITY;
+			_velocity = this->getVelocityByLevel();
 		}
 	}
 
@@ -336,7 +340,7 @@ void Tank::move(eDirection direction, float dt)
 	if (!this->hasStatus(eStatus::RUNNING))
 		return;
 
-	this->fixPositionForTurn();
+	// this->fixPositionForTurn();
 
 	switch (_direction)
 	{
@@ -378,6 +382,9 @@ bool Tank::onContactBegin(PhysicsContact & contact)
 {
 	auto objectA = (GameObject*)contact.getShapeA()->getBody()->getNode();
 	auto objectB = (GameObject*)contact.getShapeB()->getBody()->getNode();
+
+	if (objectA->getId() == objectB->getId())
+		return true;
 	
 	if (objectA == this)
 	{
@@ -386,11 +393,9 @@ bool Tank::onContactBegin(PhysicsContact & contact)
 
 		if (side != eDirection::NONE && side == _direction)
 		{
-			_velocity = 0;
-			this->removeStatus(eStatus::RUNNING);
+			this->stand();
 
 			_collidingObjects[objectB] = side;
-
 			this->fixPosition(side, objectB);
 		}
 	}
@@ -401,11 +406,9 @@ bool Tank::onContactBegin(PhysicsContact & contact)
 
 		if (side != eDirection::NONE && side == _direction)
 		{
-			_velocity = 0;
-			this->removeStatus(eStatus::RUNNING);
+			this->stand();
 
-			_collidingObjects[objectB] = side;
-
+			_collidingObjects[objectA] = side;
 			this->fixPosition(side, objectA);
 		}
 	}
@@ -426,7 +429,11 @@ bool Tank::onPreSolve(PhysicsContact & contact, PhysicsContactPreSolve & presolv
 {
 	auto objectA = (GameObject*)contact.getShapeA()->getBody()->getNode();
 	auto objectB = (GameObject*)contact.getShapeB()->getBody()->getNode();
-
+	
+	if (objectA->getId() == objectB->getId() || 
+		objectB->getId() == eObjectId::BULLET || objectA->getId() == eObjectId::BULLET)
+		return true;
+	
 	if (objectA == this)
 	{
 		eDirection side = this->getIntersectSide(objectB->getBoundingBox());
@@ -458,7 +465,7 @@ void Tank::updateWithStatus(eStatus status)
 		if (this->getParent() == nullptr)
 			break;
 
-		auto explosion = Explosion::create(false);
+		auto explosion = Explosion::create(true);
 		explosion->setPosition(this->getPosition());
 
 		this->getParent()->addChild(explosion);
@@ -508,6 +515,7 @@ void Tank::shoot()
 	}
 
 	auto bullet = Bullet::create(shootPosition, this->getDirection());
+	bullet->setTag(GameObject::getNextId());
 	bullet->setOwner(this);
 
 	auto parent = this->getParent();
@@ -652,5 +660,36 @@ void Tank::fixPosition(eDirection direction, GameObject* other)
 		break;
 	default:
 		break;
+	}
+}
+
+void Tank::stand()
+{
+	_velocity = 0;
+	this->removeStatus(eStatus::RUNNING);
+}
+
+float Tank::getVelocityByLevel()
+{
+	switch (_tankLevel)
+	{
+	case DEFAULT_TANK:
+		return TANK_NORMAL_VELOCITY;
+	case SECOND_TANK:
+		return TANK_NORMAL_VELOCITY;
+	case THIRD_TANK:
+		return TANK_FAST_VELOCITY;
+	case FOURTH_TANK:
+		return TANK_FAST_VELOCITY;
+	case BASIC_TANK:
+		return TANK_SLOW_VELOCITY;
+	case FAST_TANK:
+		return TANK_FAST_VELOCITY;
+	case POWER_TANK:
+		return TANK_NORMAL_VELOCITY;
+	case ARMOR_TANK:
+		return TANK_NORMAL_VELOCITY;
+	default:
+		return TANK_NORMAL_VELOCITY;
 	}
 }

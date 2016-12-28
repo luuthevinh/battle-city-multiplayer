@@ -59,6 +59,8 @@ public:
 	virtual void onChanged(bool value = true) { _hasChanged = value; }
 
 	static int getNextId();
+	static int getLastUniqueId();
+	static void setLastUniqueId(int id);
 
 	virtual unsigned int getBufferSize();
 protected:
