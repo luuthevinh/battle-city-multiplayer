@@ -97,9 +97,9 @@ void PlayScene::update(float dt)
 		object->update(dt);
 	}
 
-	for (auto object : _gameObjects)
+	for (auto i = 0; i < _gameObjects.size(); i++)
 	{
-		object->update(dt);
+		_gameObjects[i]->update(dt);
 	}
 
 	for (auto player : _players)

@@ -9,6 +9,13 @@ USING_NS_TANK
 class TankBot : public Tank
 {
 public:
+	enum eDecision
+	{
+		SHOOT,
+		MOVE_NEXT,
+		FIND_NEW_WAY
+	};
+
 	TankBot();
 	~TankBot();
 
@@ -38,6 +45,8 @@ private:
 	float _activeTimer;
 
 	void countingToActive(float dt);
+
+	eDecision think();
 };
 
 

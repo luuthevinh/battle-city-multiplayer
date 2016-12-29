@@ -25,6 +25,9 @@ public:
 	virtual void setDamageValue(int value);
 	virtual int getDamageValue();
 
+	virtual Buffer* serialize() override;
+	virtual void deserialize(Buffer & data) override;
+
 private:
 	float _speed;
 
@@ -35,6 +38,8 @@ private:
 	AABB* _collisionChecker;
 
 	GameObject* _owner;
+	int _ownerTag;
+
 	int _damageValue;
 
 	int _damagedObjectCounter;

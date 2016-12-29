@@ -70,17 +70,12 @@ GameObject::GameObject(eObjectId id) :
 	_id(id),
 	_status(eStatus::NORMAL),
 	_direction(eDirection::UP),
-	_hasChanged(true),
-	_previousBuffer(nullptr),
-	_lastBuffer(nullptr)
+	_hasChanged(true)
 {
 	this->createBuffer();
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
 
 	_lifeTime = 0.0f;
-	_previousBuffer = new Buffer(_buffer->getSize());
-	_lastBuffer = this->serialize()->clone();
-	_firstUpdated = true;
 }
 
 GameObject::GameObject(Buffer& buffer)
@@ -91,8 +86,12 @@ GameObject::GameObject(Buffer& buffer)
 GameObject::~GameObject()
 {
 	delete _buffer;
-	delete _lastBuffer;
-	delete _previousBuffer;
+
+	while (!_previousBuffers.empty())
+	{
+		delete _previousBuffers.front();
+		_previousBuffers.pop_front();
+	}
 }
 
 void GameObject::createBuffer()
@@ -200,21 +199,10 @@ void GameObject::updateWithStatus(eStatus status)
 {
 }
 
-void GameObject::addToPendingBuffer()
-{
-	auto currentBuffer = this->serialize()->clone();
-	_pendingBuffer.push_back(currentBuffer);
-
-	CCLOG("add to pending buffer: client time: %.2f", ServerConnector::getInstance()->getTime());
-}
-
 void GameObject::reconcile(Buffer &data)
 {
 	this->deserialize(data);
-
-	this->updateLastBuffer(data);
-
-	this->interpolate();
+	this->addLastBuffer(data);
 }
 
 void GameObject::update(float dt)
@@ -242,39 +230,28 @@ unsigned int GameObject::getBufferSize()
 	return BUFFER_SIZE_GAMEOBJECT;
 }
 
-void GameObject::interpolate()
+void GameObject::setLifeTime(float time)
 {
-	if (_firstUpdated)
-	{
-		_previousBuffer->setBeginRead(GameObject::INDEX_OBJECT_ID_BUFFER);
-		int type = _previousBuffer->readInt();
-		if (type == this->getId())
-		{
-			_firstUpdated = false;
-		}
-
-		return;
-	}
-
-	_lastBuffer->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
-	float x = _lastBuffer->readFloat();
-	float y = _lastBuffer->readFloat();
-	Vec2 lastPos = Vec2(x, y);
-
-	_previousBuffer->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
-	x = _previousBuffer->readFloat();
-	y = _previousBuffer->readFloat();
-	Vec2 prevPos = Vec2(x, y);
-
-	_lastPosition = lastPos;
-	_deltaDistance = (lastPos - prevPos);
-	_nextPosition = lastPos + _deltaDistance;
+	_lifeTime = time;
 }
 
-void GameObject::updateLastBuffer(Buffer & buffer)
+float GameObject::getTime()
 {
-	_previousBuffer->copy(*_lastBuffer);
-	_lastBuffer->copy(buffer);
+	return _lifeTime;
+}
+
+void GameObject::addLastBuffer(Buffer & buffer)
+{
+	auto clone = buffer.clone();
+	clone->setTime(ServerConnector::getInstance()->getClientTime());
+	
+	_previousBuffers.push_back(clone);
+
+	if (_previousBuffers.size() > 3)
+	{
+		delete _previousBuffers.front();
+		_previousBuffers.pop_front();
+	}
 }
 
 void GameObject::initWithBuffer(Buffer & buffer)
@@ -285,9 +262,6 @@ void GameObject::initWithBuffer(Buffer & buffer)
 	this->setName(SpriteManager::getInstance()->getObjectName(this->getId()));
 
 	_lifeTime = 0.0f;
-	_previousBuffer = new Buffer(_buffer->getSize());
-	_lastBuffer = this->serialize()->clone();
-	_firstUpdated = true;
 }
 
 eDirection GameObject::getIntersectSide(const Rect & other)
@@ -327,4 +301,60 @@ eDirection GameObject::getIntersectSide(const Rect & other)
 		return eDirection::UP;
 
 	return eDirection::NONE;
+}
+
+void GameObject::interpolate(Buffer & from, Buffer & to, float time)
+{
+	float deltaTime = to.getTime() - from.getTime();
+
+	if (deltaTime == 0)
+	{
+		//to.setBeginRead(GameObject::INDEX_STATUS_BUFFER);
+		//auto status = (eStatus)to.readInt();
+		//this->setStatus(status);
+
+		//to.setBeginRead(GameObject::INDEX_DIRECTION_BUFFER);
+		//this->setDirection((eDirection)from.readByte());
+		this->deserialize(to);
+
+		return;
+	}
+
+	from.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+	float fx = from.readFloat();
+	float fy = from.readFloat();
+	auto fromPosition = Vec2(fx, fy);
+
+	to.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+	float tx = to.readFloat();
+	float ty = to.readFloat();
+	auto toPosition = Vec2(tx, ty);
+
+	auto deltaPosition = toPosition - fromPosition;
+
+	auto fraction = (time - from.getTime()) / deltaTime;
+
+	auto pos = fromPosition + deltaPosition * fraction;
+	this->setPosition(pos);
+
+	//from.setBeginRead(GameObject::INDEX_DIRECTION_BUFFER);
+	//this->setDirection((eDirection)from.readByte());
+	this->deserialize(from);
+}
+
+void GameObject::getFromToBufferIndex(int& fromIndex, int& toIndex, float time)
+{
+	fromIndex = _previousBuffers.size() - 1;
+	toIndex = _previousBuffers.size() - 1;
+
+	for (int i = 0; i <= toIndex; i++)
+	{
+		if (_previousBuffers[i]->getTime() >= time)
+		{
+			toIndex = i;
+			break;
+		}
+
+		fromIndex = i;
+	}
 }

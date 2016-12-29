@@ -63,6 +63,9 @@ public:
 	static void setLastUniqueId(int id);
 
 	virtual unsigned int getBufferSize();
+
+	virtual void setLifeTime(float time);
+	virtual float getTime();
 protected:
 	static int _nextId;
 
@@ -74,26 +77,18 @@ protected:
 	eDirection _direction;
 
 	float _lifeTime;
-	std::deque<Buffer*> _pendingBuffer;		// trạng thái dự đoán chưa được server xác nhận
+	std::deque<Buffer*> _previousBuffers;
 	
-	void addToPendingBuffer();
-
 	bool _hasChanged;
-	bool _firstUpdated;
 
-	Buffer* _lastBuffer;
-	Buffer* _previousBuffer;
-
-	Vec2 _lastPosition;
-	Vec2 _nextPosition;
-	Vec2 _deltaDistance;
-
-	void interpolate();
-	void updateLastBuffer(Buffer& buffer);
+	void addLastBuffer(Buffer& buffer);
 
 	virtual void initWithBuffer(Buffer& buffer);
 
 	eDirection getIntersectSide(const Rect& other);
+
+	virtual void interpolate(Buffer& from, Buffer& to, float time);
+	virtual void getFromToBufferIndex(int& fromIndex, int& toIndex, float time);
 };
 
 

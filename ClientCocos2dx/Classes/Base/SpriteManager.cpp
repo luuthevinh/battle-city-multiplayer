@@ -149,15 +149,18 @@ void SpriteManager::initAnimate()
 		"explosion_00.png",
 		"explosion_01.png",
 		"explosion_02.png",
+		"explosion_01.png",
 		NULL));
 
-	this->_animates[_objectNames[eObjectId::EXPLOSION] + "_big"].push_back(createAniamte(
-			"explosion_00.png",
-			"explosion_01.png",
-			"explosion_02.png",
-			"explosion_03.png",
-			"explosion_04.png",
-			NULL));
+	this->_animates[_objectNames[eObjectId::EXPLOSION] + "_big"].push_back(createAniamte( 
+		0.07f,
+		"explosion_00.png",
+		"explosion_01.png",
+		"explosion_02.png",
+		"explosion_03.png",
+		"explosion_04.png",
+		"explosion_03.png",
+		NULL));
 
 	this->_animates["appearance"].push_back(createAniamte(
 		0.05f,

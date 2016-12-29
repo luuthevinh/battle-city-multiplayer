@@ -22,12 +22,15 @@ public:
 	virtual void updateWithStatus(eStatus status) override;
 	virtual void predict(float dt) override;
 
+	virtual Buffer* Bullet::serialize() override;
 	virtual void deserialize(Buffer & data) override;
 
 	virtual void setOwner(GameObject* owner);
 	virtual GameObject* getOwner();
 
 	bool onContactBegin(PhysicsContact& contact);
+
+	void reconcile(Buffer &data) override;
 
 private:
 	eDirection _direction;
@@ -37,6 +40,8 @@ private:
 	void explode();
 
 	GameObject* _owner;
+	int _ownerTag;
+
 	void checkCollisionWithBouding();
 	float getBulletSpeed();
 };

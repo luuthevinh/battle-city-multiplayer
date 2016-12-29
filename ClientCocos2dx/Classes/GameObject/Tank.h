@@ -46,6 +46,8 @@ public:
 
 	float getVelocityByLevel();
 
+	void reconcile(Buffer &data) override;
+
 protected:
 	float _velocity;
 	int _bulletCounter;
@@ -68,6 +70,8 @@ protected:
 	void fixPosition(eDirection direction, GameObject* other);
 
 	void stand();
+	void fixWithBounding();
+
 };
 
 #endif // !__TANK_H__

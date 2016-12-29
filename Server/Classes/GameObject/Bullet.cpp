@@ -24,6 +24,44 @@ Bullet::~Bullet()
 	delete _collisionChecker;
 }
 
+Buffer * Bullet::serialize()
+{
+	_buffer->setIndex(0);
+	_buffer->setBeginRead(0);
+
+	_buffer->writeInt(eDataType::OBJECT);
+	_buffer->writeInt(this->getId());
+	_buffer->writeInt(this->getUniqueId());
+	_buffer->writeInt(this->getStatus());
+	_buffer->writeByte(this->getDirection());
+	_buffer->writeFloat(this->getPosition().x);
+	_buffer->writeFloat(this->getPosition().y);
+	_buffer->writeInt(_ownerTag);
+
+	return _buffer;
+}
+
+void Bullet::deserialize(Buffer & data)
+{
+	data.setBeginRead(0);
+
+	eDataType type = (eDataType)data.readInt();
+	if (type != eDataType::OBJECT)
+		return;
+
+	this->setType(type);
+	this->setId((eObjectId)data.readInt());
+	this->setUniqueId(data.readInt());
+	this->setStatus((eStatus)data.readInt());
+	this->setDirection((eDirection)data.readByte());
+	float x = data.readFloat();
+	float y = data.readFloat();
+	this->setPosition(x, y);
+	_ownerTag = data.readInt();
+
+	data.setBeginRead(0);
+}
+
 bool Bullet::init()
 {
 	_boudingBox.width = 6;
@@ -113,6 +151,7 @@ Vector2 Bullet::getVelocity() const
 void Bullet::setOwner(GameObject * owner)
 {
 	_owner = owner;
+	_ownerTag = owner->getUniqueId();
 }
 
 GameObject * Bullet::getOwner()
@@ -132,7 +171,7 @@ int Bullet::getDamageValue()
 
 void Bullet::checkPosition()
 {
-	if (this->getPosition().x >= WINDOW_WIDTH || this->getPosition().x <= 0 || 
+	if (this->getPosition().x >= 26 * TILE_WIDTH || this->getPosition().x <= 0 || 
 		this->getPosition().y >= WINDOW_HEIGHT|| this->getPosition().y <= 0)
 	{
 		this->explode();
@@ -153,10 +192,12 @@ void Bullet::explode()
 	this->setStatus(DIE);
 	this->onChanged();
 
-	//
-	auto tank = dynamic_cast<Tank*>(_owner);
-	if (tank)
+	if (_owner != nullptr)
 	{
-		tank->setNumberOfBullets(tank->getNumberOfBullets() - 1);
+		auto tank = dynamic_cast<Tank*>(_owner);
+		if (tank)
+		{
+			tank->setNumberOfBullets(tank->getNumberOfBullets() - 1);
+		}
 	}
 }

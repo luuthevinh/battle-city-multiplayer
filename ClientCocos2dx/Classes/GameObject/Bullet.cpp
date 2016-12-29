@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "Base\SpriteManager.h"
 #include "GameObject\Explosion.h"
+#include "Base\ServerConnector.h"
 
 #include "..\Server\Classes\Shared\Utils.h"
 
@@ -44,6 +45,23 @@ Bullet * Bullet::createWithBuffer(Buffer & buffer)
 	return nullptr;
 }
 
+Buffer * Bullet::serialize()
+{
+	_buffer->setIndex(0);
+	_buffer->setBeginRead(0);
+
+	_buffer->writeInt(eDataType::OBJECT);
+	_buffer->writeInt(this->getId());
+	_buffer->writeInt(this->getUniqueId());
+	_buffer->writeInt(this->getStatus());
+	_buffer->writeByte(this->getDirection());
+	_buffer->writeFloat(this->getPosition().x);
+	_buffer->writeFloat(this->getPosition().y);
+	_buffer->writeInt(_ownerTag);
+
+	return _buffer;
+}
+
 void Bullet::deserialize(Buffer & data)
 {
 	data.setBeginRead(0);
@@ -60,7 +78,7 @@ void Bullet::deserialize(Buffer & data)
 	float x = data.readFloat();
 	float y = data.readFloat();
 
-	auto number = data.readFloat();
+	_ownerTag = data.readInt();
 
 	data.setBeginRead(0);
 }
@@ -98,15 +116,15 @@ void Bullet::update(float dt)
 {
 	GameObject::update(dt);
 	
-	if (_nextPosition != Vec2::ZERO && !_firstUpdated)
+	if (_previousBuffers.size() > 1)
 	{
-		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), _speed * dt));
-		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), _speed * dt));
+		auto curTime = ServerConnector::getInstance()->getClientTime();
+		auto interpolatedTime = curTime - 0.1f;
 
-	}
-	else if(_firstUpdated)
-	{
-		this->predict(dt);
+		int from, to;
+		this->getFromToBufferIndex(from, to, interpolatedTime);
+
+		this->interpolate(*_previousBuffers.at(from), *_previousBuffers.at(to), interpolatedTime);
 	}
 
 	// update sprite rotate
@@ -172,6 +190,7 @@ void Bullet::updateWithStatus(eStatus status)
 	{
 	case DIE:
 	{
+		this->explode();
 		this->runAction(RemoveSelf::create());
 		break;
 	}
@@ -182,8 +201,6 @@ void Bullet::updateWithStatus(eStatus status)
 
 void Bullet::explode()
 {
-	this->setStatus(eStatus::DIE);
-
 	if (this->getParent() == nullptr)
 		return;
 
@@ -199,8 +216,7 @@ void Bullet::checkCollisionWithBouding()
 	if (position.x < 0 || position.x > 26 * TILE_WIDTH || 
 		position.y < 0 || position.y > 32 * TILE_WIDTH)
 	{
-		this->explode();
-		this->runAction(RemoveSelf::create());
+		this->setStatus(eStatus::DIE);
 	}
 }
 
@@ -227,6 +243,7 @@ float Bullet::getBulletSpeed()
 void Bullet::setOwner(GameObject* owner)
 {
 	_owner = owner;
+	_ownerTag = owner->getTag();
 }
 
 GameObject* Bullet::getOwner()
@@ -242,17 +259,27 @@ bool Bullet::onContactBegin(PhysicsContact & contact)
 	if (objectA->getId() != eObjectId::BULLET && objectB->getId() != eObjectId::BULLET)
 		return true;
 
-	if (objectA != _owner && objectB != _owner)
+	if (objectA->getTag() != _ownerTag && objectB->getTag() != _ownerTag)
 	{
 		if (objectA->getId() == eObjectId::BULLET && objectB->getId() == eObjectId::BULLET)
 		{
-			this->setStatus(eStatus::DIE);
+			this->runAction(RemoveSelf::create());
 		}
-		else
+		else if (objectA->getId() == eObjectId::BRICK_WALL || objectB->getId() == eObjectId::BRICK_WALL)
 		{
-			this->explode();
+			this->setStatus(eStatus::DIE);
 		}
 	}
 
 	return true;
+}
+
+void Bullet::reconcile(Buffer &data)
+{
+	if (_previousBuffers.size() == 0)
+	{
+		this->deserialize(data);
+	}
+
+	this->addLastBuffer(data);
 }

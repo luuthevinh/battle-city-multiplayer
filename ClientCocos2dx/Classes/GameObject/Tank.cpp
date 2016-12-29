@@ -14,9 +14,9 @@ Tank::Tank(eObjectId id) :
 	this->createBuffer();
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
 
-	_previousBuffer = new Buffer(_buffer->getSize());
-	_lastBuffer = this->serialize()->clone();
-	_firstUpdated = true;
+	//_previousBuffer = new Buffer(_buffer->getSize());
+	//_lastBuffer = this->serialize()->clone();
+	//_firstUpdated = true;
 
 	_tankLevel = eTankLevel::DEFAULT_TANK;
 }
@@ -182,11 +182,18 @@ void Tank::update(float dt)
 {
 	GameObject::update(dt);
 
-	if(!_firstUpdated)
+	if(_previousBuffers.size() > 1)
 	{
-		this->setPositionX(tank::lerp(_nextPosition.x, this->getPositionX(), this->getVelocityByLevel() * dt));
-		this->setPositionY(tank::lerp(_nextPosition.y, this->getPositionY(), this->getVelocityByLevel() * dt));
+		auto curTime = ServerConnector::getInstance()->getClientTime();
+		auto interpolatedTime = curTime - 0.1f;
+
+		int from, to;
+		this->getFromToBufferIndex(from, to, interpolatedTime);
+
+		this->interpolate(*_previousBuffers.at(from), *_previousBuffers.at(to), interpolatedTime);
 	}
+
+	this->fixWithBounding();
 }
 
 void Tank::updatePosition(float dt)
@@ -340,8 +347,6 @@ void Tank::move(eDirection direction, float dt)
 	if (!this->hasStatus(eStatus::RUNNING))
 		return;
 
-	// this->fixPositionForTurn();
-
 	switch (_direction)
 	{
 	case LEFT:
@@ -374,7 +379,6 @@ void Tank::setDirection(eDirection direction)
 	_direction = direction;
 
 	this->runAnimateByDirection(direction);
-
 }
 
 
@@ -494,7 +498,7 @@ void Tank::shoot()
 	}
 
 	Vec2 shootPosition = this->getPosition();
-	float offset = 10.0f;
+	float offset = 0.0f;
 
 	switch (_direction)
 	{
@@ -669,6 +673,30 @@ void Tank::stand()
 	this->removeStatus(eStatus::RUNNING);
 }
 
+void Tank::fixWithBounding()
+{
+	//
+	if (this->getPositionX() < TANK_SIZE_WIDTH / 2)
+	{
+		this->setPositionX(TANK_SIZE_WIDTH / 2);
+	}
+
+	if (this->getPositionX() > 26 * TILE_WIDTH - TANK_SIZE_WIDTH / 2)
+	{
+		this->setPositionX(26 * TILE_WIDTH - TANK_SIZE_WIDTH / 2);
+	}
+
+	if (this->getPositionY() < TANK_SIZE_WIDTH / 2)
+	{
+		this->setPositionY(TANK_SIZE_WIDTH / 2);
+	}
+
+	if (this->getPositionY() > 32 * TILE_WIDTH - TANK_SIZE_WIDTH / 2)
+	{
+		this->setPositionY(32 * TILE_WIDTH - TANK_SIZE_WIDTH / 2);
+	}
+}
+
 float Tank::getVelocityByLevel()
 {
 	switch (_tankLevel)
@@ -692,4 +720,14 @@ float Tank::getVelocityByLevel()
 	default:
 		return TANK_NORMAL_VELOCITY;
 	}
+}
+
+void Tank::reconcile(Buffer &data)
+{
+	if (_previousBuffers.size() == 0)
+	{
+		this->deserialize(data);
+	}
+
+	this->addLastBuffer(data);
 }

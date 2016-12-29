@@ -189,3 +189,13 @@ void Buffer::copy(Buffer & other)
 
 	std::memcpy(_data, other.getData(), other.getSize());
 }
+
+void Buffer::setTime(float time)
+{
+	_time = time;
+}
+
+float Buffer::getTime()
+{
+	return _time;
+}

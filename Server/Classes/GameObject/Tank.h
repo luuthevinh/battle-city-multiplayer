@@ -84,6 +84,7 @@ protected:
 	std::queue<CommandPacket*> _commandQueue;
 
 	void resetCollidingSide();
+	void fixWithBounding();
 };
 
 #endif // !__TANK_H__

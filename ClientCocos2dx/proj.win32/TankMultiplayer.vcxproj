@@ -153,6 +153,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\..\Server\Classes\Shared\WorldSnapshot.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Base\ClientConverterFactory.cpp" />
+    <ClCompile Include="..\Classes\Base\DynamicObject.cpp" />
     <ClCompile Include="..\Classes\Base\GameObject.cpp" />
     <ClCompile Include="..\Classes\Base\ServerConnector.cpp" />
     <ClCompile Include="..\Classes\Base\SpriteManager.cpp" />
@@ -188,6 +189,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Base\ClientConverterFactory.h" />
     <ClInclude Include="..\Classes\Base\Definitions.h" />
+    <ClInclude Include="..\Classes\Base\DynamicObject.h" />
     <ClInclude Include="..\Classes\Base\GameObject.h" />
     <ClInclude Include="..\Classes\Base\ServerConnector.h" />
     <ClInclude Include="..\Classes\Base\SpriteManager.h" />

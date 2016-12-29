@@ -24,7 +24,7 @@ bool TankBot::init()
 	this->setTankLevel(eTankLevel::BASIC_TANK);
 
 	_isActive = false;
-	_activeTimer = 3.0f;
+	_activeTimer = 1.0f;
 
 	return true;
 }
@@ -35,6 +35,22 @@ void TankBot::update(float dt)
 
 	if (!_isActive)
 		return;
+
+	auto decide = this->think();
+
+	switch (decide)
+	{
+		case TankBot::SHOOT:
+			this->shoot();
+			break;
+		case TankBot::MOVE_NEXT:
+			break;
+		case TankBot::FIND_NEW_WAY:
+			this->findNewWay();
+			break;
+		default:
+			break;
+	}
 
 	if (_nextPostions.size() > 1)
 	{
@@ -198,12 +214,35 @@ void TankBot::countingToActive(float dt)
 	}
 }
 
+TankBot::eDecision TankBot::think()
+{
+	eDecision decide = eDecision::MOVE_NEXT;
+
+	auto r = rand() % 100;
+	switch (r)
+	{
+	case 1:
+		decide = eDecision::SHOOT;
+		break;
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+		decide = eDecision::FIND_NEW_WAY;
+		break;
+	default:
+		break;
+	}
+
+	return decide;
+}
+
 Point TankBot::getRandomNextPostion()
 {
 	//auto randNode = _aStarMap->getRandomNodeHasValue(0);
 	//return randNode->getIndexInPosition();
 	
-	int value = rand() % 5;
+	int value = rand() % 7;
 
 	switch (value)
 	{
@@ -217,6 +256,10 @@ Point TankBot::getRandomNextPostion()
 			return Point(25 * 16, (31 - 30) * 16);
 		case 4:
 			return Point(1 * 16, (31 - 30) * 16);
+		case 5:
+			return Point(10 * 16, (31 - 30) * 16);
+		case 6:
+			return Point(16 * 16, (31 - 30) * 16);
 		default:
 			break;
 	}

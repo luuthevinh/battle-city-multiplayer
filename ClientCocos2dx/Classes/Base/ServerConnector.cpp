@@ -69,6 +69,7 @@ bool ServerConnector::init(u_short port, const char * address)
 	_factory = new ClientConverterFactory(_dataHandler);
 
 	_timer = 0.0f;
+	_clientTime = 0.0f;
 	_isRunning = false;
 
 	return true;
@@ -153,6 +154,7 @@ void ServerConnector::update(float dt)
 
 	// CCLOG("client time: %.2f, delta: %.2f", _timer, dt);
 	_timer += dt;
+	_clientTime += dt;
 }
 
 void ServerConnector::closeConnection()
@@ -292,6 +294,11 @@ void ServerConnector::handleData(cocos2d::Layer* layer)
 float ServerConnector::getTime()
 {
 	return _timer;
+}
+
+float ServerConnector::getClientTime()
+{
+	return _clientTime;
 }
 
 void ServerConnector::setRun(bool value)

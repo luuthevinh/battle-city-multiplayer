@@ -22,8 +22,11 @@ bool Brick::init()
 
 void Brick::setDirection(eDirection direction)
 {
-	GameObject::setDirection(direction);
-	this->updateDirection();
+	if (direction != _direction)
+	{
+		GameObject::setDirection(direction);
+		this->updateDirection();
+	}
 }
 
 void Brick::updateDirection()

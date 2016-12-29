@@ -84,6 +84,8 @@ void Player::update(float dt)
 	}
 	
 	this->syncPositionWithLastUpdate(dt);
+
+	this->fixWithBounding();
 }
 
 void Player::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
@@ -235,31 +237,8 @@ void Player::reconcile(Buffer & data)
 	_lastUpdatedPosition = Vec2(x, y);
 	_enableSync = true;
 
-	this->setPosition(_lastPosition);
+	this->setPosition(_lastUpdatedPosition);
 
-	//auto time = ServerConnector::getInstance()->getTime();
-
-	//int index = 0;
-	//for (index; index < _pendingBuffer.size(); index++)
-	//{
-	//	_pendingBuffer[index]->setBeginRead(_pendingBuffer[index]->getSize() - 4);
-	//	auto t = _pendingBuffer[index]->readFloat();
-
-	//	// thời gian nhận được sau pending thì cập nhật lại từ đây
-	//	if (time <= t)
-	//	{
-	//		this->deserialize(*_pendingBuffer[index]);
-	//		CCLOG("pending[%d]: %.2f | time: %.2f", index, t, time);
-	//	}
-	//}
-
-	//while (!_pendingBuffer.empty())
-	//{
-	//	delete _pendingBuffer.front();
-	//	_pendingBuffer.pop_front();
-	//}
-
-	//_pendingBuffer.clear();
 }
 
 void Player::updateWithCommand(CommandPacket * commad, float dt)

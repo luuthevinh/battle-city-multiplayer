@@ -111,6 +111,9 @@
     <ClCompile Include="..\Classes\GameObject\AppearanceEffect.cpp">
       <Filter>src\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Base\DynamicObject.cpp">
+      <Filter>src\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\GameObject\AppearanceEffect.h">
       <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base\DynamicObject.h">
+      <Filter>src\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

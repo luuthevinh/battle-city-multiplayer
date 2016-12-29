@@ -38,11 +38,15 @@ public:
 	Buffer* clone();
 	void copy(Buffer& other);
 
+	void setTime(float time);
+	float getTime();
+
 protected:
 	char* _data;
 	unsigned int _size;
 	unsigned int _index;		// for write
 	unsigned int _readIndex;	// for read
+	float _time;
 };
 
 #endif // !__BUFFER_H__

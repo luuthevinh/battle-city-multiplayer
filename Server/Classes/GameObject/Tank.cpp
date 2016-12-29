@@ -97,6 +97,8 @@ void Tank::update(float dt)
 
 	this->updateBoundingBoxPosition();
 	this->resetCollidingSide();
+
+	this->fixWithBounding();
 }
 
 void Tank::updatePosition(float dt)
@@ -294,14 +296,14 @@ void Tank::checkCollision(GameObject & other, float dt)
 
 	this->updateBoundingBoxPosition();
 
+	this->checkCollidingSide(other);
+
 	eDirection result;
 	float time = _collisionChecker->checkCollision(*this, other, result, dt);
 
 	// có va chạm
 	if (time < 1.0f)
 	{
-		this->checkCollidingSide(other);
-
 		float distance = (_velocity * dt) * time;
 
 		this->moveByDistance(distance);
@@ -559,4 +561,28 @@ void Tank::gotHit(Damage * damage)
 	}
 
 	delete damage;
+}
+
+void Tank::fixWithBounding()
+{
+	//
+	if (this->getPosition().x < TANK_SIZE_WIDTH / 2)
+	{
+		this->setPosition(TANK_SIZE_WIDTH / 2, this->getPosition().y);
+	}
+
+	if (this->getPosition().x > 26 * TILE_WIDTH - TANK_SIZE_WIDTH / 2)
+	{
+		this->setPosition(26 * TILE_WIDTH - TANK_SIZE_WIDTH / 2, this->getPosition().y);
+	}
+
+	if (this->getPosition().y < TANK_SIZE_WIDTH / 2)
+	{
+		this->setPosition(this->getPosition().x, TANK_SIZE_WIDTH / 2);
+	}
+
+	if (this->getPosition().y > 32 * TILE_WIDTH - TANK_SIZE_WIDTH / 2)
+	{
+		this->setPosition(this->getPosition().x, 32 * TILE_WIDTH - TANK_SIZE_WIDTH / 2);
+	}
 }

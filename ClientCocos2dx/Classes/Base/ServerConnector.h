@@ -39,6 +39,8 @@ public:
 	void setTime(float time);
 	float getTime();
 
+	float getClientTime();
+
 	void setRun(bool value);
 	bool isRunning();
 
@@ -70,6 +72,7 @@ private:
 	ConverterFactory* _factory;
 
 	float _timer;
+	float _clientTime;
 	bool _isRunning;
 
 	int _uniqueIdOnServer;
