@@ -113,12 +113,12 @@ float AABB::checkCollision(const GameObject & object, const GameObject & other, 
 		if (_dxEntry > 0.0f)
 		{
 			result = eDirection::RIGHT;
-			printf("collided right.\n");
+			//printf("collided right.\n");
 		}
 		else
 		{
 			result = eDirection::LEFT;
-			printf("collided left.\n");
+			//printf("collided left.\n");
 		}
 	}
 	else
@@ -126,12 +126,12 @@ float AABB::checkCollision(const GameObject & object, const GameObject & other, 
 		if (_dyEntry > 0.0f)
 		{
 			result = eDirection::UP;
-			printf("collided up.\n");
+			//printf("collided up.\n");
 		}
 		else
 		{
 			result = eDirection::DOWN;
-			printf("collided down.\n");
+			//printf("collided down.\n");
 		}
 	}
 

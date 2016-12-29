@@ -50,6 +50,7 @@ public:
 		BEGIN_PLAY = 3,
 		SET_BOT = 4,
 		SET_HOST = 5,
+		GAME_OVER = 6
 	};
 
 	IntegerPacket();

@@ -2,6 +2,8 @@
 #include "Shared\DataPacket.h"
 #include "Base\SceneManager.h"
 
+#include <thread>
+
 Server* Server::instance = nullptr;
 
 Server::Server(u_short port, char * address)
@@ -257,7 +259,10 @@ void Server::sendDataToAllWithTimeStep()
 
 	_lastTime += _timeStep;
 
-	this->takeAndSendSnapshot();
+	if (Game::instance->isInGame())
+	{
+		this->takeAndSendSnapshot();
+	}
 
 	this->sendRoomInfoToAllClients();
 
@@ -302,7 +307,8 @@ void Server::sendRoomInfoToAllClients()
 	}
 
 	// bots
-	infopacket->playerCounters[eObjectId::WHITE_TANK] = Game::instance->getNumberOfBots();
+	int botNumber = SceneManager::getInstance()->getCurrentScene()->getNumberOfBots();
+	infopacket->playerCounters[eObjectId::WHITE_TANK] = botNumber;
 
 	this->send(infopacket);
 
@@ -357,6 +363,8 @@ void Server::sendDataToSocket(SOCKET socket)
 	WSABUF dataBuffer;
 	dataBuffer.buf = _dataHandler->getSendQueue(socket)->getData();
 	dataBuffer.len = _dataHandler->getSendQueue(socket)->getIndex();
+
+	printf("sent size: %d\n", dataBuffer.len);
 
 	if (WSASend(socket, &dataBuffer, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
 	{

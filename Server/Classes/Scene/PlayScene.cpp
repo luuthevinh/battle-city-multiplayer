@@ -7,6 +7,9 @@
 #include "..\GameObject\TankBot.h"
 #include "..\Shared\AStarMap.h"
 #include "..\Shared\SharedDefinitions.h"
+#include "..\GameObject\Eagle.h"
+#include "..\Base\SceneManager.h"
+#include "..\Scene\OverScene.h"
 
 PlayScene::PlayScene()
 {
@@ -14,13 +17,14 @@ PlayScene::PlayScene()
 
 PlayScene::~PlayScene()
 {
-	delete _snapshot;
-	delete _aStarMap;
-	delete _botSpawner;
+
 }
 
 bool PlayScene::init()
 {
+
+	GameObject::setLastUniqueId(0);
+
 	auto loader = MapLoader::createWithTMX("Resources/map/map_01.tmx");
 	if (loader == nullptr)
 	{
@@ -71,7 +75,9 @@ bool PlayScene::init()
 		}
 		else if (strcmp(object->name, "flag") == 0)
 		{
-
+			auto flag = new Eagle();
+			flag->setPosition(Vector2(object->x + object->width / 2, WINDOW_HEIGHT - object->y - object->height / 2));
+			this->addStaticObject(flag);
 		}
 
 		object = object->next;
@@ -115,6 +121,24 @@ void PlayScene::update(float dt)
 	this->checkStatusObjects();
 
 	_botSpawner->update(dt);
+
+	// chuyển scene nếu thua
+	if (_isOver)
+	{
+		printf("game over!\n");
+
+		Server::instance->takeAndSendSnapshot();
+
+		auto over = new IntegerPacket();
+		over->integerType = IntegerPacket::GAME_OVER;
+		over->value = 1;
+
+		Server::instance->send(over);
+		delete over;
+
+		Game::instance->setInGame(false);
+		SceneManager::getInstance()->replaceScene(new OverScene());
+	}
 }
 
 void PlayScene::destroy()
@@ -136,6 +160,10 @@ void PlayScene::destroy()
 		delete _players.back();
 		_players.pop_back();
 	}
+
+	delete _snapshot;
+	delete _aStarMap;
+	delete _botSpawner;
 }
 
 void PlayScene::checkCollisionObjects(float dt)
@@ -241,6 +269,9 @@ void PlayScene::sendChangedObjects()
 
 void PlayScene::updateSnapshot(Serializable * object)
 {
+	if (!Game::instance->isInGame())
+		return;
+	
 	_snapshot->addObject(object);
 }
 
@@ -250,12 +281,88 @@ void PlayScene::createBot()
 
 void PlayScene::handleData(Serializable * object)
 {
-	// player
-	auto player = this->getPlayer(object->getUniqueId());
-	if (player != nullptr)
+	switch (object->getType())
 	{
-		player->handleData(object);
+	case COMMAND:
+	{
+		// player
+		auto player = this->getPlayer(object->getUniqueId());
+		if (player != nullptr)
+		{
+			player->handleData(object);
+		}
+		break;
 	}
+	case INTEGER:
+	{
+		this->handleIntegerPacket((IntegerPacket*)object);
+		if (object != nullptr)
+			delete object;
+
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void PlayScene::handleIntegerPacket(IntegerPacket * integer)
+{
+	auto integerType = integer->integerType;
+	switch (integerType)
+	{
+	case IntegerPacket::PLAYER_CHARACTER_SELECTION:
+	{
+		auto player = Server::instance->getClientManager()->getPlayerByUniqueId(integer->getUniqueId());
+		if (player)
+		{
+			player->setId((eObjectId)integer->value);
+			Server::instance->getClientManager()->onChanged();
+		}
+		break;
+	}
+	case IntegerPacket::BEGIN_PLAY:
+	{
+		auto playerInfo = Server::instance->getClientManager()->getPlayerByUniqueId(integer->getUniqueId());
+		if (playerInfo)
+		{
+			this->addPlayer(playerInfo);
+
+			auto to = Server::instance->getClientManager()->getClientSocket(playerInfo->getIndex());
+			Server::instance->sendTo(to, playerInfo);
+
+			if (playerInfo->isHost())
+			{
+				this->beginGame();
+			}
+		}
+		break;
+	}
+	case IntegerPacket::SET_BOT:
+	{
+		auto player = Server::instance->getClientManager()->getPlayerByUniqueId(integer->getUniqueId());
+		if (player && player->isHost())
+		{
+			this->updateBots(integer->value);
+		}
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void PlayScene::updateBots(int value)
+{
+	_totalBots += value;
+
+	if (_totalBots < 0)
+		_totalBots = MAX_NUMBER_OF_BOTS;
+
+	if (_totalBots > MAX_NUMBER_OF_BOTS)
+		_totalBots = 0;
+
+	Server::instance->getClientManager()->onChanged();
 }
 
 void PlayScene::sendInitDataTo(SOCKET socket)
@@ -284,9 +391,13 @@ void PlayScene::sendInitDataTo(SOCKET socket)
 	delete reppack;
 }
 
-int PlayScene::addPlayer(int socketIndex)
+void PlayScene::addPlayer(Player * player)
 {
-	return Scene::addPlayer(socketIndex);;
+	auto p = new Player(player->getId(), player->getIndex());
+	p->setHost(player->isHost());
+	p->setUniqueId(player->getUniqueId());
+
+	Scene::addPlayer(p);
 }
 
 void PlayScene::updateMap(const tank::Point& index, int value)
@@ -310,7 +421,10 @@ tank::AStarMap * PlayScene::getMap()
 
 void PlayScene::beginGame()
 {
-	_botSpawner->setTotalObjects(Game::instance->getNumberOfBots());
+	printf("start game!!!\n");
+	_botSpawner->setTotalObjects(_totalBots);
+
+	Game::instance->setInGame(true);
 }
 
 int PlayScene::getRandomPositionIndex()
@@ -328,4 +442,9 @@ const Vector2 & PlayScene::getPlayerStartPosition()
 	auto randIndex = rand() % _beginPlayerPositions.size();
 
 	return _beginPlayerPositions[randIndex];
+}
+
+int PlayScene::getNumberOfBots()
+{
+	return _totalBots;
 }

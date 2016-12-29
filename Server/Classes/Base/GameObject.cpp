@@ -271,6 +271,11 @@ int GameObject::getLastUniqueId()
 	return _nextUniqueId;
 }
 
+void GameObject::setLastUniqueId(int value) 
+{
+	_nextUniqueId = value;
+}
+
 void GameObject::gotHit(Damage * damage)
 {
 }
@@ -288,4 +293,9 @@ Scene * GameObject::getParentScene()
 unsigned int GameObject::getBufferSize()
 {
 	return BUFFER_SIZE_GAMEOBJECT;
+}
+
+void GameObject::stand()
+{
+	this->removeStatus(eStatus::RUNNING);
 }

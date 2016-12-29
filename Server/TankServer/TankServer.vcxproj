@@ -140,12 +140,14 @@
     <ClInclude Include="..\Classes\Game.h" />
     <ClInclude Include="..\Classes\GameObject\Bullet.h" />
     <ClInclude Include="..\Classes\GameObject\Damage.h" />
+    <ClInclude Include="..\Classes\GameObject\Eagle.h" />
     <ClInclude Include="..\Classes\GameObject\MapLoader.h" />
     <ClInclude Include="..\Classes\GameObject\Player.h" />
     <ClInclude Include="..\Classes\GameObject\Spawner.h" />
     <ClInclude Include="..\Classes\GameObject\Tank.h" />
     <ClInclude Include="..\Classes\GameObject\TankBot.h" />
     <ClInclude Include="..\Classes\GameObject\Wall.h" />
+    <ClInclude Include="..\Classes\Scene\OverScene.h" />
     <ClInclude Include="..\Classes\Scene\PlayScene.h" />
     <ClInclude Include="..\Classes\Server.h" />
     <ClInclude Include="..\Classes\Shared\Buffer.h" />
@@ -175,6 +177,7 @@
     <ClCompile Include="..\Classes\Base\Vector2.cpp" />
     <ClCompile Include="..\Classes\Game.cpp" />
     <ClCompile Include="..\Classes\GameObject\Bullet.cpp" />
+    <ClCompile Include="..\Classes\GameObject\Eagle.cpp" />
     <ClCompile Include="..\Classes\GameObject\MapLoader.cpp" />
     <ClCompile Include="..\Classes\GameObject\Player.cpp" />
     <ClCompile Include="..\Classes\GameObject\Damage.cpp" />
@@ -182,6 +185,7 @@
     <ClCompile Include="..\Classes\GameObject\Tank.cpp" />
     <ClCompile Include="..\Classes\GameObject\TankBot.cpp" />
     <ClCompile Include="..\Classes\GameObject\Wall.cpp" />
+    <ClCompile Include="..\Classes\Scene\OverScene.cpp" />
     <ClCompile Include="..\Classes\Scene\PlayScene.cpp" />
     <ClCompile Include="..\Classes\Server.cpp" />
     <ClCompile Include="..\Classes\Shared\Buffer.cpp" />

@@ -13,7 +13,8 @@ public:
 	{
 		SHOOT,
 		MOVE_NEXT,
-		FIND_NEW_WAY
+		FIND_NEW_WAY,
+		STANDING
 	};
 
 	TankBot();
@@ -32,8 +33,9 @@ public:
 private:
 	// ref
 	tank::AStarMap* _aStarMap;
+	bool _canContactBegin;
 
-	std::queue<Vector2> _nextPostions;
+	std::deque<Vector2> _nextPostions;
 	
 	void findNewWay();
 	void findNewWayWithTempObstacle(const tank::Point& index);

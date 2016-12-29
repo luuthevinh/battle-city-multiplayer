@@ -1,5 +1,6 @@
 #include "MapNode.h"
 #include <math.h>
+#include <random>
 
 NAMESPACE_TANK_BEGIN
 
@@ -31,7 +32,7 @@ float MapNode::getDistanceFromStart() const
 void MapNode::setDistanceFromStart(float value)
 {
 	_distanceFromStart = value;
-	_fCost = _distanceFromStart + _distanceFromTarget;
+	_fCost = _distanceFromStart + _distanceFromTarget + rand() % 3;
 }
 
 float MapNode::getDistanceFromTarget() const
@@ -42,7 +43,7 @@ float MapNode::getDistanceFromTarget() const
 void MapNode::setDistanceFromTarget(float value)
 {
 	_distanceFromTarget = value;
-	_fCost = _distanceFromStart + _distanceFromTarget;
+	_fCost = _distanceFromStart + _distanceFromTarget + rand() % 3;
 }
 
 float MapNode::getDistance(MapNode * node)

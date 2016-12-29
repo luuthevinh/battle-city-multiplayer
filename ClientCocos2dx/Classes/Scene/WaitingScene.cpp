@@ -153,31 +153,6 @@ void WaitingScene::update(float dt)
 
 void WaitingScene::onKeyPressed(EventKeyboard::KeyCode keycode, Event * e)
 {
-	//if (keycode == EventKeyboard::KeyCode::KEY_ENTER)
-	//{
-	//	if (!_isReady)
-	//		return;
-
-	//	auto index = _cursor->getCurrentIndex();
-	//	switch (index)
-	//	{
-	//	case 0:
-	//	{
-	//		this->createPlayer(eObjectId::YELLOW_TANK);
-	//		break;
-	//	}
-	//	case 1:
-	//	{
-	//		this->createPlayer(eObjectId::GREEN_TANK);
-	//		break;
-	//	}
-	//	default:
-	//		break;
-	//	}
-
-	//	this->gotoPlayScene();
-	//}
-
 }
 
 void WaitingScene::nameTextFieldEvent(Ref * pSender, cocos2d::ui::TextField::EventType type)
@@ -192,7 +167,6 @@ void WaitingScene::nameTextFieldEvent(Ref * pSender, cocos2d::ui::TextField::Eve
 	}
 	case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
 	{
-		// _pointerInput->setVisible(false);
 		break;
 	}
 	case cocos2d::ui::TextField::EventType::INSERT_TEXT:

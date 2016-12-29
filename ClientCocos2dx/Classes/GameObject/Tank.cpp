@@ -13,18 +13,13 @@ Tank::Tank(eObjectId id) :
 {
 	this->createBuffer();
 	this->setName(SpriteManager::getInstance()->getObjectName(id));
-
-	//_previousBuffer = new Buffer(_buffer->getSize());
-	//_lastBuffer = this->serialize()->clone();
-	//_firstUpdated = true;
-
 	_tankLevel = eTankLevel::DEFAULT_TANK;
 }
 
 Tank::Tank(Buffer& data) :
 	_velocity(0)
 {
-
+	
 }
 
 Tank::~Tank()
@@ -137,6 +132,7 @@ unsigned int Tank::getBufferSize()
 bool Tank::init()
 {
 	this->setZOrder(TANK_Z_INDEX);
+	this->setStatus(eStatus::NORMAL);
 
 	// update object
 	this->scheduleUpdate();
@@ -431,6 +427,9 @@ void Tank::onContactSeparate(PhysicsContact & contact)
 
 bool Tank::onPreSolve(PhysicsContact & contact, PhysicsContactPreSolve & presolve)
 {
+	//if (!this->hasStatus(eStatus::RUNNING))
+	//	return true;
+
 	auto objectA = (GameObject*)contact.getShapeA()->getBody()->getNode();
 	auto objectB = (GameObject*)contact.getShapeB()->getBody()->getNode();
 	
@@ -477,14 +476,6 @@ void Tank::updateWithStatus(eStatus status)
 
 		break;
 	}
-	case NORMAL:
-		break;
-	case PROTECTED:
-		break;
-	case RUNNING:
-		break;
-	case STAND:
-		break;
 	default:
 		break;
 	}
@@ -675,6 +666,9 @@ void Tank::stand()
 
 void Tank::fixWithBounding()
 {
+	if (!this->hasStatus(eStatus::RUNNING))
+		return;
+
 	//
 	if (this->getPositionX() < TANK_SIZE_WIDTH / 2)
 	{

@@ -160,6 +160,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\GameObject\AppearanceEffect.cpp" />
     <ClCompile Include="..\Classes\GameObject\Brick.cpp" />
     <ClCompile Include="..\Classes\GameObject\Bullet.cpp" />
+    <ClCompile Include="..\Classes\GameObject\Eagle.cpp" />
     <ClCompile Include="..\Classes\GameObject\Explosion.cpp" />
     <ClCompile Include="..\Classes\GameObject\Grass.cpp" />
     <ClCompile Include="..\Classes\GameObject\Ice.cpp" />
@@ -170,6 +171,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\GameObject\Wall.cpp" />
     <ClCompile Include="..\Classes\GameObject\Water.cpp" />
     <ClCompile Include="..\Classes\Scene\MenuScene.cpp" />
+    <ClCompile Include="..\Classes\Scene\OverScene.cpp" />
     <ClCompile Include="..\Classes\Scene\ServerPlayScene.cpp" />
     <ClCompile Include="..\Classes\Scene\SinglePlayScene.cpp" />
     <ClCompile Include="..\Classes\Scene\WaitingScene.cpp" />
@@ -196,6 +198,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameObject\AppearanceEffect.h" />
     <ClInclude Include="..\Classes\GameObject\Brick.h" />
     <ClInclude Include="..\Classes\GameObject\Bullet.h" />
+    <ClInclude Include="..\Classes\GameObject\Eagle.h" />
     <ClInclude Include="..\Classes\GameObject\Explosion.h" />
     <ClInclude Include="..\Classes\GameObject\Grass.h" />
     <ClInclude Include="..\Classes\GameObject\Ice.h" />
@@ -206,6 +209,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameObject\Wall.h" />
     <ClInclude Include="..\Classes\GameObject\Water.h" />
     <ClInclude Include="..\Classes\Scene\MenuScene.h" />
+    <ClInclude Include="..\Classes\Scene\OverScene.h" />
     <ClInclude Include="..\Classes\Scene\ServerPlayScene.h" />
     <ClInclude Include="..\Classes\Scene\SinglePlayScene.h" />
     <ClInclude Include="..\Classes\Scene\WaitingScene.h" />

@@ -38,6 +38,9 @@ public:
 
 	virtual void beginGame() { }
 
+	virtual int getNumberOfBots() { return 0; };
+	virtual void setOver(bool over) { _isOver = over; };
+
 protected:
 	std::vector<GameObject*> _gameObjects;
 	std::vector<GameObject*> _staticObjects;
@@ -45,6 +48,7 @@ protected:
 	std::vector<Player*> _players;
 
 	WorldSnapshot* _snapshot;
+	bool _isOver;
 };
 
 #endif // !__SCENE_H__

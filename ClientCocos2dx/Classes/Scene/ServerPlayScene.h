@@ -7,6 +7,7 @@
 
 class WorldSnapshot;
 class GameObject;
+class IntegerPacket;
 
 USING_NS_CC;
 
@@ -25,6 +26,8 @@ public:
 	void update(float dt);
 
 	void updateSnapshot(WorldSnapshot* snapshot);
+	void handleData();
+	void handleIntegerPacket(IntegerPacket* packet);
 
 private:
 	std::vector<WorldSnapshot*> _snapshots;
@@ -37,6 +40,9 @@ private:
 
 	GameObject* findTankPendingByUniqueId(int id);
 	void removeTankPendingByUniqueId(int id);
+
+	bool _isOver;
+	void gameOver();
 };
 
 #endif // !__SERVER_PLAY_SCENE_H__

@@ -4,6 +4,7 @@
 #include "GameObject\Tank.h"
 #include "GameObject\Bullet.h"
 #include "GameObject\Wall.h"
+#include "GameObject\Eagle.h"
 
 #include "..\Server\Classes\Shared\DataPacket.h"
 #include "..\Server\Classes\Shared\SharedDefinitions.h"
@@ -54,9 +55,18 @@ GameObject * GameObject::createWithBuffer(Buffer & buffer)
 
 			break;
 		}
+		case GRASS_WALL:
+		case STEEL_WALL:
+		case ICE_WALL:
+		case WATER_WALL:
 		case BRICK_WALL:
 		{
 			ret = Wall::createWithBuffer(buffer);
+			break;
+		}
+		case EAGLE:
+		{
+			ret = Eagle::createWithBufer(buffer);
 			break;
 		}
 		default:
@@ -309,14 +319,7 @@ void GameObject::interpolate(Buffer & from, Buffer & to, float time)
 
 	if (deltaTime == 0)
 	{
-		//to.setBeginRead(GameObject::INDEX_STATUS_BUFFER);
-		//auto status = (eStatus)to.readInt();
-		//this->setStatus(status);
-
-		//to.setBeginRead(GameObject::INDEX_DIRECTION_BUFFER);
-		//this->setDirection((eDirection)from.readByte());
 		this->deserialize(to);
-
 		return;
 	}
 
@@ -337,8 +340,6 @@ void GameObject::interpolate(Buffer & from, Buffer & to, float time)
 	auto pos = fromPosition + deltaPosition * fraction;
 	this->setPosition(pos);
 
-	//from.setBeginRead(GameObject::INDEX_DIRECTION_BUFFER);
-	//this->setDirection((eDirection)from.readByte());
 	this->deserialize(from);
 }
 

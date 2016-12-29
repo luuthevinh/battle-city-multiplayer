@@ -40,11 +40,10 @@ bool Game::init()
 
 	instance = this;
 
+	_isInGame = true;
+
 	// add scene mới
 	SceneManager::getInstance()->addScene(new PlayScene());
-
-	_maxBots = MAX_NUMBER_OF_BOTS;
-	_totalBots = 0;
 
 	return true;
 }
@@ -98,87 +97,9 @@ void Game::handleData()
 	auto data = _factory->convertNext();
 	if (data == nullptr)
 		return;
-	
-	switch (data->getType())
-	{
-	case eDataType::COMMAND:
-	{
-		// data tự delete nếu add vào scene
-		SceneManager::getInstance()->getCurrentScene()->handleData(data);
-		return;
-	}
-	default:
-		break;
-	}
 
-	// data sẽ ko delete
-	this->handleDataFromWaitingRoom(data);
-	if(data != nullptr)
-		delete data;
-}
-
-void Game::handleDataFromWaitingRoom(Serializable * data)
-{
-	auto type = data->getType();
-
-	switch (type)
-	{
-	case INTEGER:
-	{
-		this->handleIntegerPacket((IntegerPacket*)data);
-		break;
-	}
-	default:
-		break;
-	}
-}
-
-void Game::handleIntegerPacket(IntegerPacket * integer)
-{
-	auto integerType = integer->integerType;
-	switch (integerType)
-	{
-	case IntegerPacket::PLAYER_CHARACTER_SELECTION:
-	{
-		auto player = Server::instance->getClientManager()->getPlayerByUniqueId(integer->getUniqueId());
-		if (player)
-		{
-			player->setId((eObjectId)integer->value);
-			Server::instance->getClientManager()->onChanged();
-		}
-		break;
-	}
-	case IntegerPacket::READY:
-		break;
-	case IntegerPacket::BEGIN_PLAY:
-	{
-		auto player = Server::instance->getClientManager()->getPlayerByUniqueId(integer->getUniqueId());
-		if (player)
-		{
-			this->createPlayer(*player);
-
-			auto to = Server::instance->getClientManager()->getClientSocket(player->getIndex());
-			Server::instance->sendTo(to, player);
-
-			if (player->isHost())
-			{
-				SceneManager::getInstance()->getCurrentScene()->beginGame();
-			}
-		}
-		break;
-	}
-	case IntegerPacket::SET_BOT:
-	{
-		auto player = Server::instance->getClientManager()->getPlayerByUniqueId(integer->getUniqueId());
-		if (player && player->isHost())
-		{
-			this->updateBots(integer->value);
-		}
-		break;
-	}
-	default:
-		break;
-	}
+	// data tự delete nếu add vào scene
+	SceneManager::getInstance()->getCurrentScene()->handleData(data);
 }
 
 void Game::setConverterFactory(ConverterFactory * factory)
@@ -194,31 +115,14 @@ GameTime * Game::getGameTime()
 	return _gameTime;
 }
 
-int Game::getNumberOfBots()
+bool Game::isInGame()
 {
-	return _totalBots;
+	return _isInGame;
 }
 
-void Game::updateBots(int value)
+void Game::setInGame(bool value)
 {
-	_totalBots += value;
-
-	if (_totalBots < 0)
-		_totalBots = _maxBots;
-
-	if (_totalBots > _maxBots)
-		_totalBots = 0;
-
-	Server::instance->getClientManager()->onChanged();
-}
-
-void Game::createPlayer(const Player & info)
-{
-	auto player = new Player(info.getId(), info.getIndex());
-	player->setHost(info.isHost());
-	player->setUniqueId(info.getUniqueId());
-
-	SceneManager::getInstance()->getCurrentScene()->addPlayer(player);
+	_isInGame = value;
 }
 
 void Game::destroy() 

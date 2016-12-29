@@ -114,6 +114,12 @@
     <ClCompile Include="..\Classes\Base\DynamicObject.cpp">
       <Filter>src\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\Eagle.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\OverScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -217,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Base\DynamicObject.h">
       <Filter>src\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\Eagle.h">
+      <Filter>src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\OverScene.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -29,6 +29,9 @@ void SceneManager::removeScene()
 {
 	if (!_scenes.empty())
 	{
+		_scenes.back()->destroy();
+		delete _scenes.back();
+
 		_scenes.pop_back();
 	}
 }

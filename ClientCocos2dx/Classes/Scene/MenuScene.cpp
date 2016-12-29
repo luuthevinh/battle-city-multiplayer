@@ -4,6 +4,9 @@
 #include "Base\SpriteManager.h"
 #include "SinglePlayScene.h"
 
+#include "..\Server\Classes\Shared\DataPacket.h"
+#include "Base\ServerConnector.h"
+
 MenuScene::MenuScene()
 {
 }
@@ -79,5 +82,12 @@ void MenuScene::onSinglePlayerTouch(Ref * node)
 
 void MenuScene::onMultiPlayerTouch(Ref * node)
 {
+	auto playMulti = new IntegerPacket();
+	playMulti->integerType = IntegerPacket::BEGIN_PLAY;
+	playMulti->value = 0;
+
+	ServerConnector::getInstance()->send(playMulti);
+	delete playMulti;
+
 	Director::getInstance()->replaceScene(WaitingScene::createScene());
 }

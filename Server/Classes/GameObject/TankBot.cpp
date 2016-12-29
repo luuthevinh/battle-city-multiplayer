@@ -33,7 +33,7 @@ void TankBot::update(float dt)
 {
 	this->countingToActive(dt);
 
-	if (!_isActive)
+	if (!_isActive || _status == eStatus::DIE)
 		return;
 
 	auto decide = this->think();
@@ -44,9 +44,14 @@ void TankBot::update(float dt)
 			this->shoot();
 			break;
 		case TankBot::MOVE_NEXT:
+			this->addStatus(eStatus::RUNNING);
+			_velocity = this->getVelocityByLevel();
 			break;
 		case TankBot::FIND_NEW_WAY:
 			this->findNewWay();
+			break;
+		case TankBot::STANDING:
+			this->stand();
 			break;
 		default:
 			break;
@@ -58,8 +63,6 @@ void TankBot::update(float dt)
 	}
 	else
 	{
-		this->addStatus(eStatus::RUNNING);
-		_velocity = TANK_NORMAL_VELOCITY;
 		this->findNewWay();
 	}
 
@@ -73,20 +76,15 @@ void TankBot::setMap(tank::AStarMap* map)
 
 void TankBot::onContactBegin(GameObject & object)
 {
-	if (object.getId() == this->getId())
+	if (object.getId() == eObjectId::WHITE_TANK || 
+		object.getId() == eObjectId::GREEN_TANK ||
+		object.getId() == eObjectId::YELLOW_TANK)
 	{
-		this->removeStatus(eStatus::RUNNING);
-		_velocity = 0;
+		object.stand();
+		this->stand();
 
-		while (_nextPostions.size() > 1)
-		{
-			_nextPostions.pop();
-		}
-
-		auto curPosition = object.getPosition();
-		auto otherIndex = _aStarMap->positionToIndex(tank::Point(curPosition.x, curPosition.y));
-
-		this->findNewWayWithTempObstacle(otherIndex);
+		// clear path
+		_nextPostions.clear();
 	}
 }
 
@@ -102,12 +100,10 @@ void TankBot::checkCollision(GameObject & other, float dt)
 
 	this->updateBoundingBoxPosition();
 
-	eDirection result;
-	float time = _collisionChecker->checkCollision(*this, other, result, dt);
-
-	// có va chạm
-	if (time < 1.0f)
+	float moveX, moveY;
+	if(_collisionChecker->isColliding(this->getBoundingBox(), other.getBoundingBox(), moveX, moveY, dt))
 	{
+		this->setPosition(this->getPosition().x + moveX, this->getPosition().y + moveY);
 		this->onContactBegin(other);
 	}
 }
@@ -123,7 +119,8 @@ void TankBot::findNewWay()
 		}
 
 		auto target = this->getRandomNextPostion();
-		auto index = _aStarMap->positionToIndex(target);
+
+		// auto index = _aStarMap->positionToIndex(target);
 		// printf("Next target: (%d, %d) index (%d, %d)\n", target.x, target.y, index.x, index.y);
 
 		auto result = _aStarMap->findPath(tank::Point(current.x, current.y), target);
@@ -131,8 +128,11 @@ void TankBot::findNewWay()
 		for (int i = result.size() - 1; i >= 0; i--)
 		{
 			auto index = result[i]->getIndexInPosition();
-			_nextPostions.push(Vector2(index.x, index.y));
+			_nextPostions.push_back(Vector2(index.x, index.y));
 		}
+
+		this->addStatus(eStatus::RUNNING);
+		_velocity = this->getVelocityByLevel();
 	}
 }
 
@@ -147,6 +147,9 @@ void TankBot::findNewWayWithTempObstacle(const tank::Point & index)
 
 void TankBot::moveNext(float dt)
 {
+	if (!this->hasStatus(eStatus::RUNNING))
+		return;
+
 	auto current = this->getPosition();
 	auto nextPostion = _nextPostions.front();
 
@@ -185,7 +188,7 @@ void TankBot::moveNext(float dt)
 	{
 		// this->removeStatus(eStatus::RUNNING);
 		_oldPositon = _nextPostions.front();
-		_nextPostions.pop();
+		_nextPostions.pop_front();
 	}
 }
 
@@ -229,6 +232,12 @@ TankBot::eDecision TankBot::think()
 	case 4:
 	case 5:
 		decide = eDecision::FIND_NEW_WAY;
+		break;
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+		decide = eDecision::STANDING;
 		break;
 	default:
 		break;

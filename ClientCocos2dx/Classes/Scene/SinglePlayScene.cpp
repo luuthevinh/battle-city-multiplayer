@@ -45,6 +45,14 @@ bool SinglePlayScene::init()
 	effect->setPosition(player->getPosition() + Vec2(0, 32));
 	this->addChild(effect);
 
+	for (auto i = 0; i < 10; i++)
+	{
+		auto tank = Tank::create(eObjectId::GREEN_TANK);
+		tank->setPosition(16 * (i + 1), 16);
+		this->addChild(tank);
+	}
+
+
 	return true;
 }
 

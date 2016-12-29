@@ -67,6 +67,7 @@ public:
 
 	static int getNextUniqueId();
 	static int getLastUniqueId();
+	static void setLastUniqueId(int value);
 
 	virtual void gotHit(Damage* damage);
 
@@ -77,6 +78,8 @@ public:
 	virtual Scene* getParentScene();
 
 	virtual unsigned int getBufferSize();
+
+	virtual void stand();
 
 protected:
 	Vector2 _position;

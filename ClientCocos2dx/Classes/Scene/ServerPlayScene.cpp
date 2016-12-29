@@ -3,11 +3,16 @@
 #include "Base\ServerConnector.h"
 #include "Base\GameObject.h"
 #include "GameObject\AppearanceEffect.h"
+#include "Base\ClientConverterFactory.h"
+#include "Scene\OverScene.h"
 
 // shared
 #include "..\Server\Classes\Shared\WorldSnapshot.h"
 #include "..\Server\Classes\Shared\Converter.h"
+
 #include "GameObject\Wall.h"
+#include "GameObject\Bullet.h"
+#include "GameObject\Eagle.h"
 
 
 ServerPlayScene::ServerPlayScene()
@@ -48,6 +53,8 @@ bool ServerPlayScene::init()
 		return false;
 	}
 
+	GameObject::setLastUniqueId(0);
+
 	this->setName("layer");
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -63,7 +70,6 @@ bool ServerPlayScene::init()
 	// update
 	this->scheduleUpdate();
 
-
 	return true;
 }
 
@@ -72,8 +78,78 @@ void ServerPlayScene::update(float dt)
 	if (ServerConnector::getInstance()->isRunning())
 	{
 		ServerConnector::getInstance()->update(dt);
-		ServerConnector::getInstance()->handleData(this);
+
+		this->handleData();
 	}
+}
+
+void ServerPlayScene::handleData()
+{
+	if (!ServerConnector::getInstance()->isConnected())
+		return;
+
+	auto data = ServerConnector::getInstance()->getFactory()->convertNext();
+
+	if (data == nullptr)
+		return;
+
+	auto type = data->getType();
+
+	switch (type)
+	{
+	case eDataType::OBJECT:
+	{
+		GameObject* gameObject = dynamic_cast<GameObject*>(data);
+		if (gameObject)
+		{
+			auto object = (GameObject*)this->getChildByTag(gameObject->getUniqueId());
+			if (object == nullptr)
+			{
+				this->addChild(gameObject);
+				return;
+			}
+
+			object->deserialize(*data->serialize());
+		}
+		break;
+	}
+	case eDataType::TANK:
+	{
+		Tank* tank = dynamic_cast<Tank*>(data);
+		if (tank)
+		{
+			if (tank->getUniqueId() == ServerConnector::getInstance()->getUniqueId())
+			{
+				auto player = Player::createWithBuffer(*data->serialize());
+				this->addChild(player);
+				return;
+			}
+
+			auto object = (Tank*)this->getChildByTag(tank->getUniqueId());
+			if (object == nullptr)
+			{
+				this->addChild(tank);
+				return;
+			}
+
+			object->deserialize(*data->serialize());
+		}
+		break;
+	}
+	case eDataType::SNAPSHOT:
+	{
+		this->updateSnapshot((WorldSnapshot*)data);
+		break;
+	}
+	case eDataType::INTEGER:
+	{
+		this->handleIntegerPacket((IntegerPacket*)data);
+		break;
+	}
+	default:
+		break;
+	}
+
 }
 
 void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
@@ -88,7 +164,7 @@ void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 		GameObject::setLastUniqueId(snapshot->getLastUniqueId());
 	}
 
-	auto ids  = snapshot->getDataObjects();
+	auto ids = snapshot->getDataObjects();
 
 	for (auto it = ids.begin(); it != ids.end(); it++)
 	{
@@ -115,10 +191,22 @@ void ServerPlayScene::updateSnapshot(WorldSnapshot * snapshot)
 	}
 }
 
+void ServerPlayScene::handleIntegerPacket(IntegerPacket * packet)
+{
+	switch (packet->integerType)
+	{
+	case IntegerPacket::GAME_OVER:
+	{
+		this->gameOver();
+	}
+	default:
+		break;
+	}
+}
+
 void ServerPlayScene::initWithTMX()
 {
 	auto map = TMXTiledMap::create("map/map_01.tmx");
-	// addChild(map);
 
 	auto layer = map->getLayer("wall");
 	auto size = layer->getLayerSize();
@@ -146,6 +234,18 @@ void ServerPlayScene::initWithTMX()
 		}
 	}
 
+	auto objects = map->getObjectGroup("objects");
+	auto flag = objects->getObject("flag");
+	if (flag.size() > 0)
+	{
+		auto x = flag["x"].asFloat();
+		auto y = flag["y"].asFloat();
+
+		auto eagle = Eagle::create();
+		eagle->setPosition(x + 16, y + 16);
+		eagle->setTag(GameObject::getNextId());
+		this->addChild(eagle);
+	}
 }
 
 void ServerPlayScene::addWall(const Vec2 & position, eObjectId id)
@@ -167,6 +267,19 @@ void ServerPlayScene::addObject(GameObject * object)
 	case WHITE_TANK:
 		this->addTank(object);
 		break;
+	case BULLET:
+	{
+		auto bullet = (Bullet*)object;
+		auto owner = this->getChildByTag(bullet->getOwnerTag());
+
+		if(owner != nullptr)
+		{
+			bullet->setOwner((GameObject*)owner);
+			this->addChild(bullet);
+		}
+		
+		break;
+	}
 	default:
 		this->addChild(object);
 		break;
@@ -219,4 +332,19 @@ void ServerPlayScene::removeTankPendingByUniqueId(int id)
 			return;
 		}
 	}
+}
+
+void ServerPlayScene::gameOver()
+{
+	auto sprite = Sprite::createWithSpriteFrameName("gameover.png");
+	sprite->setPosition(14 * TILE_WIDTH, -50.0f);
+	this->addChild(sprite);
+
+	auto replaceScene = CallFunc::create([] {
+		Director::getInstance()->replaceScene(OverScene::createScene());
+	});
+
+	sprite->runAction(Sequence::createWithTwoActions(
+		MoveTo::create(2.0f, Vec2(sprite->getPositionX(), 16 * TILE_WIDTH)), 
+		replaceScene));
 }

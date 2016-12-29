@@ -113,11 +113,12 @@ void Bullet::onChanged()
 
 void Bullet::checkCollision(GameObject & object, float dt)
 {
-	if (_owner == &object || _damagedObjectCounter >= 2)
+	if (_owner == &object || _damagedObjectCounter >= 2 || _owner->getId() == object.getId())
 		return;
 
 	eDirection result;
 	float time = _collisionChecker->checkCollision(*this, object, result, dt);
+
 	if (result != eDirection::NONE)
 	{
 		this->explode();

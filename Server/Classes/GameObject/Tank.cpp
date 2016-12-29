@@ -71,6 +71,7 @@ void Tank::deserialize(Buffer & data)
 bool Tank::init()
 {
 	_buffer = new Buffer(BUFFER_SIZE_TANK);
+	_status = eStatus::NORMAL;
 
 	_boudingBox.width = 32;
 	_boudingBox.height = 32;
@@ -552,6 +553,12 @@ int Tank::getStartPositionIndex()
 
 void Tank::gotHit(Damage * damage)
 {
+	if (damage->getObjectId() == this->getId())
+	{
+		// cùng màu ko bắn nhau
+		return;
+	}
+
 	_health -= damage->getValue();
 
 	if (_health <= 0)
@@ -585,4 +592,10 @@ void Tank::fixWithBounding()
 	{
 		this->setPosition(this->getPosition().x, 32 * TILE_WIDTH - TANK_SIZE_WIDTH / 2);
 	}
+}
+
+void Tank::stand()
+{
+	GameObject::stand();
+	_velocity = 0.0f;
 }

@@ -29,8 +29,11 @@ public:
 	virtual GameObject* getOwner();
 
 	bool onContactBegin(PhysicsContact& contact);
+	void contactWithOtherObject(GameObject* object);
 
 	void reconcile(Buffer &data) override;
+
+	int getOwnerTag();
 
 private:
 	eDirection _direction;

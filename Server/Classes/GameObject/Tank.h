@@ -52,6 +52,7 @@ public:
 	virtual int getStartPositionIndex();
 
 	virtual void gotHit(Damage* damage) override;
+	virtual void stand() override;
 
 protected:
 	float _velocity;

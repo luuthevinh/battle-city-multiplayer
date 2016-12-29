@@ -34,7 +34,6 @@ public:
 	u_long getDataPendingInSocket(SOCKET socket);
 
 	int getServerIndex();
-	void handleData(cocos2d::Layer* scene);
 
 	void setTime(float time);
 	float getTime();

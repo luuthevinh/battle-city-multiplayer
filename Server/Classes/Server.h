@@ -35,6 +35,9 @@ public:
 	void sendTo(SOCKET socket, Serializable* object);
 
 	const GameTime& getTime();
+
+	void takeAndSendSnapshot();
+
 private:
 	u_short _port;
 	char* _address;
@@ -69,7 +72,7 @@ private:
 	void sendDataToAllWithTimeStep();
 
 	void sendRoomInfoToAllClients();
-	void takeAndSendSnapshot();
+
 
 	char* _localIp;
 	void getLocalIp();

@@ -67,7 +67,9 @@ void Scene::removePlayer(int index)
 	{
 		if (_players[i]->getIndex() == index)
 		{
-			_players.erase(_players.begin() + i);
+			//_players.erase(_players.begin() + i);
+			_players[i]->setStatus(eStatus::DIE);
+			_players[i]->onChanged();
 		}
 	}
 }

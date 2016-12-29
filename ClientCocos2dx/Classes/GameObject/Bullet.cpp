@@ -259,19 +259,39 @@ bool Bullet::onContactBegin(PhysicsContact & contact)
 	if (objectA->getId() != eObjectId::BULLET && objectB->getId() != eObjectId::BULLET)
 		return true;
 
-	if (objectA->getTag() != _ownerTag && objectB->getTag() != _ownerTag)
+	if (objectA->getId() == eObjectId::BULLET)
 	{
-		if (objectA->getId() == eObjectId::BULLET && objectB->getId() == eObjectId::BULLET)
-		{
-			this->runAction(RemoveSelf::create());
-		}
-		else if (objectA->getId() == eObjectId::BRICK_WALL || objectB->getId() == eObjectId::BRICK_WALL)
-		{
-			this->setStatus(eStatus::DIE);
-		}
+		this->contactWithOtherObject(objectB);
+	}
+	else
+	{
+		this->contactWithOtherObject(objectA);
 	}
 
 	return true;
+}
+
+void Bullet::contactWithOtherObject(GameObject * object)
+{
+	if (object->getTag() == _ownerTag)
+		return;
+
+	if (_owner != nullptr)
+	{
+		if (_owner->getId() == object->getId())
+		{
+			return;
+		}
+	}
+
+	if (object->getId() == eObjectId::BULLET)
+	{
+		this->runAction(RemoveSelf::create());
+	}
+	else if (object->getId() == eObjectId::BRICK_WALL || object->getId() == eObjectId::STEEL_WALL)
+	{
+		this->setStatus(eStatus::DIE);
+	}
 }
 
 void Bullet::reconcile(Buffer &data)
@@ -282,4 +302,9 @@ void Bullet::reconcile(Buffer &data)
 	}
 
 	this->addLastBuffer(data);
+}
+
+int Bullet::getOwnerTag()
+{
+	return _ownerTag;
 }

@@ -22,6 +22,8 @@ Serializable * ClientConverterFactory::convertNext()
 	if (_handlerRef->getReadQueue() == nullptr || _handlerRef->getReadQueue()->getIndex() <= 0)
 		return nullptr;
 
+	CCLOG("read size: %d", _handlerRef->getReadQueue()->getIndex());
+
 	Serializable * ret = nullptr;
 	auto readQueue = _handlerRef->getReadQueue();
 
