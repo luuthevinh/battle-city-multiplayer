@@ -5,6 +5,7 @@
 #include "GameObject\AppearanceEffect.h"
 #include "Base\ClientConverterFactory.h"
 #include "Scene\OverScene.h"
+#include "InfoLayer.h"
 
 // shared
 #include "..\Server\Classes\Shared\WorldSnapshot.h"
@@ -66,6 +67,11 @@ bool ServerPlayScene::init()
 	//player->setPosition(16, 144);
 	//player->setName("player");
 	//this->addChild(player);
+
+	auto infoLayer = InfoLayer::create();
+	infoLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	infoLayer->setPosition(416.0f, 0.0f);
+	this->addChild(infoLayer);
 
 	// update
 	this->scheduleUpdate();

@@ -120,6 +120,9 @@
     <ClCompile Include="..\Classes\Scene\OverScene.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Scene\InfoLayer.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -228,6 +231,9 @@
       <Filter>src\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Scene\OverScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\InfoLayer.h">
       <Filter>src\Scene</Filter>
     </ClInclude>
   </ItemGroup>
