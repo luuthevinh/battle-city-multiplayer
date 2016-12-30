@@ -7,7 +7,7 @@
 
 class Buffer;
 class DataHandler;
-class ConverterFactory;
+class ClientConverterFactory;
 class Serializable;
 
 class ServerConnector
@@ -43,7 +43,7 @@ public:
 	void setRun(bool value);
 	bool isRunning();
 
-	ConverterFactory* getFactory();
+	ClientConverterFactory* getFactory();
 
 	void setUniqueId(int id);
 	int getUniqueId();
@@ -68,7 +68,7 @@ private:
 	int _serverIndex;
 
 	DataHandler* _dataHandler;
-	ConverterFactory* _factory;
+	ClientConverterFactory* _factory;
 
 	float _timer;
 	float _clientTime;
@@ -76,6 +76,9 @@ private:
 
 	int _uniqueIdOnServer;
 	bool _isHost;
+
+	void startNewThread();
+	void run();
 };
 
 

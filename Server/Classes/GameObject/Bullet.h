@@ -28,8 +28,12 @@ public:
 	virtual Buffer* serialize() override;
 	virtual void deserialize(Buffer & data) override;
 
+	virtual void updateWithTankLevel(eTankLevel tanklevel);
+	virtual float getSpeed();
+
 private:
 	float _speed;
+	eBulletLevel _level;
 
 	void checkPosition();
 	void updateBoudingBox();

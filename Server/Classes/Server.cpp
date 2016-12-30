@@ -364,7 +364,7 @@ void Server::sendDataToSocket(SOCKET socket)
 	dataBuffer.buf = _dataHandler->getSendQueue(socket)->getData();
 	dataBuffer.len = _dataHandler->getSendQueue(socket)->getIndex();
 
-	printf("sent size: %d\n", dataBuffer.len);
+	// printf("sent size: %d\n", dataBuffer.len);
 
 	if (WSASend(socket, &dataBuffer, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
 	{

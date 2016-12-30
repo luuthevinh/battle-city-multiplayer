@@ -8,6 +8,7 @@
 
 #include "..\Server\Classes\Shared\DataPacket.h"
 #include "..\Server\Classes\Shared\SharedDefinitions.h"
+#include "..\Server\Classes\Shared\Utils.h"
 
 int GameObject::INDEX_DATA_TYPE_BUFFER = 0;
 int GameObject::INDEX_OBJECT_ID_BUFFER = 4;
@@ -20,7 +21,7 @@ int GameObject::INDEX_TIME_BUFFER = 25;
 
 int GameObject::_nextId = 0;
 
-GameObject * GameObject::createWithBuffer(Buffer & buffer)
+GameObject * GameObject::createInfo(Buffer & buffer)
 {
 	buffer.setBeginRead(0);
 
@@ -37,22 +38,12 @@ GameObject * GameObject::createWithBuffer(Buffer & buffer)
 		case GREEN_TANK:
 		case WHITE_TANK:
 		{
-			ret = Tank::createWithBuffer(buffer);
-			buffer.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
-			float x = buffer.readFloat();
-			float y = buffer.readFloat();
-			ret->setPosition(x, y);
-
+			ret = Tank::createInfo(buffer);
 			break;
 		}
 		case BULLET:
 		{
-			ret = Bullet::createWithBuffer(buffer);
-			buffer.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
-			float x = buffer.readFloat();
-			float y = buffer.readFloat();
-			ret->setPosition(x, y);
-
+			ret = Bullet::createInfo(buffer);
 			break;
 		}
 		case GRASS_WALL:
@@ -61,12 +52,51 @@ GameObject * GameObject::createWithBuffer(Buffer & buffer)
 		case WATER_WALL:
 		case BRICK_WALL:
 		{
-			ret = Wall::createWithBuffer(buffer);
+			ret = Wall::createInfo(buffer);
 			break;
 		}
 		case EAGLE:
 		{
-			ret = Eagle::createWithBufer(buffer);
+			ret = Eagle::createInfo(buffer);
+			break;
+		}
+		default:
+			break;
+	}
+
+	return ret;
+}
+
+GameObject * GameObject::createGameObject(GameObject * info)
+{
+	GameObject* ret = nullptr;
+
+	switch (info->getId())
+	{
+		case YELLOW_TANK:
+		case GREEN_TANK:
+		case WHITE_TANK:
+		{
+			ret = Tank::createGameObject(info);
+			break;
+		}
+		case BULLET:
+		{
+			ret = Bullet::createGameObject(info);
+			break;
+		}
+		case GRASS_WALL:
+		case STEEL_WALL:
+		case ICE_WALL:
+		case WATER_WALL:
+		case BRICK_WALL:
+		{
+			ret = Wall::createGameObject(info);
+			break;
+		}
+		case EAGLE:
+		{
+			ret = Eagle::createGameObject(info);
 			break;
 		}
 		default:
@@ -339,6 +369,7 @@ void GameObject::interpolate(Buffer & from, Buffer & to, float time)
 
 	auto pos = fromPosition + deltaPosition * fraction;
 	this->setPosition(pos);
+	_nextPosition = pos;
 
 	this->deserialize(from);
 }

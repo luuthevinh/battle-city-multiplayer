@@ -172,6 +172,11 @@ void SpriteManager::initAnimate()
 		"effect_appearance_03.png",
 		NULL));
 
+	this->_animates["protection"].push_back(createAniamte(
+		"effect_protection_01.png",
+		"effect_protection_02.png",
+		NULL));
+
 	// nước
 	this->_animates[_objectNames[eObjectId::WATER_WALL]].push_back(createAniamte("water_01.png", "water_02.png", nullptr));
 }
@@ -252,6 +257,7 @@ Animate * SpriteManager::getAnimate(const std::string &animateName, int level)
 		return nullptr;
 
 	return _animates[animateName].at(level)->clone();			// should be clone, not directlyreturn nullptr;
+
 }
 
 Sprite* SpriteManager::getSprite(eSpriteId id)

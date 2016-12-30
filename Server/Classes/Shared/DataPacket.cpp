@@ -95,6 +95,13 @@ void ReplyPacket::deserialize(Buffer & data)
 	data.setBeginRead(0);
 }
 
+IntegerPacket::IntegerPacket(IntegerPacket::Type type, int v)
+{
+	integerType = type;
+	value = v;
+	_buffer = new Buffer(16);
+}
+
 IntegerPacket::IntegerPacket()
 {
 	_buffer = new Buffer(16);

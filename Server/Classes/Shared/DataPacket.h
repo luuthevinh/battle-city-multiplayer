@@ -50,9 +50,12 @@ public:
 		BEGIN_PLAY = 3,
 		SET_BOT = 4,
 		SET_HOST = 5,
-		GAME_OVER = 6
+		GAME_OVER = 6,
+		PLAYER_REVIVE = 7,
+		WAVE
 	};
 
+	IntegerPacket(IntegerPacket::Type type, int v);
 	IntegerPacket();
 	IntegerPacket(Buffer &data);
 

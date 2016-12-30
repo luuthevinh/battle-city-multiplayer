@@ -12,14 +12,21 @@ Buffer::Buffer(unsigned int size)
 Buffer::Buffer(char* data, unsigned int size)
 {
 	_size = size;
-	_data = data;
+
+	_data = new char[size];
+	std::memcpy(_data, data, size);
+
 	_index = 0;
 	_readIndex = 0;
 }
 
 Buffer::~Buffer() 
 { 
-	delete[] _data; 
+	if (_data)
+	{
+		delete[] _data;
+		_data = nullptr;
+	}
 }
 
 int Buffer::getSize() 

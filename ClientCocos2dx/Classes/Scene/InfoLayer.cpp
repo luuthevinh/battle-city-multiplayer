@@ -27,7 +27,7 @@ bool InfoLayer::init()
 	wave->setPosition(this->getContentSize().width / 2, 472.0f);
 	this->addChild(wave);
 
-	this->addWave(10);
+	//this->addWave(10);
 
 	//auto player01 = Sprite::createWithSpriteFrameName("info_83.png");
 	//player01->setAnchorPoint(Vec2(0.0f, 1.0f));
@@ -80,7 +80,7 @@ void InfoLayer::update(float dt)
 
 void InfoLayer::addWave(int number)
 {
-	Vec2 offset = Vec2(40.0f, 384.0f);
+	Vec2 offset = Vec2(40.0f, 448.0f);
 
 	for (size_t i = 0; i < number; i++)
 	{
@@ -88,7 +88,7 @@ void InfoLayer::addWave(int number)
 		auto c = _currentWave % _numberOfWaveColumns;
 
 		auto sprite = Sprite::createWithSpriteFrameName("info_94.png");
-		sprite->setPosition(offset.x + c * 16, offset.y + r * 16);
+		sprite->setPosition(offset.x + c * 16, offset.y - r * 16);
 		sprite->setTag(_currentWave);
 		this->addChild(sprite);
 
@@ -106,6 +106,11 @@ void InfoLayer::removeWave(int number)
 
 		_currentWave--;
 	}
+}
+
+int InfoLayer::getCurrentWave()
+{
+	return _currentWave;
 }
 
 void InfoLayer::setPlayerLife(int player, int life)

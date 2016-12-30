@@ -9,7 +9,7 @@ Eagle::~Eagle()
 {
 }
 
-Eagle * Eagle::createWithBufer(Buffer & buffer)
+Eagle * Eagle::createInfo(Buffer & buffer)
 {
 	buffer.setBeginRead(0);
 	eDataType type = (eDataType)buffer.readInt();
@@ -18,9 +18,23 @@ Eagle * Eagle::createWithBufer(Buffer & buffer)
 
 	Eagle* ret = new(std::nothrow) Eagle();
 
-	if (ret && ret->init())
+	if (ret)
 	{
 		ret->initWithBuffer(buffer);
+		return ret;
+	}
+
+	CC_SAFE_DELETE(ret);
+	return nullptr;
+}
+
+Eagle * Eagle::createGameObject(GameObject * info)
+{
+	auto ret = new (std::nothrow) Eagle();
+	
+	if (ret && ret->init())
+	{
+		ret->deserialize(*info->serialize());
 		ret->autorelease();
 		return ret;
 	}

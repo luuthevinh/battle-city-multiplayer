@@ -11,7 +11,8 @@ public:
 
 	CREATE_FUNC(Eagle);
 
-	static Eagle* createWithBufer(Buffer& buffer);
+	static Eagle* createInfo(Buffer& buffer);
+	static Eagle* createGameObject(GameObject* info);
 
 	virtual bool init() override;
 	

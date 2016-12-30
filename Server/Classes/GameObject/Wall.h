@@ -12,17 +12,13 @@ public:
 	static Wall* createWithPosition(eObjectId type, const Vector2 &position);
 
 	virtual bool init() override;
-	virtual void update(float dt) override;
 
 	virtual void checkCollision(GameObject& object, float dt) override;
 
-	virtual void gotHit(Damage* damage) override;
+	virtual void updateBoundingBox();
 
 private:
-	int _health;
-
-	void updateBoundingBox();
-	void updateMap();
+	
 };
 
 #endif // !__WALL_H__

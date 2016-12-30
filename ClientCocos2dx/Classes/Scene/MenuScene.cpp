@@ -3,9 +3,12 @@
 #include "ServerPlayScene.h"
 #include "Base\SpriteManager.h"
 #include "SinglePlayScene.h"
+#include "SimpleAudioEngine.h"
 
 #include "..\Server\Classes\Shared\DataPacket.h"
 #include "Base\ServerConnector.h"
+
+using namespace CocosDenshion;
 
 MenuScene::MenuScene()
 {
@@ -38,6 +41,10 @@ bool MenuScene::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
+	auto sprite = Sprite::create("title.png");
+	sprite->setPosition(visibleSize.width / 2, 2 * visibleSize.height / 3);
+	this->addChild(sprite);
+
 	auto single = Label::createWithTTF("SINGLE PLAYER", "/fonts/pixel.ttf", 18.0f);
 	//single->setPosition(visibleSize.width / 2, visibleSize.height / 2);
 	//this->addChild(single);
@@ -50,7 +57,7 @@ bool MenuScene::init()
 	auto multiItem = MenuItemLabel::create(multi, CC_CALLBACK_1(MenuScene::onMultiPlayerTouch, this));
 
 	auto menu = Menu::create(singleItem, multiItem, nullptr);
-	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+	menu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 3);
 	menu->alignItemsVerticallyWithPadding(10.0f);
 	this->addChild(menu);
 
@@ -59,6 +66,9 @@ bool MenuScene::init()
 	keyboardListener->onKeyReleased = CC_CALLBACK_2(MenuScene::onKeyReleased, this);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
+	auto audio = SimpleAudioEngine::getInstance();
+	audio->playBackgroundMusic("levelstarting.wav", false);
 
 	return true;
 }

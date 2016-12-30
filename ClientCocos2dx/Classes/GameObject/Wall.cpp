@@ -32,7 +32,7 @@ Wall * Wall::createWithType(eObjectId id)
 	return nullptr;
 }
 
-Wall * Wall::createWithBuffer(Buffer & buffer)
+Wall * Wall::createInfo(Buffer & buffer)
 {
 	buffer.setBeginRead(0);
 	eDataType type = (eDataType)buffer.readInt();
@@ -42,9 +42,24 @@ Wall * Wall::createWithBuffer(Buffer & buffer)
 	eObjectId objectId = (eObjectId)buffer.readInt();
 
 	Wall* wall = Wall::getNewWallById(objectId);
-	if (wall && wall->init())
+
+	if (wall)
 	{
 		wall->initWithBuffer(buffer);
+		return wall;
+	}
+
+	CC_SAFE_DELETE(wall);
+	return nullptr;
+}
+
+Wall * Wall::createGameObject(GameObject * info)
+{
+	Wall* wall = Wall::getNewWallById(info->getId());
+
+	if (wall && wall->init())
+	{
+		wall->deserialize(*info->serialize());
 		wall->autorelease();
 		return wall;
 	}

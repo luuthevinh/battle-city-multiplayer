@@ -1,12 +1,14 @@
-#ifndef __TANK_H__
+﻿#ifndef __TANK_H__
 #define __TANK_H__
 
 #include <map>
-
+#include <deque>
 #include "Base\GameObject.h"
 #include "Base\SpriteManager.h"
 
 #include "..\Server\Classes\Shared\DataPacket.h"
+
+class Bullet;
 
 class Tank : public GameObject
 {
@@ -16,7 +18,12 @@ public:
 	~Tank();
 
 	static Tank* create(eObjectId id);
-	static Tank* createWithBuffer(Buffer& data);
+	
+	// chỉ tạo info buffer
+	static Tank* createInfo(Buffer& data);
+
+	// tạo object để add vào game
+	static Tank* createGameObject(GameObject* tankInfo);
 
 	virtual void createBuffer() override;
 	virtual bool init() override;
@@ -48,6 +55,9 @@ public:
 
 	void reconcile(Buffer &data) override;
 
+	void removeBullet(int tag);
+	void updateBulletIdFromServer(Bullet& info);
+
 protected:
 	float _velocity;
 	int _bulletCounter;
@@ -57,6 +67,9 @@ protected:
 	std::map<eDirection, Animate*> _animations;
 	std::queue<CommandPacket*> _commandQueue;
 	std::map<GameObject*, eDirection> _collidingObjects;
+
+	std::map<int, Bullet*> _bulletsRef;
+	std::deque<int> _bulletOrder;
 
 	virtual void updateWithCommand(CommandPacket* commad, float dt);
 
@@ -72,6 +85,8 @@ protected:
 	void stand();
 	void fixWithBounding();
 
+
+	int _movingSoundId;
 };
 
 #endif // !__TANK_H__

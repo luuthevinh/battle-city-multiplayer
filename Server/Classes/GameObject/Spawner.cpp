@@ -3,12 +3,14 @@
 
 #include "..\Scene\PlayScene.h"
 #include "..\Base\GameObject.h"
+#include "..\Server.h"
+#include "..\Shared\DataPacket.h"
 
 Spawner::Spawner(eObjectId type, PlayScene * parent)
 {
 	_objectType = type;
 	_parentScene = parent;
-	_counter = 0;
+	this->init();
 }
 
 Spawner::~Spawner()
@@ -17,6 +19,10 @@ Spawner::~Spawner()
 
 bool Spawner::init()
 {
+	_counter = 0;
+	_currentMax = 2;
+	_waveCounter = 1;
+	_canSpawn = true;
 	return true;
 }
 
@@ -33,8 +39,28 @@ void Spawner::update(float dt)
 	{
 		_timer = _timeSpan;
 
-		_counter--;
-		this->createObjectAndAddToParent();
+		if (_total == 1)
+		{
+			if (_canSpawn && _currentCounter < _currentMax)
+			{
+				_currentCounter++;
+				this->createObjectAndAddToParent();
+
+				if (_currentCounter == _currentMax)
+				{
+					_canSpawn = false;
+				}
+			}
+		}
+		else
+		{
+			if (_currentCounter < _currentMax)
+			{
+				_currentCounter++;
+				_counter--;
+				this->createObjectAndAddToParent();
+			}
+		}
 	}
 }
 
@@ -60,6 +86,46 @@ int Spawner::getTotalObjects()
 	return _total;
 }
 
+void Spawner::setCurrent(int number)
+{
+	_currentCounter = number;
+	if (_currentCounter == 0 && _total == 1)
+	{
+		this->nextWave();
+	}
+}
+
+int Spawner::getCurrent()
+{
+	return _currentCounter;
+}
+
+void Spawner::setCurrentMax(int number)
+{
+	_currentMax = number;
+}
+
+eObjectId Spawner::getObjectType()
+{
+	return _objectType;
+}
+
+int Spawner::getWave()
+{
+	return _waveCounter;
+}
+
+void Spawner::nextWave()
+{
+	_canSpawn = true;
+	_waveCounter++;
+	_currentMax = 2;
+
+	auto wave = new IntegerPacket(IntegerPacket::WAVE, _waveCounter);
+	Server::instance->send(wave);
+	delete wave;
+}
+
 GameObject * Spawner::createObject()
 {
 	switch (_objectType)
@@ -77,7 +143,7 @@ GameObject * Spawner::createObject()
 			auto index = _parentScene->getRandomPositionIndex();
 			tankbot->setPosition(_parentScene->getBotStartPosition(index));
 			tankbot->setStartPositionIndex(index);
-			tankbot->setTankLevel(eTankLevel::BASIC_TANK);
+			tankbot->setTankLevel(this->getTankLevel());
 
 			return tankbot;
 		}
@@ -92,4 +158,34 @@ void Spawner::createObjectAndAddToParent()
 
 	auto object = this->createObject();
 	_parentScene->addObject(object);
+}
+
+eTankLevel Spawner::getTankLevel()
+{
+	if (_waveCounter > 10)
+		_waveCounter = 10;
+
+	auto r = rand() % _waveCounter;
+
+	switch (r)
+	{
+		case 0:
+		case 1:
+			return eTankLevel::BASIC_TANK;
+		case 2:
+		case 3:
+		case 4:
+			return eTankLevel::FAST_TANK;
+		case 5:
+		case 6:
+		case 7:
+			return eTankLevel::POWER_TANK;
+		case 8:
+		case 9:
+			return eTankLevel::ARMOR_TANK;
+		default:
+			return eTankLevel::BASIC_TANK;
+	}
+
+	return eTankLevel::BASIC_TANK;
 }

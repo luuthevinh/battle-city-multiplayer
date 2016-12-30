@@ -1,6 +1,12 @@
 #include "Wall.h"
 #include "..\Scene\PlayScene.h"
 
+#include "Brick.h"
+#include "Steel.h"
+#include "Grass.h"
+#include "Ice.h"
+#include "Water.h"
+
 Wall::Wall(eObjectId id) : GameObject(id)
 {
 }
@@ -11,7 +17,29 @@ Wall::~Wall()
 
 Wall * Wall::createWithPosition(eObjectId type, const Vector2 &position)
 {
-	auto wall = new Wall(type);
+	Wall* wall = nullptr;
+
+	switch (type)
+	{
+		case BRICK_WALL:
+			wall = new Brick();
+			break;
+		case STEEL_WALL:
+			wall = new Steel();
+			break;
+		case GRASS_WALL:
+			wall = new Grass();
+			break;
+		case ICE_WALL:
+			wall = new Ice();
+			break;
+		case WATER_WALL:
+			wall = new Water();
+			break;
+		default:
+			break;
+	}
+
 	wall->setPosition(position);
 
 	if (wall->init())
@@ -32,14 +60,7 @@ bool Wall::init()
 
 	this->updateBoundingBox();
 
-	_health = 2;
-
 	return true;
-}
-
-void Wall::update(float dt)
-{
-
 }
 
 void Wall::checkCollision(GameObject& object, float dt)
@@ -47,62 +68,8 @@ void Wall::checkCollision(GameObject& object, float dt)
 
 }
 
-void Wall::gotHit(Damage* damage)
-{
-	_health -= damage->getValue();
-	
-	if (_health <= 0)
-	{
-		this->setStatus(eStatus::DIE);
-
-		this->updateMap();
-		delete damage;
-
-		return;
-	}
-
-	_direction = damage->getDirection();
-
-	delete damage;
-
-	this->updateBoundingBox();
-}
-
 void Wall::updateBoundingBox()
 {
-	switch (_direction)
-	{
-	case NONE:
-		break;
-	case LEFT:
-		_boudingBox.width = _boudingBox.width / 2;
-		_position.x -= _boudingBox.width / 2;
-		break;
-	case UP:
-		_boudingBox.height = _boudingBox.height / 2;
-		_position.y += _boudingBox.height / 2;
-		break;
-	case RIGHT:
-		_boudingBox.width = _boudingBox.width / 2;
-		_position.x += _boudingBox.width / 2;
-		break;
-	case DOWN:
-		_boudingBox.height = _boudingBox.height / 2;
-		_position.y -= _boudingBox.height / 2;
-		break;
-	default:
-		break;
-	}
-
 	_boudingBox.position.x = this->getPosition().x - _boudingBox.width / 2;
 	_boudingBox.position.y = this->getPosition().y - _boudingBox.height / 2;
-}
-
-void Wall::updateMap()
-{
-	auto scene = (PlayScene*)_parentScene;
-	if (scene == nullptr)
-		return;
-
-	scene->updateMap(this->getPosition(), eTiledObjectId::NONE_TILE);
 }

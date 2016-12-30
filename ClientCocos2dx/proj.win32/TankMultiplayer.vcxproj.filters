@@ -123,6 +123,9 @@
     <ClCompile Include="..\Classes\Scene\InfoLayer.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\GameObject\ProtectionEffect.cpp">
+      <Filter>src\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Scene\InfoLayer.h">
       <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject\ProtectionEffect.h">
+      <Filter>src\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

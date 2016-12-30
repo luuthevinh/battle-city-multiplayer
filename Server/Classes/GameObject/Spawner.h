@@ -22,6 +22,16 @@ public:
 	void setTotalObjects(int number);
 	int getTotalObjects();
 
+	void setCurrent(int number);
+	int getCurrent();
+
+	void setCurrentMax(int number);
+
+	eObjectId getObjectType();
+	
+	int getWave();
+	void nextWave();
+
 private:
 	eObjectId _objectType;
 
@@ -30,11 +40,17 @@ private:
 	int _total;
 	int _counter;
 
+	int _currentMax;
+	int _currentCounter;
+	int _waveCounter;
+	bool _canSpawn;
+
 	float _timeSpan;
 	float _timer;
 
 	GameObject* createObject();
 	void createObjectAndAddToParent();
+	eTankLevel getTankLevel();
 };
 
 

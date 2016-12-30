@@ -1,6 +1,9 @@
 #include "Explosion.h"
 #include "Base\SpriteManager.h"
 
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
+
 Explosion::Explosion() : GameObject(eObjectId::EXPLOSION)
 {
 }
@@ -37,12 +40,16 @@ bool Explosion::init()
 		auto explosion = SpriteManager::getInstance()->getAnimate(this->getName() + "_big");
 		_sprite->runAction(explosion);
 		this->scheduleOnce(schedule_selector(Explosion::removeSelf), DEFAULT_ANIMATION_TIME * 4);
+
+		SimpleAudioEngine::getInstance()->playEffect("fexplosion.wav", false);
 	}
 	else
 	{
 		auto explosion = SpriteManager::getInstance()->getAnimate(this->getName());
 		_sprite->runAction(explosion);
 		this->scheduleOnce(schedule_selector(Explosion::removeSelf), DEFAULT_ANIMATION_TIME * 3);
+
+		SimpleAudioEngine::getInstance()->playEffect("eexplosion.wav", false);
 	}
 
 	return true;

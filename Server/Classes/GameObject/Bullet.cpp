@@ -62,6 +62,62 @@ void Bullet::deserialize(Buffer & data)
 	data.setBeginRead(0);
 }
 
+void Bullet::updateWithTankLevel(eTankLevel tanklevel)
+{
+	switch (tanklevel)
+	{
+		case DEFAULT_TANK:
+			_damageValue = 1;
+			_level = eBulletLevel::NORMAL_BULLET;
+			break;
+		case BASIC_TANK:
+			_damageValue = 1;
+			_level = eBulletLevel::SLOW_BULLET;
+			break;
+		case SECOND_TANK:
+		case FAST_TANK:
+			_damageValue = 1;
+			_level = eBulletLevel::NORMAL_BULLET;
+			break;
+		case THIRD_TANK:
+		case POWER_TANK:
+			_damageValue = 1;
+			_level = eBulletLevel::FAST_BULLET;
+			break;
+			break;
+		case FOURTH_TANK:
+		case ARMOR_TANK:
+			_damageValue = 2;
+			_level = eBulletLevel::NORMAL_BULLET;
+			break;
+		default:
+			break;
+	}
+
+	this->getSpeed();
+}
+
+float Bullet::getSpeed()
+{
+	switch (_level)
+	{
+	case SLOW_BULLET:
+		_speed = BULLET_SPEED_01;
+		break;
+	case NORMAL_BULLET:
+		_speed = BULLET_SPEED_02;
+		break;
+	case FAST_BULLET:
+		_speed = BULLET_SPEED_03;
+		break;
+	default:
+		_speed = BULLET_SPEED_02;
+		break;
+	}
+
+	return _speed;
+}
+
 bool Bullet::init()
 {
 	_boudingBox.width = 6;
@@ -73,6 +129,7 @@ bool Bullet::init()
 
 	_damageValue = 1;
 	_damagedObjectCounter = 0;
+	_level = eBulletLevel::NORMAL_BULLET;
 
 	return true;
 }
@@ -85,16 +142,16 @@ void Bullet::update(float dt)
 	switch (_direction)
 	{
 	case LEFT:
-		this->setPosition(this->getPosition().x - _speed * dt, this->getPosition().y);
+		this->setPosition(this->getPosition().x - this->getSpeed() * dt, this->getPosition().y);
 		break;
 	case UP:
-		this->setPosition(this->getPosition().x, this->getPosition().y + _speed * dt);
+		this->setPosition(this->getPosition().x, this->getPosition().y + this->getSpeed() * dt);
 		break;
 	case RIGHT:
-		this->setPosition(this->getPosition().x + _speed * dt, this->getPosition().y);
+		this->setPosition(this->getPosition().x + this->getSpeed() * dt, this->getPosition().y);
 		break;
 	case DOWN:
-		this->setPosition(this->getPosition().x, this->getPosition().y - _speed * dt);
+		this->setPosition(this->getPosition().x, this->getPosition().y - this->getSpeed() * dt);
 		break;
 	default:
 		break;
@@ -113,6 +170,13 @@ void Bullet::onChanged()
 
 void Bullet::checkCollision(GameObject & object, float dt)
 {
+	if (object.getId() == eObjectId::GRASS_WALL || object.getId() == eObjectId::WATER_WALL ||
+		object.hasStatus(eStatus::PROTECTED))
+		return;
+
+	if (_owner == nullptr)
+		return;
+
 	if (_owner == &object || _damagedObjectCounter >= 2 || _owner->getId() == object.getId())
 		return;
 
@@ -123,8 +187,10 @@ void Bullet::checkCollision(GameObject & object, float dt)
 	{
 		this->explode();
 		
-		object.gotHit(Damage::create(_owner->getId(), _damageValue, _direction));
-		object.onChanged();
+		auto damage = Damage::create(_owner->getId(), _damageValue, _direction);
+		damage->setLevel(_level);
+
+		object.gotHit(damage);
 
 		_damagedObjectCounter++;
 	}
@@ -152,6 +218,9 @@ Vector2 Bullet::getVelocity() const
 void Bullet::setOwner(GameObject * owner)
 {
 	_owner = owner;
+	if (owner == nullptr)
+		return;
+
 	_ownerTag = owner->getUniqueId();
 }
 
@@ -199,6 +268,7 @@ void Bullet::explode()
 		if (tank)
 		{
 			tank->setNumberOfBullets(tank->getNumberOfBullets() - 1);
+			tank->removeBullet(this->getUniqueId());
 		}
 	}
 }

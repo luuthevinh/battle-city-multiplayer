@@ -5,6 +5,9 @@
 
 #include "..\Server\Classes\Shared\DataPacket.h"
 #include "..\Server\Classes\Shared\WorldSnapshot.h"
+#include "ServerConnector.h"
+
+#include <thread>
 
 ClientConverterFactory::ClientConverterFactory(DataHandler * handler) : ConverterFactory(handler)
 {
@@ -30,7 +33,7 @@ Serializable * ClientConverterFactory::convertNext()
 	// thằng đầu ko phải kích thước là int (4 bytes) thì lỗi cnmr
 	ASSERT_MSG(readQueue->getIndex() >= 4, "read data should begin with size");
 
-	int size = *(int*)readQueue->popFront(4);
+	int size = *(int*)this->popDataRead(4);;
 	char* data = readQueue->readFront(size);
 
 	Buffer* buffer = new Buffer(data, size);
@@ -40,12 +43,12 @@ Serializable * ClientConverterFactory::convertNext()
 	{
 	case OBJECT:
 	{
-		ret = GameObject::createWithBuffer(*buffer);
+		ret = GameObject::createInfo(*buffer);
 		break;
 	}
 	case TANK:
 	{
-		ret = Tank::createWithBuffer(*buffer);
+		ret = Tank::createInfo(*buffer);
 		break;
 	}
 	case REPLY_ID:
@@ -79,7 +82,51 @@ Serializable * ClientConverterFactory::convertNext()
 
 	// ko dùng buffer này nữa
 	delete buffer;
-	readQueue->popFront(size);
+	this->popDataRead(size);
 
 	return ret;
+}
+
+Serializable * ClientConverterFactory::getNext()
+{
+	if (!_convertedObjects.empty())
+	{
+		//std::lock_guard<std::mutex> guard(_mutex);
+		auto ret = _convertedObjects.front();
+		_convertedObjects.pop_front();
+		return ret;
+	}
+		
+	return nullptr;
+}
+
+void ClientConverterFactory::startConvertMultithread()
+{
+	std::thread thread1(&ClientConverterFactory::convertNextDataInQueue, this);
+	thread1.detach();
+}
+
+void ClientConverterFactory::convertNextDataInQueue()
+{
+	std::lock_guard<std::mutex> guard(_mutex);
+	auto object = this->convertNext();
+
+	if (object != nullptr)
+	{
+		CCLOG("push converted object from other thread.");
+		_convertedObjects.push_back(object);
+	}
+}
+
+void ClientConverterFactory::pushDataRead(char * data, int size)
+{
+	//std::lock_guard<std::mutex> guard(_mutexReadQueue);
+	_handlerRef->recieve(data, size);
+}
+
+char * ClientConverterFactory::popDataRead(int size)
+{
+	//std::lock_guard<std::mutex> guard(_mutexReadQueue);
+	auto data = _handlerRef->getReadQueue()->popFront(size);
+	return data;
 }

@@ -4,6 +4,8 @@
 #include "..\Base\Definitions.h"
 #include "..\Base\GameObject.h"
 
+class Tank;
+
 class Bullet : public GameObject
 {
 public:
@@ -11,7 +13,8 @@ public:
 	~Bullet();
 
 	static Bullet* create(const Vec2& position, eDirection direction);
-	static Bullet* createWithBuffer(Buffer& buffer);
+	static Bullet* createInfo(Buffer& buffer);
+	static Bullet* createGameObject(GameObject* info);
 
 	virtual bool init() override;
 	virtual void update(float dt) override;
@@ -25,8 +28,8 @@ public:
 	virtual Buffer* Bullet::serialize() override;
 	virtual void deserialize(Buffer & data) override;
 
-	virtual void setOwner(GameObject* owner);
-	virtual GameObject* getOwner();
+	virtual void setOwner(Tank* owner);
+	virtual Tank* getOwner();
 
 	bool onContactBegin(PhysicsContact& contact);
 	void contactWithOtherObject(GameObject* object);
@@ -34,6 +37,7 @@ public:
 	void reconcile(Buffer &data) override;
 
 	int getOwnerTag();
+	virtual void updateWithTankLevel(eTankLevel tanklevel);
 
 private:
 	eDirection _direction;
@@ -42,11 +46,13 @@ private:
 
 	void explode();
 
-	GameObject* _owner;
+	Tank* _owner;
 	int _ownerTag;
 
 	void checkCollisionWithBouding();
 	float getBulletSpeed();
+
+	void removeRefInOwner();
 };
 
 #endif // !__BULLET_H__

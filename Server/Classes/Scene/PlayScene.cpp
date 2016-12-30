@@ -11,6 +11,8 @@
 #include "..\Base\SceneManager.h"
 #include "..\Scene\OverScene.h"
 
+#include <thread>
+
 PlayScene::PlayScene()
 {
 }
@@ -168,29 +170,59 @@ void PlayScene::destroy()
 
 void PlayScene::checkCollisionObjects(float dt)
 {
-	std::vector<GameObject*> mergeList;
-	mergeList.insert(mergeList.end(), _gameObjects.begin(), _gameObjects.end());
-	mergeList.insert(mergeList.end(), _staticObjects.begin(), _staticObjects.end());
+	std::thread thread1([&] 
+	{
+		for (auto player : _players)
+		{
+			for (auto other : _staticObjects)
+			{
+				player->checkCollision(*other, dt);
+			}
 
-	// check collision
+			for (auto other : _gameObjects)
+			{
+				player->checkCollision(*other, dt);
+			}
+		}
+	});
+
+	std::thread thread2([&] 
+	{
+		for (auto object : _gameObjects)
+		{
+			for (auto other : _staticObjects)
+			{
+				object->checkCollision(*other, dt);
+			}
+
+			for (auto other : _gameObjects)
+			{
+				if (other == object)
+					continue;
+
+				object->checkCollision(*other, dt);
+			}
+
+			for (auto other : _players)
+			{
+				object->checkCollision(*other, dt);
+			}
+		}
+	});
+
 	for (auto player : _players)
 	{
-		for (auto other : mergeList)
+		for (auto other : _players)
 		{
-			player->checkCollision(*other, dt);
+			if (other != player)
+			{
+				player->checkCollision(*other, dt);
+			}
 		}
 	}
 
-	for (auto object : _gameObjects)
-	{
-		for (auto other : mergeList)
-		{
-			if (other == object)
-				continue;
-
-			object->checkCollision(*other, dt);
-		}
-	}
+	thread1.join();
+	thread2.join();
 }
 
 void PlayScene::checkStatusObjects()
@@ -200,8 +232,14 @@ void PlayScene::checkStatusObjects()
 	{
 		if ((*it)->getStatus() == eStatus::DIE)
 		{
+			if ((*it)->getId() == _botSpawner->getObjectType())
+			{
+				_botSpawner->setCurrent(_botSpawner->getCurrent() - 1);
+			}
+
 			delete *it;
 			it = _gameObjects.erase(it);
+
 		}
 		else
 		{
@@ -213,6 +251,7 @@ void PlayScene::checkStatusObjects()
 	{
 		if ((*it)->getStatus() == eStatus::DIE)
 		{
+			
 			delete *it;
 			it = _staticObjects.erase(it);
 		}
@@ -226,6 +265,25 @@ void PlayScene::checkStatusObjects()
 	{
 		if ((*it)->getStatus() == eStatus::DIE)
 		{
+			if ((*it)->getLife() > 0)
+			{
+				(*it)->revive();
+				(*it)->setPosition(this->getPlayerStartPosition());
+				(*it)->onChanged();
+
+				auto revive = new IntegerPacket(IntegerPacket::PLAYER_REVIVE, (*it)->getUniqueId());
+				Server::instance->send(revive);
+				delete revive;
+
+				continue;
+			}
+			else
+			{
+				auto over = new IntegerPacket(IntegerPacket::GAME_OVER, 1);
+				Server::instance->send(over);
+				delete over;
+			}
+
 			delete *it;
 			it = _players.erase(it);
 		}

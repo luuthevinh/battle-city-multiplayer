@@ -21,7 +21,8 @@ public:
 	static int INDEX_POSITION_Y_BUFFER;
 	static int INDEX_TIME_BUFFER;
 
-	static GameObject* createWithBuffer(Buffer& buffer);
+	static GameObject* createInfo(Buffer& buffer);
+	static GameObject* createGameObject(GameObject* info);
 
 	GameObject() {}
 	GameObject(eObjectId id);
@@ -89,6 +90,8 @@ protected:
 
 	virtual void interpolate(Buffer& from, Buffer& to, float time);
 	virtual void getFromToBufferIndex(int& fromIndex, int& toIndex, float time);
+
+	Vec2 _nextPosition;
 };
 
 

@@ -20,10 +20,14 @@ public:
 	void setDirection(eDirection direction);
 	eDirection getDirection();
 
+	void setLevel(eBulletLevel level);
+	eBulletLevel getLevel();
+
 private:
 	int _value;
 	eDirection _direction;
 	eObjectId _fromObject;
+	eBulletLevel _level;
 };
 
 #endif // !__DAMAGE_H__

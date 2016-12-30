@@ -8,6 +8,8 @@
 
 #include "..\Shared\DataPacket.h"
 
+class Bullet;
+
 class Tank : public GameObject
 {
 public:
@@ -35,6 +37,7 @@ public:
 	
 	virtual void setNumberOfBullets(int number);
 	virtual int getNumberOfBullets();
+	virtual void removeBullet(int id);
 
 	virtual void handleData(Serializable* data) override;
 
@@ -86,6 +89,8 @@ protected:
 
 	void resetCollidingSide();
 	void fixWithBounding();
+
+	std::map<int, Bullet*> _bulletsRef;
 };
 
 #endif // !__TANK_H__

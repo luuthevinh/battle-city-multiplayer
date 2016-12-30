@@ -2,6 +2,7 @@
 #include "Base\SpriteManager.h"
 #include "GameObject\Explosion.h"
 #include "Base\ServerConnector.h"
+#include "GameObject\Tank.h"
 
 #include "..\Server\Classes\Shared\Utils.h"
 
@@ -17,7 +18,7 @@ Bullet::~Bullet()
 Bullet * Bullet::create(const Vec2 & position, eDirection direction)
 {
 	Bullet* bullet = new(std::nothrow) Bullet();
-	if (bullet->init())
+	if (bullet && bullet->init())
 	{
 		bullet->autorelease();
 		bullet->setPosition(position);
@@ -30,13 +31,40 @@ Bullet * Bullet::create(const Vec2 & position, eDirection direction)
 	return nullptr;
 }
 
-Bullet * Bullet::createWithBuffer(Buffer & buffer)
+Bullet * Bullet::createInfo(Buffer & buffer)
 {
 	Bullet* bullet = new(std::nothrow) Bullet();
 
-	if (bullet->init())
+	if (bullet)
 	{
 		bullet->initWithBuffer(buffer);
+
+		buffer.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+		float x = buffer.readFloat();
+		float y = buffer.readFloat();
+		bullet->setPosition(x, y);
+
+		return bullet;
+	}
+
+	CC_SAFE_DELETE(bullet);
+	return nullptr;
+}
+
+Bullet * Bullet::createGameObject(GameObject * info)
+{
+	Bullet* bullet = new(std::nothrow) Bullet();
+
+	if (bullet && bullet->init())
+	{
+		auto data = info->serialize();
+		bullet->deserialize(*data);
+
+		data->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+		float x = data->readFloat();
+		float y = data->readFloat();
+		bullet->setPosition(x, y);
+
 		bullet->autorelease();
 		return bullet;
 	}
@@ -192,6 +220,7 @@ void Bullet::updateWithStatus(eStatus status)
 	{
 		this->explode();
 		this->runAction(RemoveSelf::create());
+		this->removeRefInOwner();
 		break;
 	}
 	default:
@@ -220,6 +249,36 @@ void Bullet::checkCollisionWithBouding()
 	}
 }
 
+void Bullet::updateWithTankLevel(eTankLevel tanklevel)
+{
+	switch (tanklevel)
+	{
+	case DEFAULT_TANK:
+		_level = eBulletLevel::NORMAL_BULLET;
+		break;
+	case BASIC_TANK:
+		_level = eBulletLevel::SLOW_BULLET;
+		break;
+	case SECOND_TANK:
+	case FAST_TANK:
+		_level = eBulletLevel::NORMAL_BULLET;
+		break;
+	case THIRD_TANK:
+	case POWER_TANK:
+		_level = eBulletLevel::FAST_BULLET;
+		break;
+		break;
+	case FOURTH_TANK:
+	case ARMOR_TANK:
+		_level = eBulletLevel::NORMAL_BULLET;
+		break;
+	default:
+		break;
+	}
+
+	this->getBulletSpeed();
+}
+
 float Bullet::getBulletSpeed()
 {
 	switch (_level)
@@ -240,13 +299,32 @@ float Bullet::getBulletSpeed()
 	return _speed;
 }
 
-void Bullet::setOwner(GameObject* owner)
+void Bullet::removeRefInOwner()
+{
+	auto parent = this->getParent();
+	if (parent == nullptr)
+		return;
+
+	auto owner = (Tank*)parent->getChildByTag(_ownerTag);
+	if (owner == nullptr || !owner->isRunning())
+		return;
+
+	//if (_owner == nullptr)
+	//	return;
+
+	owner->removeBullet(this->getUniqueId());
+}
+
+void Bullet::setOwner(Tank* owner)
 {
 	_owner = owner;
+	if (_owner == nullptr)
+		return;
+
 	_ownerTag = owner->getTag();
 }
 
-GameObject* Bullet::getOwner()
+Tank* Bullet::getOwner()
 {
 	return _owner;
 }
@@ -276,21 +354,24 @@ void Bullet::contactWithOtherObject(GameObject * object)
 	if (object->getTag() == _ownerTag)
 		return;
 
-	if (_owner != nullptr)
+	auto owner = (Tank*)this->getParent()->getChildByTag(_ownerTag);
+	if (owner == nullptr || !owner->isRunning())
+		return;
+
+	if (owner->getId() == object->getId())
 	{
-		if (_owner->getId() == object->getId())
-		{
-			return;
-		}
+		return;
 	}
 
 	if (object->getId() == eObjectId::BULLET)
 	{
 		this->runAction(RemoveSelf::create());
+		this->removeRefInOwner();
 	}
 	else if (object->getId() == eObjectId::BRICK_WALL || object->getId() == eObjectId::STEEL_WALL)
 	{
 		this->setStatus(eStatus::DIE);
+		this->removeRefInOwner();
 	}
 }
 

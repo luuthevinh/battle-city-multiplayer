@@ -12,7 +12,8 @@ public:
 	~Wall();
 
 	static Wall* createWithType(eObjectId id);
-	static Wall* createWithBuffer(Buffer &buffer);
+	static Wall* createInfo(Buffer &buffer);
+	static Wall* createGameObject(GameObject* buffer);
 
 	virtual bool init() override;
 

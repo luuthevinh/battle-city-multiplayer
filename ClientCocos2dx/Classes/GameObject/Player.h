@@ -10,7 +10,8 @@ public:
 	~Player();
 
 	static Player* create(eObjectId id);
-	static Player* createWithBuffer(Buffer& data);
+	static Player* createInfo(Buffer& data);
+	static Player* createGameObject(GameObject* object);
 
 	virtual bool init() override;
 	virtual void update(float dt) override;
@@ -22,10 +23,15 @@ public:
 	void predict(float dt);
 
 	virtual void move(eDirection direction, float dt) override;
+	virtual void updateWithStatus(eStatus status) override;
+
+	void revive();
+	int getLife();
 
 private:
 	int _keyDirectionCounter;
 	Vec2 _lastUpdatedPosition;
+	int _life;
 
 	virtual void updateWithCommand(CommandPacket* commad, float dt) override;
 	void syncPositionWithLastUpdate(float dt);

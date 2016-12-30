@@ -91,6 +91,8 @@ bool ServerConnector::connectServer()
 
 	_connecting = true;
 
+	this->startNewThread();
+
 	return true;
 }
 
@@ -122,36 +124,13 @@ void ServerConnector::recieveData()
 	else
 	{
 		// lưu byte
-		_dataHandler->recieve(dataBuffer.buf, recvBytes);
+		// _dataHandler->recieve(dataBuffer.buf, recvBytes);
+		_factory->pushDataRead(dataBuffer.buf, recvBytes);
 	}
 }
 
 void ServerConnector::update(float dt)
 {
-	if (!_connecting)
-		return;
-
-	// select
-	FD_ZERO(&_readSet);
-	FD_ZERO(&_writeSet);
-	FD_SET(_socket, &_readSet);
-	FD_SET(_socket, &_writeSet);
-
-	int total = select(0, &_readSet, &_writeSet, NULL, &_timeVal);
-
-	if (total > 0)
-	{
-		if (FD_ISSET(_socket, &_readSet))
-		{
-			this->recieveData();
-		}
-
-		if (FD_ISSET(_socket, &_writeSet))
-		{
-			this->sendData(_socket);
-		}
-	}
-
 	// CCLOG("client time: %.2f, delta: %.2f", _timer, dt);
 	_timer += dt;
 	_clientTime += dt;
@@ -230,7 +209,7 @@ bool ServerConnector::isRunning()
 	return _isRunning;
 }
 
-ConverterFactory * ServerConnector::getFactory()
+ClientConverterFactory * ServerConnector::getFactory()
 {
 	return _factory;
 }
@@ -253,6 +232,41 @@ void ServerConnector::setHost(bool value)
 bool ServerConnector::isHost()
 {
 	return _isHost;
+}
+
+void ServerConnector::startNewThread()
+{
+	std::thread thread1(&ServerConnector::run, this);
+	thread1.detach();
+}
+
+void ServerConnector::run()
+{
+	while (_connecting)
+	{
+		// select
+		FD_ZERO(&_readSet);
+		FD_ZERO(&_writeSet);
+		FD_SET(_socket, &_readSet);
+		FD_SET(_socket, &_writeSet);
+
+		int total = select(0, &_readSet, &_writeSet, NULL, &_timeVal);
+
+		if (total > 0)
+		{
+			if (FD_ISSET(_socket, &_readSet))
+			{
+				this->recieveData();
+			}
+
+			if (FD_ISSET(_socket, &_writeSet))
+			{
+				this->sendData(_socket);
+			}
+		}
+
+		//_factory->convertNextDataInQueue();
+	}
 }
 
 void ServerConnector::setTime(float time)

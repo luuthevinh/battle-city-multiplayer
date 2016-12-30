@@ -49,3 +49,13 @@ eDirection Damage::getDirection()
 {
 	return _direction;
 }
+
+void Damage::setLevel(eBulletLevel level)
+{
+	_level = level;
+}
+
+eBulletLevel Damage::getLevel()
+{
+	return _level;
+}

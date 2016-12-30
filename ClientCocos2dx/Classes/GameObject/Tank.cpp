@@ -8,6 +8,9 @@
 #include "..\Server\Classes\Shared\Utils.h"
 #include "..\Server\Classes\Shared\Converter.h"
 
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
+
 Tank::Tank(eObjectId id) :
 	_velocity(0)
 {
@@ -26,7 +29,8 @@ Tank::~Tank()
 {
 	for (auto i = _animations.begin(); i != _animations.end(); i++)
 	{
-		i->second->release();
+		if(i->second != nullptr)
+			i->second->release();
 	}
 }
 
@@ -46,14 +50,19 @@ Tank* Tank::create(eObjectId id)
 	}
 }
 
-Tank * Tank::createWithBuffer(Buffer &data)
+Tank * Tank::createInfo(Buffer &data)
 {
 	Tank* tank = new(std::nothrow) Tank(data);
 
-	if (tank && tank->init())
+	if (tank)
 	{
 		tank->initWithBuffer(data);
-		tank->autorelease();
+
+		data.setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+		float x = data.readFloat();
+		float y = data.readFloat();
+		tank->setPosition(x, y);
+
 		return tank;
 	}
 	else
@@ -102,6 +111,30 @@ void Tank::deserialize(Buffer & data)
 	auto number = data.readFloat();
 
 	data.setBeginRead(0);
+}
+
+Tank * Tank::createGameObject(GameObject* tankInfo)
+{
+	Tank* tank = new(std::nothrow) Tank(tankInfo->getId());
+	tank->setTankLevel(((Tank*)tankInfo)->getTankLevel());
+
+	if (tank && tank->init())
+	{
+		auto data = tankInfo->serialize();
+		tank->deserialize(*data);
+
+		data->setBeginRead(GameObject::INDEX_POSITION_X_BUFFER);
+		float x = data->readFloat();
+		float y = data->readFloat();
+		tank->setPosition(x, y);
+
+		tank->autorelease();
+
+		return tank;
+	}
+
+	CC_SAFE_DELETE(tank);
+	return nullptr;
 }
 
 void Tank::createBuffer()
@@ -171,6 +204,9 @@ bool Tank::init()
 
 	this->setContentSize(Size(32.0f, 32.0f));
 
+	_bulletCounter = 0;
+	_movingSoundId = 0;
+
 	return true;
 }
 
@@ -187,6 +223,11 @@ void Tank::update(float dt)
 		this->getFromToBufferIndex(from, to, interpolatedTime);
 
 		this->interpolate(*_previousBuffers.at(from), *_previousBuffers.at(to), interpolatedTime);
+
+		//auto x = tank::lerp(_nextPosition.x, this->getPositionX(), this->getVelocityByLevel() * dt);
+		//auto y = tank::lerp(_nextPosition.y, this->getPositionY(), this->getVelocityByLevel() * dt);
+
+		//this->setPosition(x, y);
 	}
 
 	this->fixWithBounding();
@@ -265,6 +306,9 @@ void Tank::runAnimateByDirection(eDirection direction)
 
 void Tank::updateSprite()
 {
+	if (this->getParent() == nullptr)
+		return;
+
 	// xóa cái cũ đi
 	for (auto i = _animations.begin(); i != _animations.end(); i++)
 	{
@@ -329,6 +373,11 @@ void Tank::updateWithCommand(CommandPacket * commad, float dt)
 		if (commad->input != eKeyInput::KEY_SHOOT)
 		{
 			this->removeStatus(eStatus::RUNNING);
+			if (_movingSoundId != 0)
+			{
+				SimpleAudioEngine::getInstance()->stopEffect(_movingSoundId);
+				_movingSoundId = 0;
+			}
 		}
 	}
 }
@@ -364,6 +413,7 @@ void Tank::move(eDirection direction, float dt)
 	// CCLOG("tank move %.2f/frame", _velocity * dt);
 
 	this->onChanged();
+
 }
 
 void Tank::setDirection(eDirection direction)
@@ -465,6 +515,13 @@ void Tank::updateWithStatus(eStatus status)
 	{
 	case DIE:
 	{
+		for (auto it = _bulletsRef.begin(); it != _bulletsRef.end(); it++)
+		{
+			it->second->setOwner(nullptr);
+		}
+
+		this->runAction(RemoveSelf::create());
+
 		if (this->getParent() == nullptr)
 			break;
 
@@ -472,9 +529,12 @@ void Tank::updateWithStatus(eStatus status)
 		explosion->setPosition(this->getPosition());
 
 		this->getParent()->addChild(explosion);
-		this->runAction(RemoveSelf::create());
 
 		break;
+	}
+	case eStatus::RUNNING:
+	{
+		
 	}
 	default:
 		break;
@@ -483,10 +543,12 @@ void Tank::updateWithStatus(eStatus status)
 
 void Tank::shoot()
 {
-	if (_bulletCounter >= this->getMaxBullet())
+	if (_bulletsRef.size() >= this->getMaxBullet())
 	{
 		return;
 	}
+
+	SimpleAudioEngine::getInstance()->playEffect("shoot.wav", false);
 
 	Vec2 shootPosition = this->getPosition();
 	float offset = 0.0f;
@@ -510,8 +572,12 @@ void Tank::shoot()
 	}
 
 	auto bullet = Bullet::create(shootPosition, this->getDirection());
-	bullet->setTag(GameObject::getNextId());
+	bullet->setTag(GameObject::getNextId() + 100);
+	bullet->updateWithTankLevel(_tankLevel);
 	bullet->setOwner(this);
+
+	_bulletsRef[bullet->getUniqueId()] = bullet;
+	_bulletOrder.push_back(bullet->getUniqueId());
 
 	auto parent = this->getParent();
 	if (parent != nullptr)
@@ -724,4 +790,39 @@ void Tank::reconcile(Buffer &data)
 	}
 
 	this->addLastBuffer(data);
+}
+
+void Tank::removeBullet(int tag)
+{
+	if (_bulletsRef.find(tag) == _bulletsRef.end())
+		return;
+
+	_bulletsRef.erase(tag);
+	_bulletCounter = 0;
+
+	auto result = std::find(_bulletOrder.begin(), _bulletOrder.end(), tag);
+	if (result != _bulletOrder.end())
+	{
+		_bulletOrder.erase(result);
+	}
+}
+
+void Tank::updateBulletIdFromServer(Bullet& info)
+{
+	if (_bulletOrder.size() == 0)
+		return;
+
+	auto lastId = _bulletOrder.front();
+	auto result = _bulletsRef.find(lastId);
+	if (result == _bulletsRef.end())
+		return;
+
+	auto bullet = result->second;
+	bullet->reconcile(*info.serialize());
+
+	_bulletOrder.pop_front();
+
+	// cập nhật lại cái ref mới
+	_bulletsRef.erase(result);
+	_bulletsRef[bullet->getUniqueId()] = bullet;
 }

@@ -48,7 +48,7 @@ void TankBot::update(float dt)
 			_velocity = this->getVelocityByLevel();
 			break;
 		case TankBot::FIND_NEW_WAY:
-			this->findNewWay();
+			//this->findNewWay();
 			break;
 		case TankBot::STANDING:
 			this->stand();

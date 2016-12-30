@@ -18,6 +18,7 @@ public:
 
 	void addWave(int number);
 	void removeWave(int number);
+	int getCurrentWave();
 
 	void setPlayerLife(int player, int life);
 

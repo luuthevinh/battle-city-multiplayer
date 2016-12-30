@@ -8,6 +8,8 @@
 class WorldSnapshot;
 class GameObject;
 class IntegerPacket;
+class ClientConverterFactory;
+class InfoLayer;
 
 USING_NS_CC;
 
@@ -33,6 +35,8 @@ private:
 	std::vector<WorldSnapshot*> _snapshots;
 	std::deque<GameObject*> _tankPending;
 
+	ClientConverterFactory* _factory;
+
 	void initWithTMX();
 	void addWall(const Vec2& position, eObjectId id);
 	void addObject(GameObject* object);
@@ -43,6 +47,11 @@ private:
 
 	bool _isOver;
 	void gameOver();
+	void revivePlayer(int tag);
+
+	void addChildAndAutoRelease(GameObject* object);
+	InfoLayer* _infoLayer;
+
 };
 
 #endif // !__SERVER_PLAY_SCENE_H__

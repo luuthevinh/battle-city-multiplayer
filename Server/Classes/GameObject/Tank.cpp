@@ -343,6 +343,14 @@ int Tank::getNumberOfBullets()
 	return _bulletCounter;
 }
 
+void Tank::removeBullet(int id)
+{
+	if (_bulletsRef.find(id) == _bulletsRef.end())
+		return;
+
+	_bulletsRef.erase(id);
+}
+
 void Tank::handleData(Serializable * data)
 {
 	if (data->getType() == eDataType::OBJECT)
@@ -513,9 +521,13 @@ void Tank::shoot()
 	}
 
 	auto bullet = new Bullet(shootPosition, this->getDirection());
+	bullet->updateWithTankLevel(_tankLevel);
 	bullet->setOwner(this);
 
 	SceneManager::getInstance()->getCurrentScene()->addObject(bullet);
+
+	// ref bullet
+	_bulletsRef[bullet->getUniqueId()] = bullet;
 
 	_bulletCounter++;
 
@@ -565,6 +577,11 @@ void Tank::gotHit(Damage * damage)
 	{
 		this->setStatus(eStatus::DIE);
 		this->onChanged();
+
+		for (auto it = _bulletsRef.begin(); it != _bulletsRef.end(); it++)
+		{
+			it->second->setOwner(nullptr);
+		}
 	}
 
 	delete damage;

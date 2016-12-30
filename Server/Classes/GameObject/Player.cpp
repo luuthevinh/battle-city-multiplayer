@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "Bullet.h"
 #include "..\Base\SceneManager.h"
 #include "..\Shared\DataPacket.h"
@@ -9,10 +9,26 @@ Player::Player(eObjectId id, int index) : Tank(id),
 	_index(index),
 	_isHost(false)
 {
+	_life = 3;
 }
 
 Player::~Player()
 {
+}
+
+void Player::update(float dt)
+{
+	Tank::update(dt);
+
+	if (_protectedTimer > 0)
+	{
+		_protectedTimer -= dt;
+	}
+	else if (this->hasStatus(eStatus::PROTECTED))
+	{
+		_protectedTimer = 0.0f;
+		this->removeStatus(eStatus::PROTECTED);
+	}
 }
 
 int Player::getIndex() const
@@ -68,6 +84,41 @@ void Player::move(eDirection direction, float dt)
 	this->fixPositionForTurn();
 
 	this->moveByDistance(_velocity * dt);
+}
+
+void Player::gotHit(Damage * damage)
+{
+	if (damage->getObjectId() == this->getId() || this->hasStatus(eStatus::PROTECTED))
+	{
+		// cùng màu ko bắn nhau
+		return;
+	}
+
+	_health -= damage->getValue();
+
+	if (_health <= 0)
+	{
+		_life--;
+
+		this->setStatus(eStatus::DIE);
+		this->onChanged();
+	}
+
+	delete damage;
+}
+
+void Player::revive()
+{
+	if (_life <= 0)
+		return;
+
+	this->setStatus((eStatus)(STAND | PROTECTED));
+	_protectedTimer = 3.0f;
+}
+
+int Player::getLife()
+{
+	return _life;
 }
 
 void Player::setHost(bool value)
